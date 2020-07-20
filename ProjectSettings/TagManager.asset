@@ -13,14 +13,14 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Weapon
+  - Player
+  - Enemy
+  - Bullet
+  - HitableObject
+  - Wall
+  - Rigidbody_child
+  - Rigidbody_child_Player
   - 
   - 
   - 
@@ -40,4 +40,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: backGround
+    uniqueID: 2027310449
+    locked: 0
+  - name: objects
+    uniqueID: 2826043305
+    locked: 0
+  - name: foreGround
+    uniqueID: 515623519
+    locked: 0
+  - name: UI
+    uniqueID: 3226051869
     locked: 0

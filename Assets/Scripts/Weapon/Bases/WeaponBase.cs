@@ -10,12 +10,12 @@ public class WeaponBase : MonoBehaviour
     /// <summary>
     /// 플레이어에게 넘겨줄 animType
     /// </summary>
-
     public int idleAnimType = 0;
     public int moveAnimType = 0;
     public int attackAnimType = 0;
     public int deadAnimType = 0;
     public int dashAnimType = 0;
+    public int skillAnimType = 0;
 
     WeaponType weaponType;
     public MoveWhileAttack currentMoveCondition;
@@ -23,7 +23,6 @@ public class WeaponBase : MonoBehaviour
     
     Animator _animator;
     int objectState;
-    Type stateType;
     protected bool newState;
     int viewDirection;
     public int attackComboCount;
@@ -89,13 +88,7 @@ public class WeaponBase : MonoBehaviour
         switch (weaponType)
         {
             case WeaponType.sampleWeapon:
-                setStateType(typeof(SampleWeaponState));
-                idleStrategy = new SampleIdleStrategy();
-                moveStrategy = new SampleMoveStrategy();
-                mouseInputStrategy = new SampleMouseInputStrategy();
-                dashStrategy = new SampleDashStrategy();
-                deadStrategy = new SampleDeadStrategy();
-                attackStrategy = new SampleAttackStrategy(this);
+                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
                 //스트래티지들 싹다 세팅
                 //애니메이션 컨트롤러 변경
                 break;
@@ -178,16 +171,15 @@ public class WeaponBase : MonoBehaviour
     {
         return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
-    protected void setStateType(Type t)
-    {
-        stateType = t;
-    }
     public void setState(int state,bool animChage = true)
     {
         objectState = state;
         newState = true;
-        if(animChage)
-        _animator.SetInteger("State", objectState+attackComboCount);
+        if (animChage)
+        {
+            _animator.SetInteger("State", objectState);
+            _animator.SetInteger("ComboCount", attackComboCount);
+        }
         attackComboCount = 0;
     }
     public void setRotate(float value) {
@@ -199,7 +191,7 @@ public class WeaponBase : MonoBehaviour
         while (true)
         {
             newState = false;
-            yield return StartCoroutine(Enum.GetName(stateType, objectState));
+            yield return StartCoroutine(((PlayerState)objectState).ToString());
         }
     }
     IEnumerator idle()

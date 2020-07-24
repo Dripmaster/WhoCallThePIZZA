@@ -37,6 +37,8 @@ public class WeaponBase : MonoBehaviour
     public PlayerFSM player;
     public static WeaponBase instance;
     Transform Rotator;
+    bool flipValue;
+    float tempX;
     private WeaponBase() {
         instance = this;
     }
@@ -79,7 +81,6 @@ public class WeaponBase : MonoBehaviour
         idleAnimType = 0;
         attackAnimType = 0;
         moveAnimType = 0;
-        Rotator = transform.GetChild(0);
         InitData();
     }
     public void setWeapon(WeaponType weaponType) {
@@ -164,6 +165,9 @@ public class WeaponBase : MonoBehaviour
         currentMoveCondition = 0;
         newState = false;
         nowAttack = false;
+        Rotator = transform.GetChild(0);
+        flipValue = false;
+        tempX = Rotator.transform.localPosition.x;
         StartCoroutine(FSMmain());
     }
     public bool getAnimEnd(float targetTime=0.99f) {
@@ -189,7 +193,17 @@ public class WeaponBase : MonoBehaviour
     }
     public void setRotate(float value) {
         Rotator.rotation = Quaternion.Euler(0, 0, value);
-    
+    }
+    public void setFlip(bool value)
+    {
+        flipValue = value;
+        if (flipValue)
+        {
+            Rotator.transform.localPosition = new Vector3(tempX * -1, Rotator.transform.localPosition.y);
+        }
+        else {
+            Rotator.transform.localPosition = new Vector3(tempX, Rotator.transform.localPosition.y);
+        }
     }
     IEnumerator FSMmain()
     {

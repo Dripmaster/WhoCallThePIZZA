@@ -24,6 +24,20 @@ public class SampleIdleStrategy : IdleStrategy
     public void Update(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        switch (weaponBase.ViewDirection)
+        {
+            case 0:
+            case 1:
+            case 7:
+                weaponBase.setFlip(true);
+                break;
+            case 2:
+            case 6:
+            case 3:
+            case 4:
+            case 5:weaponBase.setFlip(false);
+                break;
+        }
     }
 }
 public class SampleMoveStrategy : MoveStrategy
@@ -37,6 +51,21 @@ public class SampleMoveStrategy : MoveStrategy
     public void Update(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        switch (weaponBase.ViewDirection)
+        {
+            case 0:
+            case 1:
+            case 7:
+                weaponBase.setFlip(true);
+                break;
+            case 2:
+            case 6:
+            case 3:
+            case 4:
+            case 5:
+                weaponBase.setFlip(false);
+                break;
+        }
     }
 }
 public class SampleDeadStrategy : DeadStrategy
@@ -87,6 +116,22 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        switch (weaponBase.ViewDirection)
+        {
+            case 0:
+            case 1:
+            case 7:
+                weaponBase.setFlip(true);
+                break;
+            case 2:
+            case 6:
+            case 3:
+            case 4:
+            case 5:
+                weaponBase.setFlip(false);
+                break;
+        }
+
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }
     public void Update(WeaponBase weaponBase)

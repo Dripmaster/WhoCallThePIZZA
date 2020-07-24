@@ -35,13 +35,15 @@ public class PlayerFSM : FSMbase
         Weapon.ViewDirection = ViewDirection;
         if (viewDir.x < 0)
         {
-            transform.localScale = new Vector2(-1, 1);
-            Weapon.transform.localScale = new Vector2(-1, 1);
+            //transform.localScale = new Vector2(-1, 1);
+            //Weapon.transform.localScale = new Vector2(-1, 1);
+            _sr.flipX = true;
         }
         else
         {
-            transform.localScale = new Vector2(1, 1);
-            Weapon.transform.localScale = new Vector2(1, 1);
+            //transform.localScale = new Vector2(1, 1);
+            //Weapon.transform.localScale = new Vector2(1, 1);
+            _sr.flipX = false;
         }
     }
     bool MoveInput() {

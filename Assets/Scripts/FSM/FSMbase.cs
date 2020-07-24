@@ -15,6 +15,7 @@ using UnityEngine;
 public abstract class FSMbase : MonoBehaviour
 {
     protected Animator _animator;
+    protected SpriteRenderer _sr;
     protected int objectState;
     Type stateType;
     protected bool newState = false;
@@ -54,6 +55,7 @@ public abstract class FSMbase : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _sr = GetComponent<SpriteRenderer>();
     }
     protected void OnEnable()
     {

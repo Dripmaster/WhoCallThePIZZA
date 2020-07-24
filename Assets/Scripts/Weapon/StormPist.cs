@@ -30,11 +30,13 @@ public class StormPistIdleStrategy : IdleStrategy
     {
         if (weaponBase.ViewDirection > 2 && weaponBase.ViewDirection < 6)  //오른쪽(3, 4, 5)
         {
-
+            SR_pist1.sortingOrder = 1;
+            SR_pist2.sortingOrder = -1;
         }
-        else // 왼쪽, 위, 아래
+        else // 왼쪽 (0, 1, 2, 6, 7)
         {
-
+            SR_pist1.sortingOrder = -1;
+            SR_pist2.sortingOrder = 1;
         }
     }
 }

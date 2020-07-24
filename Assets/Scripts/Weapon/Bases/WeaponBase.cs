@@ -54,7 +54,7 @@ public class WeaponBase : MonoBehaviour
             }
         }
     }
-    public int ViewDirection
+    public int ViewDirection //0~7 0 = 왼쪽, 시계방향으로 증가
     {
         get
         {
@@ -91,6 +91,9 @@ public class WeaponBase : MonoBehaviour
                 SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
                 //스트래티지들 싹다 세팅
                 //애니메이션 컨트롤러 변경
+                break;
+            case WeaponType.StormPist:
+                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
                 break;
             default:
                 break;

@@ -16,6 +16,7 @@ public enum PlayerState { //플레이어와 무기의 스테이트(고유 번호
 }
 public enum WeaponType { 
     sampleWeapon = 0,
+    StormPist,
 }
 public enum MoveWhileAttack { 
     Move_Attack = 0, // player-move weapon-attack

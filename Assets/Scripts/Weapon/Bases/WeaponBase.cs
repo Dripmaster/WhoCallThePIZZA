@@ -194,7 +194,7 @@ public class WeaponBase : MonoBehaviour
     public void setRotate(float value) {
         Rotator.rotation = Quaternion.Euler(0, 0, value);
     }
-    public void setFlip(bool value)
+    public void setFlip(bool value)//한손무기 위치플립
     {
         flipValue = value;
         if (flipValue)

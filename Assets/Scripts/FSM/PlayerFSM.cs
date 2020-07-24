@@ -33,6 +33,21 @@ public class PlayerFSM : FSMbase
 
         ViewDirection = (Mathf.RoundToInt((Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180) * -1) + 24) / 45;
         Weapon.ViewDirection = ViewDirection;
+        switch (ViewDirection)
+        {
+            case 0:
+            case 1:
+            case 7:
+                _sr.flipX = true;
+                break;
+            case 2:
+            case 6:
+            case 3:
+            case 4:
+            case 5:
+                _sr.flipX = false;
+                break;
+        }/*
         if (viewDir.x < 0)
         {
             //transform.localScale = new Vector2(-1, 1);
@@ -44,7 +59,7 @@ public class PlayerFSM : FSMbase
             //transform.localScale = new Vector2(1, 1);
             //Weapon.transform.localScale = new Vector2(1, 1);
             _sr.flipX = false;
-        }
+        }*/
     }
     bool MoveInput() {
         SetViewPoint();

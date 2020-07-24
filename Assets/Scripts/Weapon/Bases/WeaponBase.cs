@@ -17,7 +17,7 @@ public class WeaponBase : MonoBehaviour
     public int dashAnimType = 0;
     public int skillAnimType = 0;
 
-    WeaponType weaponType;
+    public WeaponType weaponType;
     public MoveWhileAttack currentMoveCondition;
     public bool CanAttackCancel;
     
@@ -96,7 +96,7 @@ public class WeaponBase : MonoBehaviour
                 //애니메이션 컨트롤러 변경
                 break;
             case WeaponType.StormPist:
-                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
+                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
                 break;
             default:
                 break;

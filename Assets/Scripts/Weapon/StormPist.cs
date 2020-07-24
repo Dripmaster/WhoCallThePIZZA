@@ -21,8 +21,8 @@ public class StormPistIdleStrategy : IdleStrategy
     SpriteRenderer SR_pist2;
     public void SetState(WeaponBase weaponBase)
     {
-        SR_pist1 = weaponBase.transform.Find("pist1").GetComponent<SpriteRenderer>();
-        SR_pist2 = weaponBase.transform.Find("pist2").GetComponent<SpriteRenderer>();
+        SR_pist1 = weaponBase.transform.Find("stormpist/pists/pist1").GetComponent<SpriteRenderer>();
+        SR_pist2 = weaponBase.transform.Find("stormpist/pists/pist2").GetComponent<SpriteRenderer>();
         if (weaponBase.CanAttackCancel)
             weaponBase.setState((int)PlayerState.idle);
     }

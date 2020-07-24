@@ -14,7 +14,7 @@ public enum PlayerState { //플레이어와 무기의 스테이트(고유 번호
     skill,
     dash,
 }
-public enum WeaponType { 
+public enum WeaponType { //무기목록
     sampleWeapon = 0,
 }
 public enum MoveWhileAttack { 

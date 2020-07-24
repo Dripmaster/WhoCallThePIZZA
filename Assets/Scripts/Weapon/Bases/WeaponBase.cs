@@ -36,6 +36,7 @@ public class WeaponBase : MonoBehaviour
     AttackStrategy attackStrategy;
     public PlayerFSM player;
     public static WeaponBase instance;
+    Transform Rotator;
     private WeaponBase() {
         instance = this;
     }
@@ -78,6 +79,7 @@ public class WeaponBase : MonoBehaviour
         idleAnimType = 0;
         attackAnimType = 0;
         moveAnimType = 0;
+        Rotator = transform.GetChild(0);
         InitData();
     }
     public void setWeapon(WeaponType weaponType) {
@@ -183,7 +185,7 @@ public class WeaponBase : MonoBehaviour
         attackComboCount = 0;
     }
     public void setRotate(float value) {
-        transform.rotation = Quaternion.Euler(0, 0, value);
+        Rotator.rotation = Quaternion.Euler(0, 0, value);
     
     }
     IEnumerator FSMmain()

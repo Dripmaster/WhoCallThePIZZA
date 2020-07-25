@@ -107,12 +107,11 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(2)
     {
         tempAtkType = weaponBase.attackAnimType;
-        ATK_COMMAND_PROGRESS_START = 0.3f;
-        ATK_COMMAND_PROGRESS_END = 0.7f;
+        ATK_COMBO_COUNT = 6;
+        tempAtkCount = 6;
     }
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }
     public void Update(WeaponBase weaponBase)

@@ -93,8 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3924143022818776073}
   - component: {fileID: 3924143022818776076}
-  - component: {fileID: 3924143022818776079}
   - component: {fileID: 3924143022818776078}
+  - component: {fileID: 6563611869816597509}
   m_Layer: 8
   m_Name: pist1
   m_TagString: Untagged
@@ -167,32 +167,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3924143022818776079
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3924143022818776072}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.06, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.07, y: 0.07}
-    newSize: {x: 0.07, y: 0.07}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.05, y: 0.01}
-  m_EdgeRadius: 0
 --- !u!114 &3924143022818776078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +180,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myColliderType: 0
+--- !u!58 &6563611869816597509
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3924143022818776072}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.035
 --- !u!1 &6337469738030220939
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,8 +206,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5232045796810640918}
   - component: {fileID: 2804494622017595912}
-  - component: {fileID: 8642154520490434581}
   - component: {fileID: 7124388250650641880}
+  - component: {fileID: 3924143022366814612}
   m_Layer: 8
   m_Name: pist2
   m_TagString: Untagged
@@ -290,32 +280,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8642154520490434581
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6337469738030220939}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.06, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.07, y: 0.07}
-    newSize: {x: 0.07, y: 0.07}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.05, y: 0.01}
-  m_EdgeRadius: 0
 --- !u!114 &7124388250650641880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,3 +293,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myColliderType: 0
+--- !u!58 &3924143022366814612
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6337469738030220939}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.035

@@ -17,30 +17,18 @@ public class StormPist
 
 public class StormPistIdleStrategy : IdleStrategy
 {
-    SpriteRenderer SR_pist1;
-    SpriteRenderer SR_pist2;
     public void SetState(WeaponBase weaponBase)
     {
-        SR_pist1 = weaponBase.transform.Find("stormpist/pists/pist1").GetComponent<SpriteRenderer>();
-        SR_pist2 = weaponBase.transform.Find("stormpist/pists/pist2").GetComponent<SpriteRenderer>();
         if (weaponBase.CanAttackCancel)
             weaponBase.setState((int)PlayerState.idle);
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (weaponBase.ViewDirection > 2 && weaponBase.ViewDirection < 6)  //오른쪽(3, 4, 5)
-        {
-
-        }
-        else // 왼쪽, 위, 아래
-        {
-
-        }
+        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
     }
 }
 public class StormPistMoveStrategy : MoveStrategy
 {
-
     public void SetState(WeaponBase weaponBase)
     {
         if (weaponBase.CanAttackCancel)
@@ -48,7 +36,7 @@ public class StormPistMoveStrategy : MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        
+        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
     }
 }
 public class StormPistDeadStrategy : DeadStrategy
@@ -93,12 +81,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(2)
     {
         tempAtkType = weaponBase.attackAnimType;
-        ATK_COMMAND_PROGRESS_START = 0.3f;
-        ATK_COMMAND_PROGRESS_END = 0.7f;
+        ATK_COMBO_COUNT = 6;
+        tempAtkCount = 6;
     }
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }
     public void Update(WeaponBase weaponBase)

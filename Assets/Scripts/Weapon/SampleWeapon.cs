@@ -113,6 +113,19 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         ATK_COMMAND_PROGRESS_START = 0.3f;
         ATK_COMMAND_PROGRESS_END = 0.7f;
     }
+
+    public void onWeaponTouch(int colliderType, FSMbase target)
+    {
+        if (colliderType == 0)
+        {
+            AttackManager.GetInstance().HandleDamage(50, target);
+        }
+        else
+        {
+            AttackManager.GetInstance().HandleDamage(5, target);
+        }
+    }
+
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.ViewDirection * -45f);

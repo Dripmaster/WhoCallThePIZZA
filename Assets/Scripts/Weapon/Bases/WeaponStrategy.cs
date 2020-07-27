@@ -28,6 +28,7 @@ public interface AttackStrategy
 {
     void Update(WeaponBase weaponBase);
     void SetState(WeaponBase weaponBase);
+    void onWeaponTouch(int colliderType, FSMbase target);
 }
 public interface MouseInputStrategy
 {

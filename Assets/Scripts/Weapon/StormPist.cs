@@ -84,6 +84,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         ATK_COMBO_COUNT = 6;
         tempAtkCount = 6;
     }
+
+    public void onWeaponTouch(int colliderType, FSMbase target)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);

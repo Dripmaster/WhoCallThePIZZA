@@ -258,15 +258,8 @@ public class WeaponBase : MonoBehaviour
 
         if (!nowAttack)
             return;
-        if (colliderType == 0)
-        {
-            AttackManager.GetInstance().HandleDamage(50, target);
-        }
-        else
-        {
-            AttackManager.GetInstance().HandleDamage(5, target);
 
-        }
+        attackStrategy.onWeaponTouch(colliderType,target);
 
     }
 }

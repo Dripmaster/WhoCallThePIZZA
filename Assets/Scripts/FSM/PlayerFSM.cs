@@ -32,6 +32,7 @@ public class PlayerFSM : FSMbase
         Vector2 viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
         ViewDirection = (Mathf.RoundToInt((Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180) * -1) + 24) / 45;
+        Weapon.WeaponViewDirection = (Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180);
         Weapon.ViewDirection = ViewDirection;
         switch (ViewDirection)
         {

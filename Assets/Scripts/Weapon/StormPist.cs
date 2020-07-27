@@ -24,7 +24,11 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6); // (0, 1, 7)  Left
+        if(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
+        else
+            weaponBase.setFlipScaleY(1); // 원래 대로
+
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
     }
 }
@@ -37,6 +41,11 @@ public class StormPistMoveStrategy : MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
+        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
+        else
+            weaponBase.setFlipScaleY(1); // 원래 대로
+
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
     }
 }
@@ -87,7 +96,10 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6); // (0, 1, 7)  Left
+        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
+        else
+            weaponBase.setFlipScaleY(1); // 원래 대로
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }

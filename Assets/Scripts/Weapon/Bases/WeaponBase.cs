@@ -39,6 +39,7 @@ public class WeaponBase : MonoBehaviour
     Transform Rotator;
     bool flipValue;
     float tempX;
+    float tempScaleX;
     private WeaponBase() {
         instance = this;
     }
@@ -168,6 +169,7 @@ public class WeaponBase : MonoBehaviour
         Rotator = transform.GetChild(0);
         flipValue = false;
         tempX = Rotator.transform.localPosition.x;
+        tempScaleX = Rotator.transform.localScale.x;
         StartCoroutine(FSMmain());
     }
     public bool getAnimEnd(float targetTime=0.99f) {
@@ -193,6 +195,14 @@ public class WeaponBase : MonoBehaviour
     }
     public void setRotate(float value) {
         Rotator.rotation = Quaternion.Euler(0, 0, value);
+    }
+    public void setFlipScaleX(float value)//플립
+    {
+        if (tempScaleX !=value)
+        {
+            tempScaleX = value;
+            Rotator.transform.localScale = new Vector3(tempScaleX, Rotator.transform.localScale.y);
+        }
     }
     public void setFlip(bool value)//한손무기 위치플립
     {

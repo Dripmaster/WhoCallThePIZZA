@@ -196,12 +196,12 @@ public class WeaponBase : MonoBehaviour
     public void setRotate(float value) {
         Rotator.rotation = Quaternion.Euler(0, 0, value);
     }
-    public void setFlipScaleX(float value)//한손무기 위치플립
+    public void setFlipScaleX(float value)//플립
     {
         if (tempScaleX !=value)
         {
             tempScaleX = value;
-            Rotator.transform.localPosition = new Vector3(tempScaleX, Rotator.transform.localPosition.y);
+            Rotator.transform.localScale = new Vector3(tempScaleX, Rotator.transform.localScale.y);
         }
     }
     public void setFlip(bool value)//한손무기 위치플립

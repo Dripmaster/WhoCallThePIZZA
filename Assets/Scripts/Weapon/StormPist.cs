@@ -24,6 +24,7 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
+        weaponBase.setFlip(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6); // (0, 1, 7)  Left
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
     }
 }
@@ -86,6 +87,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void SetState(WeaponBase weaponBase)
     {
+        weaponBase.setFlip(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6); // (0, 1, 7)  Left
         weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }

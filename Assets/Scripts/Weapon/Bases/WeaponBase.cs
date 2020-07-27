@@ -77,6 +77,8 @@ public class WeaponBase : MonoBehaviour
             }
         }
     }
+
+    public float WeaponViewDirection;
     protected void Awake()
     {
         _animator = GetComponentInChildren<Animator>();

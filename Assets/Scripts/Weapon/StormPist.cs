@@ -24,12 +24,12 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if(weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+        if(weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
             weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
         else
             weaponBase.setFlipScaleY(1); // 원래 대로
 
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
 }
 public class StormPistMoveStrategy : MoveStrategy
@@ -41,12 +41,12 @@ public class StormPistMoveStrategy : MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left   2, 6 은 원하는데로 설정
             weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
         else
             weaponBase.setFlipScaleY(1); // 원래 대로
 
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
 }
 public class StormPistDeadStrategy : DeadStrategy
@@ -58,7 +58,7 @@ public class StormPistDeadStrategy : DeadStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-
+        
     }
 }
 public class StormPistMouseInputStrategy : MouseInputStrategy
@@ -96,11 +96,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void SetState(WeaponBase weaponBase)
     {
-        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left
+        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
             weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
         else
             weaponBase.setFlipScaleY(1); // 원래 대로
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f + 180);
+
+        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
     }
     public void Update(WeaponBase weaponBase)

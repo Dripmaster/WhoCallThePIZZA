@@ -70,6 +70,8 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
             if (weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
+                weaponBase.CanRotateView = true;
+                weaponBase.setViewPoint();
                 weaponBase.SetAttack(true);
             }
         }
@@ -97,7 +99,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     public void onWeaponTouch(int colliderType, FSMbase target)
     {
-        throw new System.NotImplementedException();
+        //TODO:스태틱 효과 및 공격이벤트
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -109,11 +111,14 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
+
+        weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
-        HandleAttackEND(weaponBase, (int)PlayerState.idle);
+        HandleAttackEND(weaponBase, (int)PlayerState.idle, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
+
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
@@ -36,12 +37,12 @@ public interface MouseInputStrategy
 }
 #endregion
 public abstract class AttackValues {
-    public int ATK_COMBO_COUNT = 3;
-    public float ATK_CANCEL_PROGRESS = 0.8f;
-    public float ATK_COMMAND_PROGRESS_START = 0f;
-    public float ATK_COMMAND_PROGRESS_END = 0.8f;
-    public int tempAtkType = 0;
-    public int tempAtkCount;
+    public int ATK_COMBO_COUNT = 3;//공격 콤보
+    public float ATK_CANCEL_PROGRESS = 0.8f; //공격 캔슬 가능 진행도
+    public float ATK_COMMAND_PROGRESS_START = 0f; // 이 진행도 부터 공격 범위
+    public float ATK_COMMAND_PROGRESS_END = 0.8f; // 이 진행도 까지 공격 범위
+    public int tempAtkType = 0; 
+    public int tempAtkCount; 
     public bool CancelConditonOnce;
     public bool AttackOnce;
     public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
@@ -98,6 +99,15 @@ public abstract class AttackValues {
         {
             weaponBase.setState(idleState);
             weaponBase.SetIdle(true);
+        }
+    }
+    public void HandleAttackEND(WeaponBase weaponBase, int idleState,Action callback)
+    {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
+        if (weaponBase.getAnimEnd())
+        {
+            weaponBase.setState(idleState);
+            weaponBase.SetIdle(true);
+            callback.Invoke();
         }
     }
     public void HandleOnceInit(WeaponBase weaponBase) {

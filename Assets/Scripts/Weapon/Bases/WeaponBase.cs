@@ -20,6 +20,7 @@ public class WeaponBase : MonoBehaviour
     public WeaponType weaponType;
     public MoveWhileAttack currentMoveCondition;
     public bool CanAttackCancel;
+    public bool CanRotateView;
     
     Animator _animator;
     int objectState;
@@ -166,6 +167,7 @@ public class WeaponBase : MonoBehaviour
         AnimSpeed = 1;
         attackComboCount = 0;
         CanAttackCancel = true;
+        CanRotateView = true;
         currentMoveCondition = 0;
         newState = false;
         nowAttack = false;
@@ -263,15 +265,12 @@ public class WeaponBase : MonoBehaviour
         } while (!newState);
     }
     public void onWeaponTouch(int colliderType, FSMbase target) {
-        ///TODO
-        ///이거 여기서 이렇게 하지말고 웨폰 스트래티지>어택스트래티지>웨폰터치에서 하게 ㄱ 
-        ///
-
-
         if (!nowAttack)
             return;
 
         attackStrategy.onWeaponTouch(colliderType,target);
-
+    }
+    public void setViewPoint() {
+        player.SetViewPoint();
     }
 }

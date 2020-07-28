@@ -27,13 +27,17 @@ public class PlayerFSM : FSMbase
         currentHP = maxHP;
         //moveSpeed = 1;
     }
-    void SetViewPoint() {
+    public void SetViewPoint() {
 
-        Vector2 viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+
+        if (!Weapon.CanRotateView)
+            return;
+       Vector2 viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
         ViewDirection = (Mathf.RoundToInt((Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180) * -1) + 24) / 45;
         Weapon.WeaponViewDirection = (Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180);
         Weapon.ViewDirection = ViewDirection;
+
         switch (ViewDirection)
         {
             case 0:

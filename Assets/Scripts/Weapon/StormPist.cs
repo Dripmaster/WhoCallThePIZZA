@@ -32,12 +32,11 @@ public class StormPistIdleStrategy : IdleStrategy
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
 }
-public class StormPistMoveStrategy : MoveStrategy
+public class StormPistMoveStrategy : MoveFunction,MoveStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        if (weaponBase.CanAttackCancel)
-            weaponBase.setState((int)PlayerState.move);
+        cannotMove(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -65,7 +64,7 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
-        if (InputSystem.instance.getKey(InputKeys.MB_L_click))
+        if (!weaponBase.isDash && InputSystem.instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
             {
@@ -77,15 +76,15 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
         }
     }
 }
-public class StormPistDashStrategy : DashStrategy
+public class StormPistDashStrategy : DashFunction,DashStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        //weaponBase.setState((int)SampleWeaponState.move);
+        cannotMove(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+
     }
 }
 public class StormPistAttackStrategy : AttackValues, AttackStrategy
@@ -119,6 +118,11 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, (int)PlayerState.idle, ()=>{ weaponBase.CanRotateView = true; }) ;
+    }
+
+    public bool canDash()
+    {
+        return true;
     }
 
 }

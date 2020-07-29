@@ -15,6 +15,19 @@ public interface MoveStrategy
      void Update(WeaponBase weaponBase);
      void SetState(WeaponBase weaponBase);
 }
+public abstract class MoveFunction {
+    public void cannotMove(WeaponBase weaponBase)//무빙어택이나 어택하면서 못움직일때 호출
+    {
+        if (weaponBase.CanAttackCancel)
+            weaponBase.setState((int)PlayerState.move);
+    }
+    public void attack_Cancel(WeaponBase weaponBase)
+    {//움직이면 공격 캔슬될 때 호출
+        weaponBase.CanAttackCancel = true;
+        weaponBase.setState((int)PlayerState.move);
+    }
+
+}
 public interface DeadStrategy
 {
      void Update(WeaponBase weaponBase);
@@ -25,11 +38,27 @@ public interface DashStrategy
      void Update(WeaponBase weaponBase);
      void SetState(WeaponBase weaponBase);
 }
+public abstract class DashFunction
+{
+    public void cannotMove(WeaponBase weaponBase)//무빙어택이나 어택하면서 못움직일때 호출
+    {
+        if (weaponBase.CanAttackCancel)
+            weaponBase.setState((int)PlayerState.dash);
+    }
+    public void attack_Cancel(WeaponBase weaponBase)
+    {//움직이면 공격 캔슬될 때 호출
+        weaponBase.CanAttackCancel = true;
+        weaponBase.setState((int)PlayerState.dash);
+    }
+
+}
 public interface AttackStrategy
 {
     void Update(WeaponBase weaponBase);
     void SetState(WeaponBase weaponBase);
     void onWeaponTouch(int colliderType, FSMbase target);
+
+    bool canDash();
 }
 public interface MouseInputStrategy
 {

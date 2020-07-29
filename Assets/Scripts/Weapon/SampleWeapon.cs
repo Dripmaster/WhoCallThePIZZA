@@ -40,14 +40,14 @@ public class SampleIdleStrategy : IdleStrategy
         }
     }
 }
-public class SampleMoveStrategy : MoveStrategy
+public class SampleMoveStrategy : MoveFunction,MoveStrategy
 {
 
     public void SetState(WeaponBase weaponBase)
     {
-        if (weaponBase.CanAttackCancel)
-            weaponBase.setState((int)PlayerState.move);
+        cannotMove(weaponBase);
     }
+    
     public void Update(WeaponBase weaponBase)
     {
         weaponBase.setRotate(weaponBase.WeaponViewDirection);
@@ -84,7 +84,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
-        if (InputSystem.instance.getKey(InputKeys.MB_L_click))
+        if (!weaponBase.isDash&&InputSystem.instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
             {
@@ -94,15 +94,15 @@ public class SampleMouseInputStrategy : MouseInputStrategy
         }
     }
 }
-public class SampleDashStrategy : DashStrategy
+public class SampleDashStrategy : DashFunction, DashStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        //weaponBase.setState((int)SampleWeaponState.move);
+        attack_Cancel(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+
     }
 }
 public class SampleAttackStrategy : AttackValues, AttackStrategy
@@ -112,6 +112,11 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         tempAtkType = weaponBase.attackAnimType;
         ATK_COMMAND_PROGRESS_START = 0.3f;
         ATK_COMMAND_PROGRESS_END = 0.7f;
+    }
+
+    public bool canDash()
+    {
+        return true;
     }
 
     public void onWeaponTouch(int colliderType, FSMbase target)
@@ -145,7 +150,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
                 break;
         }
 
-        CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
+        CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Cancel_Attack);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -153,4 +158,6 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, (int)PlayerState.idle);
     }
+
+
 }

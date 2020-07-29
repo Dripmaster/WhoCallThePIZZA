@@ -131,6 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 333232270}
   - component: {fileID: 333232269}
+  - component: {fileID: 333232271}
   m_Layer: 0
   m_Name: SettingManager
   m_TagString: Untagged
@@ -164,6 +165,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333232271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333232268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87393495661aa55418daf7649a0a95e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &544498441 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7229258637901855802, guid: 479303b630fc812449bb430d14a054cb,
@@ -593,12 +606,12 @@ PrefabInstance:
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: dashSpeed
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: DashFrameCount
-      value: 1000
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}

@@ -129,7 +129,15 @@ public class PlayerFSM : FSMbase
     bool dashInput()
     {//!TODO : dash가능한 상태인지 확인할 것
 
-        return InputSystem.instance.getKeyDown(InputKeys.DashBtn);
+        if (Weapon.CanDash())
+        {
+
+            return InputSystem.instance.getKeyDown(InputKeys.DashBtn);
+        }
+        else
+        {
+            return false;
+        }
     }
     bool doDash(Vector2 moveDir)
     {
@@ -219,17 +227,24 @@ public class PlayerFSM : FSMbase
                 case MoveWhileAttack.Move_Attack:
                     if (MoveInput())
                     {
+                        if(!dashInput())
                         setState((int)PlayerState.move, Weapon.moveAnimType);
                     }
                     break;
                 case MoveWhileAttack.Move_Cancel_Attack:
                     if (MoveInput())
                     {
-                        setState((int)PlayerState.move, Weapon.moveAnimType);
-                        Weapon.SetMove();
+                        if (!dashInput())
+                        {
+                            setState((int)PlayerState.move, Weapon.moveAnimType);
+                            Weapon.SetMove();
+                        }
                     }
                     break;
                 case MoveWhileAttack.Cannot_Move:
+                    {
+                        MoveInput();
+                    }
                     break;
                 default:
                     break;

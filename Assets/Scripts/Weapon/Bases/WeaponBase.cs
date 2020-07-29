@@ -21,7 +21,7 @@ public class WeaponBase : MonoBehaviour
     public MoveWhileAttack currentMoveCondition;
     public bool CanAttackCancel;
     public bool CanRotateView;
-    
+
     Animator _animator;
     int objectState;
     protected bool newState;

@@ -590,6 +590,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: dashSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: DashFrameCount
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_FlipX

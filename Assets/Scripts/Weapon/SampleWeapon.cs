@@ -23,7 +23,7 @@ public class SampleIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
         switch (weaponBase.ViewDirection)
         {
             case 0:
@@ -50,7 +50,7 @@ public class SampleMoveStrategy : MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
         switch (weaponBase.ViewDirection)
         {
             case 0:
@@ -84,7 +84,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
-        if (Input.GetMouseButton(0))
+        if (InputSystem.instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
             {
@@ -128,7 +128,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
         switch (weaponBase.ViewDirection)
         {
             case 0:

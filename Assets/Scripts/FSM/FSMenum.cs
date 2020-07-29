@@ -23,3 +23,16 @@ public enum MoveWhileAttack {
     Move_Cancel_Attack , //player-move weapon-(attack->move)
     Cannot_Move //player-attack weapon-attack
 }
+
+public enum InputKeys
+{
+    Move_left=0,
+    Move_right,
+    Move_up,
+    Move_down,
+    DashBtn,
+    MB_L_click,
+    MB_R_click,
+    SkillBtn,
+    UltmateBtn,
+}

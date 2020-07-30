@@ -131,7 +131,6 @@ public class PlayerFSM : FSMbase
 
         if (Weapon.CanDash())
         {
-
             return InputSystem.Instance.getKeyDown(InputKeys.DashBtn);
         }
         else

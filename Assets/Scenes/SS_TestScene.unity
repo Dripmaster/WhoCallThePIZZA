@@ -476,12 +476,12 @@ PrefabInstance:
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: dashSpeed
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: DashFrameCount
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -517,6 +517,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081582, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081583, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 479303b630fc812449bb430d14a054cb, type: 3}

@@ -483,6 +483,31 @@ PrefabInstance:
       propertyPath: DashFrameCount
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_SortingOrder

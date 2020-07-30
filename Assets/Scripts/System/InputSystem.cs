@@ -69,6 +69,7 @@ public class InputSystem : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
+        init();
         DontDestroyOnLoad(gameObject);
     }
 

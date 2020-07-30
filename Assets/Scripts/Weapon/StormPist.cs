@@ -64,7 +64,7 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
-        if (!weaponBase.isDash && InputSystem.instance.getKey(InputKeys.MB_L_click))
+        if (!weaponBase.isDash && InputSystem.Instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
             {

@@ -1,33 +1,75 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class InputSystem : MonoBehaviour
-{
-    public static InputSystem instance;
+public class InputSystem : MonoBehaviour { 
+    private static InputSystem instance;
+    public static InputSystem Instance
+    {
 
+        get
+
+        {
+
+            if (instance == null)
+
+            {
+
+                var obj = FindObjectOfType<InputSystem>();
+
+                if (obj != null)
+                {
+
+                    instance = obj;
+
+                }
+                else
+                {
+
+                    var newSingleton = new GameObject("InputSystem Class").AddComponent<InputSystem>();
+
+                    instance = newSingleton;
+                }
+
+            }
+
+            return instance;
+
+        }
+
+        private set
+
+        {
+
+            instance = value;
+
+        }
+
+    }
 
     bool[] keyDownValues;
     bool[] keyUpValues;
     bool[] keyValues;
     int Length;
-    void Awake()
+    public void init()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else {
-            Destroy(gameObject);
-        }
-
-
         Length = Enum.GetValues(typeof(InputKeys)).Length;
         keyValues = new bool[Length];
         keyDownValues = new bool[Length];
         keyUpValues = new bool[Length];
+    }
+    void Awake()
+    {
+        var objs = FindObjectsOfType<InputSystem>();
+
+        if (objs.Length != 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()
@@ -101,14 +143,20 @@ public class InputSystem : MonoBehaviour
 
     public bool getKeyDown(InputKeys input)
     {
+        if (keyDownValues == null)
+            init();
         return keyDownValues[(int)input];
     }
     public bool getKeyUp(InputKeys input)
     {
+        if (keyUpValues == null)
+            init();
         return keyUpValues[(int)input];
     }
     public bool getKey(InputKeys input)
     {
+        if (keyValues == null)
+            init();
         return keyValues[(int)input];
     }
 

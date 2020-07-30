@@ -79,19 +79,19 @@ public class PlayerFSM : FSMbase
         SetViewPoint();
 
         moveDir = new Vector2(0, 0);
-        if (InputSystem.instance.getKey(InputKeys.Move_left))
+        if (InputSystem.Instance.getKey(InputKeys.Move_left))
         {
             moveDir.x += -1;
         }
-        if (InputSystem.instance.getKey(InputKeys.Move_right))
+        if (InputSystem.Instance.getKey(InputKeys.Move_right))
         {
             moveDir.x += 1;
         }
-        if (InputSystem.instance.getKey(InputKeys.Move_up))
+        if (InputSystem.Instance.getKey(InputKeys.Move_up))
         {
             moveDir.y += 1;
         }
-        if (InputSystem.instance.getKey(InputKeys.Move_down))
+        if (InputSystem.Instance.getKey(InputKeys.Move_down))
         {
             moveDir.y += -1;
         }
@@ -132,7 +132,7 @@ public class PlayerFSM : FSMbase
         if (Weapon.CanDash())
         {
 
-            return InputSystem.instance.getKeyDown(InputKeys.DashBtn);
+            return InputSystem.Instance.getKeyDown(InputKeys.DashBtn);
         }
         else
         {

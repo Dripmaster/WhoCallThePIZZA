@@ -32,12 +32,11 @@ public class StormPistIdleStrategy : IdleStrategy
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
 }
-public class StormPistMoveStrategy : MoveStrategy
+public class StormPistMoveStrategy : MoveFunction,MoveStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        if (weaponBase.CanAttackCancel)
-            weaponBase.setState((int)PlayerState.move);
+        cannotMove(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -65,25 +64,27 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
-        if (Input.GetMouseButton(0))
+        if (!weaponBase.isDash && InputSystem.instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
+                weaponBase.CanRotateView = true;
+                weaponBase.setViewPoint();
                 weaponBase.SetAttack(true);
             }
         }
     }
 }
-public class StormPistDashStrategy : DashStrategy
+public class StormPistDashStrategy : DashFunction,DashStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        //weaponBase.setState((int)SampleWeaponState.move);
+        cannotMove(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.ViewDirection * -45f);
+
     }
 }
 public class StormPistAttackStrategy : AttackValues, AttackStrategy
@@ -94,6 +95,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         ATK_COMBO_COUNT = 6;
         tempAtkCount = 6;
     }
+
+    public void onWeaponTouch(int colliderType, FSMbase target)
+    {
+        //TODO:스태틱 효과 및 공격이벤트
+    }
+
     public void SetState(WeaponBase weaponBase)
     {
         if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
@@ -103,11 +110,19 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
         CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
+
+        weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
-        HandleAttackEND(weaponBase, (int)PlayerState.idle);
+        HandleAttackEND(weaponBase, (int)PlayerState.idle, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
+
+    public bool canDash()
+    {
+        return true;
+    }
+
 }

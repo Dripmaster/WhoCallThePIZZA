@@ -12,7 +12,7 @@ public class WeaponBase : MonoBehaviour
     /// </summary>
     public int idleAnimType = 0;
     public int moveAnimType = 0;
-    public int attackAnimType = 0;
+    public int attackAnimType = 0;  
     public int deadAnimType = 0;
     public int dashAnimType = 0;
     public int skillAnimType = 0;
@@ -20,7 +20,9 @@ public class WeaponBase : MonoBehaviour
     public WeaponType weaponType;
     public MoveWhileAttack currentMoveCondition;
     public bool CanAttackCancel;
-    
+    public bool CanRotateView;
+    public bool isDash;
+
     Animator _animator;
     int objectState;
     protected bool newState;
@@ -156,16 +158,24 @@ public class WeaponBase : MonoBehaviour
         dashStrategy.SetState(this);
         if (playerSet)
         {
-            //player.setState((int)PlayerState.attack, attackAnimType);
+            player.setState((int)PlayerState.dash, dashAnimType);
         }
+    }
+    public bool CanDash() {
+        if (objectState == (int)PlayerState.attack)
+            return attackStrategy.canDash();
+        else
+            return true;
     }
     protected void OnEnable()
     {
         ViewDirection = 6;
         SetIdle();
+        isDash = false;
         AnimSpeed = 1;
         attackComboCount = 0;
         CanAttackCancel = true;
+        CanRotateView = true;
         currentMoveCondition = 0;
         newState = false;
         nowAttack = false;
@@ -253,6 +263,17 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
+    IEnumerator dash()
+    {
+        isDash = true;
+        do
+        {
+            MouseInput();
+            dashStrategy.Update(this);
+            yield return null;
+        } while (!newState);
+        isDash = false;
+    }
     IEnumerator attack()
     {
         do
@@ -261,24 +282,15 @@ public class WeaponBase : MonoBehaviour
             MouseInput();
             yield return null;
         } while (!newState);
+        nowAttack = false;
     }
     public void onWeaponTouch(int colliderType, FSMbase target) {
-        ///TODO
-        ///이거 여기서 이렇게 하지말고 웨폰 스트래티지>어택스트래티지>웨폰터치에서 하게 ㄱ 
-        ///
-
-
         if (!nowAttack)
             return;
-        if (colliderType == 0)
-        {
-            AttackManager.GetInstance().HandleDamage(50, target);
-        }
-        else
-        {
-            AttackManager.GetInstance().HandleDamage(5, target);
 
-        }
-
+        attackStrategy.onWeaponTouch(colliderType,target);
+    }
+    public void setViewPoint() {
+        player.SetViewPoint();
     }
 }

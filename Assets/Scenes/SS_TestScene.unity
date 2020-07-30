@@ -473,6 +473,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: dashSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: DashFrameCount
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_SortingOrder
@@ -658,6 +668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1795193292}
   - component: {fileID: 1795193291}
+  - component: {fileID: 1795193293}
   m_Layer: 0
   m_Name: SettingManager
   m_TagString: Untagged
@@ -691,6 +702,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1795193293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795193290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87393495661aa55418daf7649a0a95e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3924143022366814610
 PrefabInstance:
   m_ObjectHideFlags: 0

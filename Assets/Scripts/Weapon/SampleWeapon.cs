@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SampleWeapon {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, WeaponBase weaponBase) {
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out SkillStrategy s, WeaponBase weaponBase) {
         i = new SampleIdleStrategy();
         m = new SampleMoveStrategy();
         d = new SampleDeadStrategy();
         mi = new SampleMouseInputStrategy();
         ds= new SampleDashStrategy();
         a = new SampleAttackStrategy(weaponBase);
+        s = new SampleSkillStrategy();
     }
 
 }
@@ -84,6 +85,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 {
     public void HandleInput(WeaponBase weaponBase)
     {
+        /////기본 공격
         if (!weaponBase.isDash&&InputSystem.Instance.getKey(InputKeys.MB_L_click))
         {
             if (weaponBase.CanAttackCancel)
@@ -95,7 +97,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
                     ///움직이면서 공격이 되는 애면
                     ///움직이면서 공격 할 때
                     ///SetAttack(false)호출해야함(플레이어는 계속 움직이고 무기만 공격상태)
-                    if (weaponBase.getState() != PlayerState.move)
+                    if (weaponBase.getPlayerState() != PlayerState.move)
                     {
                         weaponBase.SetAttack(true);
                     }
@@ -110,6 +112,42 @@ public class SampleMouseInputStrategy : MouseInputStrategy
                 }
             }
         }
+        ////스킬
+        if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.SkillBtn))
+        {
+            if (weaponBase.CanAttackCancel)
+            {
+                weaponBase.CanAttackCancel = false;
+
+                if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
+                {
+                    if (weaponBase.getPlayerState() != PlayerState.move)
+                    {
+                        weaponBase.SetSkill(true);
+                    }
+                    else
+                    {
+                        weaponBase.SetSkill(false);
+                    }
+                }
+                else
+                {
+                    weaponBase.SetSkill(true);
+                }
+            }
+        }
+
+    }
+}
+public class SampleSkillStrategy : SkillStrategy
+{
+    public void SetState(WeaponBase weaponBase)
+    {
+        weaponBase.setState(PlayerState.skill);
+    }
+    public void Update(WeaponBase weaponBase)
+    {
+
     }
 }
 public class SampleDashStrategy : DashFunction, DashStrategy
@@ -173,13 +211,13 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
                 break;
         }
 
-        CountCombo(weaponBase, PlayerState.attack);
+        CountCombo(weaponBase);
     }
     public void Update(WeaponBase weaponBase)
     {
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
-        HandleAttackEND(weaponBase, (int)PlayerState.idle);
+        HandleAttackEND(weaponBase);
     }
 
 

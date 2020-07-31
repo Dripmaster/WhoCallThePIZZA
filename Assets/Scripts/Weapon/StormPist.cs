@@ -1,17 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class StormPist
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, WeaponBase weaponBase)
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out SkillStrategy s, WeaponBase weaponBase)
     {
         i = new StormPistIdleStrategy();
         m = new StormPistMoveStrategy();
         d = new StormPistDeadStrategy();
-        mi = new StormPistMouseInputStrategy();
+        mi = new SampleMouseInputStrategy();
         ds = new StormPistDashStrategy();
         a = new StormPistAttackStrategy(weaponBase);
+        s = new StormPistSkillStrategy();
     }
 }
 
@@ -60,38 +62,63 @@ public class StormPistDeadStrategy : DeadStrategy
         
     }
 }
-public class StormPistMouseInputStrategy : MouseInputStrategy
-{
-    public void HandleInput(WeaponBase weaponBase)
-    {
-        if (!weaponBase.isDash && InputSystem.Instance.getKey(InputKeys.MB_L_click))
-        {
-            if (weaponBase.CanAttackCancel)
-            {
-                weaponBase.CanAttackCancel = false;
 
-                if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
-                {
-                    ///움직이면서 공격이 되는 애면
-                    ///움직이면서 공격 할 때
-                    ///SetAttack(false)호출해야함(플레이어는 계속 움직이고 무기만 공격상태)
-                    if (weaponBase.getState() != PlayerState.move)
-                    {
-                        weaponBase.SetAttack(true);
-                    }
-                    else
-                    {
-                        weaponBase.SetAttack(false);
-                    }
-                }
-                else
-                {
-                    weaponBase.SetAttack(true);
-                }
-            }
+public class StormPistSkillStrategy :  SkillStrategy
+{
+    Vector2 targetPos;//목표지점
+    Vector2 startPos;//시작점
+    Vector2 lerpPos;//프레임 당 이동
+
+    float vy = 0.01f;//최고 높이
+    float h;
+    float t;//경과시간
+    int skillFrame = 0;
+
+    void PreCalculate() {
+       lerpPos =Vector2.Lerp(startPos, targetPos,1f/60)-startPos;
+
+        h = 0;
+        t = 0;
+        skillFrame = 0;
+    }
+
+    public void SetState(WeaponBase weaponBase)
+    {
+        weaponBase.setState(PlayerState.skill);
+        weaponBase.CanRotateView = false;
+        targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        startPos = weaponBase.player.transform.position;
+        PreCalculate();
+    }
+    public void Update(WeaponBase weaponBase)
+    {
+        if (skillFrame > 60)
+        {
+        weaponBase.CanRotateView = true;
+            weaponBase.CanAttackCancel = true;
+            weaponBase.SetIdle();
+            weaponBase.SetPlayerFree();
         }
+        if (skillFrame < 30) {
+            h += vy;
+
+        }
+        else
+        {
+                h -= vy;
+        }
+        skillFrame++;
+        t += Time.deltaTime;
+
+        float x = startPos.x+lerpPos.x* skillFrame;
+        float y = startPos.y+lerpPos.y* skillFrame + h;
+
+        Vector2 movePos = new Vector2(x, y);
+        weaponBase.player.SetPosition(movePos);
     }
 }
+
+
 public class StormPistDashStrategy : DashFunction,DashStrategy
 {
     public void SetState(WeaponBase weaponBase)
@@ -132,7 +159,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             weaponBase.setFlipScaleY(1); // 원래 대로
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-        CountCombo(weaponBase, PlayerState.attack);
+        CountCombo(weaponBase);
 
         weaponBase.CanRotateView = false;
     }
@@ -140,7 +167,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     {
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
-        HandleAttackEND(weaponBase, (int)PlayerState.idle, ()=>{ weaponBase.CanRotateView = true; }) ;
+        HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
 
     public bool canDash()

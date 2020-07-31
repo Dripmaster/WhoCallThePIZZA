@@ -75,7 +75,7 @@ public class PlayerFSM : FSMbase
             _sr.flipX = false;
         }*/
     }
-    bool MoveInput() {
+    public bool MoveInput() {
         SetViewPoint();
 
         moveDir = new Vector2(0, 0);
@@ -155,8 +155,14 @@ public class PlayerFSM : FSMbase
         Weapon.MouseInput();
     }
 
+    public PlayerState getState()
+    {
+        return (PlayerState)objectState;
+    }
 
-
+    public void SetComboCount(int c) {
+        _animator.SetInteger("ComboCount",c);
+    }
     private void FixedUpdate()
     {
         if (moveDir != Vector2.zero)
@@ -250,5 +256,44 @@ public class PlayerFSM : FSMbase
             }
             yield return null;
         } while (!newState);
+    }
+    IEnumerator skill()
+    {
+        do
+        {
+            SetViewPoint();
+            switch (Weapon.currentMoveCondition)
+            {
+                case MoveWhileAttack.Move_Attack:
+                    if (MoveInput())
+                    {
+                        if (!dashInput())
+                            setState((int)PlayerState.move);
+                    }
+                    break;
+                case MoveWhileAttack.Move_Cancel_Attack:
+                    if (MoveInput())
+                    {
+                        if (!dashInput())
+                        {
+                            setState((int)PlayerState.move);
+                            Weapon.SetMove();
+                        }
+                    }
+                    break;
+                case MoveWhileAttack.Cannot_Move:
+                    {
+                        MoveInput();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            yield return null;
+        } while (!newState);
+    }
+    public void SetPosition(Vector2 movePos)
+    {
+        transform.position = movePos;
     }
 }

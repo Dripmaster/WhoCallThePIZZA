@@ -25,6 +25,7 @@ public class WeaponBase : MonoBehaviour
     public bool nowAttack;
     private float animSpeed;
     IdleStrategy idleStrategy;
+    SkillStrategy skillStrategy;
     MoveStrategy moveStrategy;
     DashStrategy dashStrategy;
     DeadStrategy deadStrategy;
@@ -88,12 +89,12 @@ public class WeaponBase : MonoBehaviour
         switch (weaponType)
         {
             case WeaponType.sampleWeapon:
-                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
+                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out skillStrategy, this);
                 //스트래티지들 싹다 세팅
                 //애니메이션 컨트롤러 변경
                 break;
             case WeaponType.StormPist:
-                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, this);
+                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out skillStrategy, this);
                 break;
             default:
                 break;
@@ -114,6 +115,14 @@ public class WeaponBase : MonoBehaviour
     public void InitData() {
         setStateEnum(weaponType);
     }
+    public void SetPlayerFree() {
+
+        if (player.MoveInput())
+            player.setState((int)PlayerState.move);
+        else
+            player.setState((int)PlayerState.idle);
+
+    }
     public void SetIdle(bool playerSet = false) {
         idleStrategy.SetState(this);
         if (playerSet) {
@@ -132,6 +141,14 @@ public class WeaponBase : MonoBehaviour
         if (playerSet)
         {
             player.setState((int)PlayerState.dead);
+        }
+    }
+    public void SetSkill(bool playerSet = false)
+    {
+        skillStrategy.SetState(this);
+        if (playerSet)
+        {
+            player.setState((int)PlayerState.skill);
         }
     }
     public void SetAttack(bool playerSet = false)
@@ -265,6 +282,7 @@ public class WeaponBase : MonoBehaviour
         } while (!newState);
         isDash = false;
     }
+    
     IEnumerator attack()
     {
         do
@@ -275,6 +293,15 @@ public class WeaponBase : MonoBehaviour
         } while (!newState);
         nowAttack = false;
     }
+    IEnumerator skill()
+    {
+        do
+        {
+            MouseInput();
+            skillStrategy.Update(this);
+            yield return null;
+        } while (!newState);
+    }
     public void onWeaponTouch(int colliderType, FSMbase target) {
         if (!nowAttack)
             return;
@@ -284,10 +311,20 @@ public class WeaponBase : MonoBehaviour
     public void setViewPoint() {
         player.SetViewPoint();
     }
+
+    public PlayerState getPlayerState()
+    {
+        return player.getState();
+    }
     public PlayerState getState() {
         return objectState;
     }
     public MoveWhileAttack getMoveAttackCondition() {
         return attackStrategy.getAttackMoveCondition();
+    }
+    public void SetComboCount(int c)
+    {
+        attackComboCount = c;
+        player.SetComboCount(attackComboCount);
     }
 }

@@ -61,6 +61,12 @@ public interface AttackStrategy
 
     bool canDash();
 }
+public interface SkillStrategy
+{
+    void SetState(WeaponBase weaponBase);
+    void Update(WeaponBase weaponBase);
+}
+
 public interface MouseInputStrategy
 {
      void HandleInput(WeaponBase weaponBase);
@@ -83,7 +89,7 @@ public abstract class AttackValues {
         ATK_COMMAND_PROGRESS_END = ATK_COMMAND_progress_END;
         tempAtkCount = ATK_COMBO_count;
     }
-    public void CountCombo(WeaponBase weaponBase, PlayerState attackState)
+    public void CountCombo(WeaponBase weaponBase)
     {//공격 시 마다 어택콤보 늘어날때 setState에서 호출
         weaponBase.currentMoveCondition = attackMoveCondition;
         tempAtkCount++;
@@ -91,9 +97,8 @@ public abstract class AttackValues {
         {
             tempAtkCount = 0;
         }
-        weaponBase.attackComboCount = tempAtkCount;
-
-        weaponBase.setState(attackState);
+        weaponBase.SetComboCount(tempAtkCount);
+        weaponBase.setState(PlayerState.attack);
     }
     public void HandleAttackCancel(WeaponBase weaponBase) {//ATK_CANCEL_PROGRESS에 도달하면 끊고 이동 및 다음 공격이 가능해지는 애들 업데이트에서 호출
         if (!CancelConditonOnce && weaponBase.getAnimProgress() >= ATK_CANCEL_PROGRESS)
@@ -124,19 +129,18 @@ public abstract class AttackValues {
             }
         }
     }
-    public void HandleAttackEND(WeaponBase weaponBase, PlayerState idleState) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
+    public void HandleAttackEND(WeaponBase weaponBase) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
         {
-            weaponBase.setState(idleState);
-            weaponBase.SetIdle(true);
+            weaponBase.SetIdle();
+            weaponBase.SetPlayerFree();
         }
     }
-    public void HandleAttackEND(WeaponBase weaponBase, PlayerState idleState,Action callback)
+    public void HandleAttackEND(WeaponBase weaponBase,Action callback)
     {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
         {
-            weaponBase.setState(idleState);
-            weaponBase.SetIdle(true);
+            HandleAttackEND(weaponBase);
             callback.Invoke();
         }
     }

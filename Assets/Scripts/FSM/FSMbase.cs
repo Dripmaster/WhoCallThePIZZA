@@ -100,4 +100,5 @@ public abstract class FSMbase : MonoBehaviour
         } while (!newState);
     }
     public abstract void TakeAttack(float dmg);
+
 }

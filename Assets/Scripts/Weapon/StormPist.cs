@@ -69,9 +69,25 @@ public class StormPistMouseInputStrategy : MouseInputStrategy
             if (weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
-                weaponBase.CanRotateView = true;
-                weaponBase.setViewPoint();
-                weaponBase.SetAttack(true);
+
+                if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
+                {
+                    ///움직이면서 공격이 되는 애면
+                    ///움직이면서 공격 할 때
+                    ///SetAttack(false)호출해야함(플레이어는 계속 움직이고 무기만 공격상태)
+                    if (weaponBase.getState() != PlayerState.move)
+                    {
+                        weaponBase.SetAttack(true);
+                    }
+                    else
+                    {
+                        weaponBase.SetAttack(false);
+                    }
+                }
+                else
+                {
+                    weaponBase.SetAttack(true);
+                }
             }
         }
     }
@@ -91,7 +107,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 {
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(2)
     {
-        tempAtkType = weaponBase.attackAnimType;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
         ATK_COMBO_COUNT = 6;
         tempAtkCount = 6;
     }
@@ -101,15 +117,22 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         //TODO:스태틱 효과 및 공격이벤트
     }
 
+    public MoveWhileAttack getAttackMoveCondition()
+    {
+        return attackMoveCondition;
+    }
     public void SetState(WeaponBase weaponBase)
     {
+
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
         if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
             weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
         else
             weaponBase.setFlipScaleY(1); // 원래 대로
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-        CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Attack);
+        CountCombo(weaponBase, PlayerState.attack);
 
         weaponBase.CanRotateView = false;
     }

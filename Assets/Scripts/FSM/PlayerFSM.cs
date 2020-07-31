@@ -18,20 +18,20 @@ public class PlayerFSM : FSMbase
         base.Awake();
         
         setStateType(typeof(PlayerState));
-        initData();
         mainCamera = Camera.main;
         Weapon = GetComponentInChildren<WeaponBase>();
         Weapon.player = this;
+        initData();
     }
     new void OnEnable()
     {
         base.OnEnable();
         moveDir = Vector2.zero;
         dashFrameCount = 0;
-        setState((int)PlayerState.idle, Weapon.idleAnimType);
+        setState((int)PlayerState.idle);
     }
     void initData() {//현재는 임시 데이터
-
+        _animator.SetInteger("WeaponNumber", (int)Weapon.weaponType);
         maxHP = 100;
         currentHP = maxHP;
         //moveSpeed = 1;
@@ -99,7 +99,7 @@ public class PlayerFSM : FSMbase
         {
             if (dashInput())
             {
-                setState((int)PlayerState.dash, Weapon.dashAnimType);
+                setState((int)PlayerState.dash);
                 Weapon.SetDash();
                 return true;
             }
@@ -177,7 +177,7 @@ public class PlayerFSM : FSMbase
         {
             if (MoveInput())
             {
-                setState((int)PlayerState.move, Weapon.moveAnimType);
+                setState((int)PlayerState.move);
                 Weapon.SetMove();
             }
 
@@ -190,7 +190,7 @@ public class PlayerFSM : FSMbase
         do
         {
             if (!MoveInput()) {
-                setState((int)PlayerState.idle, Weapon.idleAnimType);
+                setState((int)PlayerState.idle);
                 Weapon.SetIdle();
             }
             yield return null;
@@ -205,11 +205,11 @@ public class PlayerFSM : FSMbase
             {
                 if (MoveInput())
                 {
-                    setState((int)PlayerState.move, Weapon.moveAnimType);
+                    setState((int)PlayerState.move);
                     Weapon.SetMove();
                 }
                 else {
-                    setState((int)PlayerState.idle, Weapon.idleAnimType);
+                    setState((int)PlayerState.idle);
                     Weapon.SetIdle();
                 }
             }
@@ -227,7 +227,7 @@ public class PlayerFSM : FSMbase
                     if (MoveInput())
                     {
                         if(!dashInput())
-                        setState((int)PlayerState.move, Weapon.moveAnimType);
+                        setState((int)PlayerState.move);
                     }
                     break;
                 case MoveWhileAttack.Move_Cancel_Attack:
@@ -235,7 +235,7 @@ public class PlayerFSM : FSMbase
                     {
                         if (!dashInput())
                         {
-                            setState((int)PlayerState.move, Weapon.moveAnimType);
+                            setState((int)PlayerState.move);
                             Weapon.SetMove();
                         }
                     }

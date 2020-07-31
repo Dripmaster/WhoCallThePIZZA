@@ -19,12 +19,12 @@ public abstract class MoveFunction {
     public void cannotMove(WeaponBase weaponBase)//무빙어택이나 어택하면서 못움직일때 호출
     {
         if (weaponBase.CanAttackCancel)
-            weaponBase.setState((int)PlayerState.move);
+            weaponBase.setState(PlayerState.move);
     }
     public void attack_Cancel(WeaponBase weaponBase)
     {//움직이면 공격 캔슬될 때 호출
         weaponBase.CanAttackCancel = true;
-        weaponBase.setState((int)PlayerState.move);
+        weaponBase.setState(PlayerState.move);
     }
 
 }
@@ -43,12 +43,12 @@ public abstract class DashFunction
     public void cannotMove(WeaponBase weaponBase)//무빙어택이나 어택하면서 못움직일때 호출
     {
         if (weaponBase.CanAttackCancel)
-            weaponBase.setState((int)PlayerState.dash);
+            weaponBase.setState(PlayerState.dash);
     }
     public void attack_Cancel(WeaponBase weaponBase)
     {//움직이면 공격 캔슬될 때 호출
         weaponBase.CanAttackCancel = true;
-        weaponBase.setState((int)PlayerState.dash);
+        weaponBase.setState(PlayerState.dash);
     }
 
 }
@@ -57,6 +57,7 @@ public interface AttackStrategy
     void Update(WeaponBase weaponBase);
     void SetState(WeaponBase weaponBase);
     void onWeaponTouch(int colliderType, FSMbase target);
+    MoveWhileAttack getAttackMoveCondition();
 
     bool canDash();
 }
@@ -74,6 +75,7 @@ public abstract class AttackValues {
     public int tempAtkCount; 
     public bool CancelConditonOnce;
     public bool AttackOnce;
+    protected MoveWhileAttack attackMoveCondition;
     public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
         ATK_COMBO_COUNT = ATK_COMBO_count;
         ATK_CANCEL_PROGRESS = ATK_CANCEL_progress;
@@ -81,15 +83,14 @@ public abstract class AttackValues {
         ATK_COMMAND_PROGRESS_END = ATK_COMMAND_progress_END;
         tempAtkCount = ATK_COMBO_count;
     }
-    public void CountCombo(WeaponBase weaponBase, int attackState, MoveWhileAttack moveWhileAttack)
+    public void CountCombo(WeaponBase weaponBase, PlayerState attackState)
     {//공격 시 마다 어택콤보 늘어날때 setState에서 호출
-        weaponBase.currentMoveCondition = moveWhileAttack;
+        weaponBase.currentMoveCondition = attackMoveCondition;
         tempAtkCount++;
         if (tempAtkCount >= ATK_COMBO_COUNT)
         {
             tempAtkCount = 0;
         }
-        weaponBase.attackAnimType = tempAtkType + tempAtkCount;
         weaponBase.attackComboCount = tempAtkCount;
 
         weaponBase.setState(attackState);
@@ -123,14 +124,14 @@ public abstract class AttackValues {
             }
         }
     }
-    public void HandleAttackEND(WeaponBase weaponBase, int idleState) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
+    public void HandleAttackEND(WeaponBase weaponBase, PlayerState idleState) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
         {
             weaponBase.setState(idleState);
             weaponBase.SetIdle(true);
         }
     }
-    public void HandleAttackEND(WeaponBase weaponBase, int idleState,Action callback)
+    public void HandleAttackEND(WeaponBase weaponBase, PlayerState idleState,Action callback)
     {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
         {

@@ -72,11 +72,12 @@ public abstract class FSMbase : MonoBehaviour
         newState = true;
         _animator.SetInteger("State",objectState);
     }
-    public void setState(int state,int animType)
+    public void setState(int state,int combo)
     {
         objectState = state;
         newState = true;
-        _animator.SetInteger("State", objectState+animType);
+        _animator.SetInteger("State", objectState);
+        _animator.SetInteger("ComboCount", combo);
     }
     IEnumerator FSMmain() {
         while (true)

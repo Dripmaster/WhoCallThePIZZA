@@ -10,12 +10,6 @@ public class WeaponBase : MonoBehaviour
     /// <summary>
     /// 플레이어에게 넘겨줄 animType
     /// </summary>
-    public int idleAnimType = 0;
-    public int moveAnimType = 0;
-    public int attackAnimType = 0;  
-    public int deadAnimType = 0;
-    public int dashAnimType = 0;
-    public int skillAnimType = 0;
 
     public WeaponType weaponType;
     public MoveWhileAttack currentMoveCondition;
@@ -24,7 +18,7 @@ public class WeaponBase : MonoBehaviour
     public bool isDash;
 
     Animator _animator;
-    int objectState;
+    PlayerState objectState;
     protected bool newState;
     int viewDirection;
     public int attackComboCount;
@@ -84,9 +78,6 @@ public class WeaponBase : MonoBehaviour
     protected void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
-        idleAnimType = 0;
-        attackAnimType = 0;
-        moveAnimType = 0;
         InitData();
     }
     public void setWeapon(WeaponType weaponType) {
@@ -126,21 +117,21 @@ public class WeaponBase : MonoBehaviour
     public void SetIdle(bool playerSet = false) {
         idleStrategy.SetState(this);
         if (playerSet) {
-            player.setState((int)PlayerState.idle,idleAnimType);
+            player.setState((int)PlayerState.idle);
         }
     }
     public void SetMove(bool playerSet = false) {
         moveStrategy.SetState(this);
         if (playerSet)
         {
-            player.setState((int)PlayerState.move, moveAnimType);
+            player.setState((int)PlayerState.move);
         }
     }
     public void SetDead(bool playerSet = false) {
         deadStrategy.SetState(this);
         if (playerSet)
         {
-            player.setState((int)PlayerState.dead, deadAnimType);
+            player.setState((int)PlayerState.dead);
         }
     }
     public void SetAttack(bool playerSet = false)
@@ -148,7 +139,7 @@ public class WeaponBase : MonoBehaviour
         attackStrategy.SetState(this);
         if (playerSet)
         {
-            player.setState((int)PlayerState.attack, attackAnimType);
+            player.setState((int)PlayerState.attack);
         }
     }
     public void MouseInput() {
@@ -158,11 +149,11 @@ public class WeaponBase : MonoBehaviour
         dashStrategy.SetState(this);
         if (playerSet)
         {
-            player.setState((int)PlayerState.dash, dashAnimType);
+            player.setState((int)PlayerState.dash);
         }
     }
     public bool CanDash() {
-        if (objectState == (int)PlayerState.attack)
+        if (objectState == PlayerState.attack)
             return attackStrategy.canDash();
         else
             return true;
@@ -196,13 +187,13 @@ public class WeaponBase : MonoBehaviour
     {
         return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
-    public void setState(int state,bool animChage = true)
+    public void setState(PlayerState state,bool animChage = true)
     {
         objectState = state;
         newState = true;
         if (animChage)
         {
-            _animator.SetInteger("State", objectState);
+            _animator.SetInteger("State", (int)objectState);
             _animator.SetInteger("ComboCount", attackComboCount);
         }
         attackComboCount = 0;
@@ -292,5 +283,11 @@ public class WeaponBase : MonoBehaviour
     }
     public void setViewPoint() {
         player.SetViewPoint();
+    }
+    public PlayerState getState() {
+        return objectState;
+    }
+    public MoveWhileAttack getMoveAttackCondition() {
+        return attackStrategy.getAttackMoveCondition();
     }
 }

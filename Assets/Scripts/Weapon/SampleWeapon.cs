@@ -73,7 +73,7 @@ public class SampleDeadStrategy : DeadStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setState((int)PlayerState.dead);
+        weaponBase.setState(PlayerState.dead);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -89,7 +89,25 @@ public class SampleMouseInputStrategy : MouseInputStrategy
             if (weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
-                weaponBase.SetAttack(true);
+
+                if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
+                {
+                    ///움직이면서 공격이 되는 애면
+                    ///움직이면서 공격 할 때
+                    ///SetAttack(false)호출해야함(플레이어는 계속 움직이고 무기만 공격상태)
+                    if (weaponBase.getState() != PlayerState.move)
+                    {
+                        weaponBase.SetAttack(true);
+                    }
+                    else
+                    {
+                        weaponBase.SetAttack(false);
+                    }
+                }
+                else
+                {
+                    weaponBase.SetAttack(true);
+                }
             }
         }
     }
@@ -109,14 +127,19 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 {
     public SampleAttackStrategy(WeaponBase weaponBase) : base(2)
     {
-        tempAtkType = weaponBase.attackAnimType;
         ATK_COMMAND_PROGRESS_START = 0.3f;
         ATK_COMMAND_PROGRESS_END = 0.7f;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
     }
 
     public bool canDash()
     {
         return true;
+    }
+
+    public MoveWhileAttack getAttackMoveCondition()
+    {
+        return attackMoveCondition;
     }
 
     public void onWeaponTouch(int colliderType, FSMbase target)
@@ -150,7 +173,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
                 break;
         }
 
-        CountCombo(weaponBase, (int)PlayerState.attack, MoveWhileAttack.Move_Cancel_Attack);
+        CountCombo(weaponBase, PlayerState.attack);
     }
     public void Update(WeaponBase weaponBase)
     {

@@ -234,6 +234,14 @@ public class WeaponBase : MonoBehaviour
             Rotator.transform.localScale = new Vector3(Rotator.transform.localScale.x, tempScaleY);
         }
     }
+
+    public void SP_FlipY()  // StormPist용 flip
+    {
+        if (ViewDirection < 2 || ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
+            setFlipScaleY(-1); // -1 : 위아래 뒤집기
+        else
+            setFlipScaleY(1); // 원래 대로
+    }
     public void setFlip(bool value)//한손무기 위치플립
     {
         flipValue = value;
@@ -257,8 +265,8 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            MouseInput();
             idleStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }
@@ -266,8 +274,8 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            MouseInput();
             moveStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }
@@ -276,8 +284,8 @@ public class WeaponBase : MonoBehaviour
         isDash = true;
         do
         {
-            MouseInput();
             dashStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
         isDash = false;
@@ -297,8 +305,8 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            MouseInput();
             skillStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }

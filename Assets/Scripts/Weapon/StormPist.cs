@@ -26,10 +26,7 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if(weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
-        else
-            weaponBase.setFlipScaleY(1); // 원래 대로
+        weaponBase.SP_FlipY();
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
@@ -42,10 +39,7 @@ public class StormPistMoveStrategy : MoveFunction,MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left   2, 6 은 원하는데로 설정
-            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
-        else
-            weaponBase.setFlipScaleY(1); // 원래 대로
+        weaponBase.SP_FlipY();
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
     }
@@ -84,10 +78,10 @@ public class StormPistSkillStrategy :  SkillStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection >= 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            weaponBase.setRotate(0);
-        else
+        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
             weaponBase.setRotate(180);
+        else
+            weaponBase.setRotate(0);
 
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
@@ -99,7 +93,7 @@ public class StormPistSkillStrategy :  SkillStrategy
     {
         if (skillFrame > 60)
         {
-        weaponBase.CanRotateView = true;
+            weaponBase.CanRotateView = true;
             weaponBase.CanAttackCancel = true;
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
@@ -158,10 +152,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            weaponBase.setFlipScaleY(-1); // -1 : 위아래 뒤집기
-        else
-            weaponBase.setFlipScaleY(1); // 원래 대로
+        weaponBase.SP_FlipY();
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
         CountCombo(weaponBase);
@@ -179,5 +170,4 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     {
         return true;
     }
-
 }

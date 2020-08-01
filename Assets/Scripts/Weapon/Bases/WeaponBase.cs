@@ -250,15 +250,15 @@ public class WeaponBase : MonoBehaviour
         while (true)
         {
             newState = false;
-            yield return StartCoroutine(((PlayerState)objectState).ToString());
+            yield return StartCoroutine((objectState).ToString());
         }
     }
     IEnumerator idle()
     {
         do
         {
-            MouseInput();
             idleStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }
@@ -266,8 +266,8 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            MouseInput();
             moveStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }
@@ -276,8 +276,8 @@ public class WeaponBase : MonoBehaviour
         isDash = true;
         do
         {
-            MouseInput();
             dashStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
         isDash = false;
@@ -297,8 +297,8 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            MouseInput();
             skillStrategy.Update(this);
+            MouseInput();
             yield return null;
         } while (!newState);
     }

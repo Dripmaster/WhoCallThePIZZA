@@ -84,6 +84,12 @@ public class StormPistSkillStrategy :  SkillStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
+
+        if (weaponBase.ViewDirection <= 2 || weaponBase.ViewDirection >= 6)// (0, 1, 7)  Left   2, 6 은 원하는데로 설정
+            weaponBase.setRotate(180); 
+        else
+            weaponBase.setRotate(0); 
+
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

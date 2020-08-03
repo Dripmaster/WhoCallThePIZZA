@@ -140,7 +140,36 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     public void onWeaponTouch(int colliderType, FSMbase target)
     {
-        //TODO:스태틱 효과 및 공격이벤트
+        List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 대상 저장용
+        alreadyHitTarget.Add(target.GetComponent<Collider2D>());
+
+        AttackManager.GetInstance().HandleDamage(50, target);
+        Collider2D[] targetList1 = AttackManager.GetInstance().GetTargetList(target.GetComponent<Transform>().position, 10, 1<<10);
+        //리스트나 어래이에서 타격된대상 제외 하고 Length 확인
+
+        if (targetList1.Length < 1)
+        {
+            AttackManager.GetInstance().HandleDamage(5, target); // 탐지 됬는지 확인용
+            return;
+        }
+
+        FSMbase ES_target1 = targetList1[1].GetComponent<FSMbase>();
+        AttackManager.GetInstance().HandleDamage(50, ES_target1);
+        Collider2D[] targetList2 = AttackManager.GetInstance().GetTargetList(ES_target1.GetComponent<Transform>().position, 10, 1<<10);
+
+        if (targetList2.Length < 1)
+            return;
+        
+        FSMbase ES_target2 = targetList2[0].GetComponent<FSMbase>();
+        AttackManager.GetInstance().HandleDamage(50, ES_target2);
+        Collider2D[] targetList3 = AttackManager.GetInstance().GetTargetList(ES_target2.GetComponent<Transform>().position, 10, 1<<10);
+
+        if (targetList3.Length < 1)
+            return;
+
+        FSMbase ES_target3 = targetList3[1].GetComponent<FSMbase>();
+        AttackManager.GetInstance().HandleDamage(50, ES_target3);
+
     }
 
     public MoveWhileAttack getAttackMoveCondition()

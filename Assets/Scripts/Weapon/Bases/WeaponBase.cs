@@ -41,7 +41,7 @@ public class WeaponBase : MonoBehaviour
     private WeaponBase() {
         instance = this;
     }
-    protected float AnimSpeed
+    public float AnimSpeed
     {
         get
         {
@@ -258,7 +258,7 @@ public class WeaponBase : MonoBehaviour
         while (true)
         {
             newState = false;
-            yield return StartCoroutine(((PlayerState)objectState).ToString());
+            yield return StartCoroutine((objectState).ToString());
         }
     }
     IEnumerator idle()

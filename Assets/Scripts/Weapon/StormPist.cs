@@ -63,17 +63,24 @@ public class StormPistSkillStrategy :  SkillStrategy
     Vector2 startPos;//시작점
     Vector2 lerpPos;//프레임 당 이동
 
-    float vy = 0.01f;//최고 높이
+    float v = 2.5f;//속도
+    float vy = 1f;//y가짜 포물선 속도
     float h;
     float t;//경과시간
-    int skillFrame = 0;
+    float all_t;//전체 이동 시간
+    float l;//이동거리
+   
 
     void PreCalculate() {
-       lerpPos =Vector2.Lerp(startPos, targetPos,1f/60)-startPos;
+       lerpPos =targetPos-startPos;
+        l = lerpPos.magnitude;
+       lerpPos.Normalize();
+        lerpPos *= v;
 
         h = 0;
         t = 0;
-        skillFrame = 0;
+        all_t = l/lerpPos.magnitude;
+        
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -88,31 +95,42 @@ public class StormPistSkillStrategy :  SkillStrategy
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         startPos = weaponBase.player.transform.position;
         PreCalculate();
+        weaponBase.AnimSpeed = 1 / all_t;
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (skillFrame > 60)
+       
+        t += Time.deltaTime;
+
+        if (t <= all_t * 0.4f) {
+            h = t*vy;
+        }
+        else if(t < all_t * 0.7f)
         {
+            
+        }else if(t <= all_t)
+        {
+            h = (all_t-t)*vy;
+        }
+
+
+        float x = startPos.x+lerpPos.x* t;
+        float y = startPos.y+lerpPos.y* t+h;
+
+        Vector2 movePos = new Vector2(x, y);
+        if (//Vector2.SqrMagnitude(movePos-(Vector2)weaponBase.player.transform.position)>=
+            //Vector2.SqrMagnitude(targetPos - (Vector2)weaponBase.player.transform.position))
+            t>=all_t)
+        {
+            movePos = targetPos;
             weaponBase.CanRotateView = true;
             weaponBase.CanAttackCancel = true;
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
-        }
-        if (skillFrame < 30) {
-            h += vy;
 
+            weaponBase.AnimSpeed = 1;
         }
-        else
-        {
-                h -= vy;
-        }
-        skillFrame++;
-        t += Time.deltaTime;
 
-        float x = startPos.x+lerpPos.x* skillFrame;
-        float y = startPos.y+lerpPos.y* skillFrame + h;
-
-        Vector2 movePos = new Vector2(x, y);
         weaponBase.player.SetPosition(movePos);
     }
 }

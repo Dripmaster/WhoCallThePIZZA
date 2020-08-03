@@ -295,8 +295,8 @@ public class PlayerFSM : FSMbase
     public void SetPosition(Vector2 movePos)
     {
         //TODO : fixedUpdate에서 이동하도록 해야함
-        //transform.position = movePos;
+        transform.position = movePos;
 
-        _rigidbody2D.MovePosition(movePos);
+        //_rigidbody2D.MovePosition(movePos);
     }
 }

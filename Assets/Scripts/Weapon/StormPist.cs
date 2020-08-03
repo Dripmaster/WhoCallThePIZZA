@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StormPist
@@ -158,7 +159,6 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     public void onWeaponTouch(int colliderType, FSMbase target)
     {
-        //TODO:스태틱 효과 및 공격이벤트
     }
 
     public MoveWhileAttack getAttackMoveCondition()

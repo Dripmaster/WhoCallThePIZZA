@@ -150,15 +150,35 @@ public class StormPistDashStrategy : DashFunction,DashStrategy
 }
 public class StormPistAttackStrategy : AttackValues, AttackStrategy
 {
+    int attackConnectCount;
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(2)
     {
         attackMoveCondition = MoveWhileAttack.Move_Attack;
         ATK_COMBO_COUNT = 6;
         tempAtkCount = 6;
+        attackConnectCount = 3;
     }
 
     public void onWeaponTouch(int colliderType, FSMbase target)
     {
+        List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
+        alreadyHitTarget.Add(target.GetComponent<Collider2D>());
+
+        AttackManager.GetInstance().HandleDamage(50, target);
+
+        for (int i = 0; i < attackConnectCount; i++)
+        {
+            Collider2D[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1<<10,alreadyHitTarget);
+            if (targetList.Length < 1)
+                break;
+            alreadyHitTarget.Add(targetList[0]);
+        }
+        for (int i = 1; i < alreadyHitTarget.Count; i++)
+        {
+            AttackManager.GetInstance().HandleDamage(10,alreadyHitTarget[i].GetComponent<FSMbase>());
+
+        }
+
     }
 
     public MoveWhileAttack getAttackMoveCondition()

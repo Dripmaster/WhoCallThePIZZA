@@ -172,6 +172,8 @@ public class WeaponBase : MonoBehaviour
     public bool CanDash() {
         if (objectState == PlayerState.attack)
             return attackStrategy.canDash();
+        else if(objectState == PlayerState.skill)
+            return skillStrategy.canDash();
         else
             return true;
     }
@@ -310,7 +312,11 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
-    public void onWeaponTouch(int colliderType, FSMbase target) {
+    public void onWeaponTouch(int colliderType, Collider2D target) {
+        if (objectState == PlayerState.skill)
+            skillStrategy.onWeaponTouch(colliderType, target);
+
+
         if (!nowAttack)
             return;
 
@@ -334,5 +340,8 @@ public class WeaponBase : MonoBehaviour
     {
         attackComboCount = c;
         player.SetComboCount(attackComboCount);
+    }
+    public Animator GetAnimatior() {
+        return _animator;
     }
 }

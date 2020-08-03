@@ -1032,7 +1032,7 @@ GameObject:
   - component: {fileID: 1714896395}
   - component: {fileID: 1714896394}
   m_Layer: 10
-  m_Name: testEnemy (1)
+  m_Name: testEnemy (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1181,7 +1181,7 @@ Transform:
   m_Children:
   - {fileID: 65192236}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1795193290
 GameObject:

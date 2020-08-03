@@ -39,6 +39,7 @@ public class Pool : MonoBehaviour
         if(waitingQueue.Count == 0)
             AddObject(incrementCount);
         PoolableObject poolable = waitingQueue.Dequeue(); 
+        if(parent!=null)
         poolable.transform.parent = parent;
         return poolable;
     }

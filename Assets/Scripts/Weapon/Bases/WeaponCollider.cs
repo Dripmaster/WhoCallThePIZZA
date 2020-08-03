@@ -9,9 +9,7 @@ public class WeaponCollider : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         FSMbase target = collision.GetComponent<FSMbase>();
-        if (target != null)
-        {
-            WeaponBase.instance.onWeaponTouch(myColliderType, target);
-        }
+        WeaponBase.instance.onWeaponTouch(myColliderType, collision);
+
     }
 }

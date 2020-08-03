@@ -56,7 +56,7 @@ public interface AttackStrategy
 {
     void Update(WeaponBase weaponBase);
     void SetState(WeaponBase weaponBase);
-    void onWeaponTouch(int colliderType, FSMbase target);
+    void onWeaponTouch(int colliderType, Collider2D target);
     MoveWhileAttack getAttackMoveCondition();
 
     bool canDash();
@@ -65,6 +65,8 @@ public interface SkillStrategy
 {
     void SetState(WeaponBase weaponBase);
     void Update(WeaponBase weaponBase);
+    void onWeaponTouch(int colliderType, Collider2D target);
+    bool canDash();
 }
 
 public interface MouseInputStrategy

@@ -86,6 +86,7 @@ public class StormPistSkillStrategy :  SkillStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
+        weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
         if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
             weaponBase.setRotate(180);
         else
@@ -134,6 +135,16 @@ public class StormPistSkillStrategy :  SkillStrategy
 
         weaponBase.player.SetPosition(movePos);
     }
+
+    public void onWeaponTouch(int colliderType, Collider2D target)
+    {
+
+    }
+
+    public bool canDash()
+    {
+        return false;
+    }
 }
 
 
@@ -159,24 +170,27 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         attackConnectCount = 3;
     }
 
-    public void onWeaponTouch(int colliderType, FSMbase target)
+    public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
-        alreadyHitTarget.Add(target.GetComponent<Collider2D>());
-
-        AttackManager.GetInstance().HandleDamage(50, target);
-
-        for (int i = 0; i < attackConnectCount; i++)
+        var fsm = target.GetComponent<FSMbase>();
+        if (fsm != null)
         {
-            Collider2D[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1<<10,alreadyHitTarget);
-            if (targetList.Length < 1)
-                break;
-            alreadyHitTarget.Add(targetList[0]);
-        }
-        for (int i = 1; i < alreadyHitTarget.Count; i++)
-        {
-            AttackManager.GetInstance().HandleDamage(10,alreadyHitTarget[i].GetComponent<FSMbase>());
+            List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
+            alreadyHitTarget.Add(target.GetComponent<Collider2D>());
 
+            AttackManager.GetInstance().HandleDamage(50, fsm);
+
+            for (int i = 0; i < attackConnectCount; i++)
+            {
+                Collider2D[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1 << 10, alreadyHitTarget);
+                if (targetList.Length < 1)
+                    break;
+                alreadyHitTarget.Add(targetList[0]);
+            }
+            for (int i = 1; i < alreadyHitTarget.Count; i++)
+            {
+                AttackManager.GetInstance().HandleDamage(10, alreadyHitTarget[i].GetComponent<FSMbase>());
+            }
         }
 
     }

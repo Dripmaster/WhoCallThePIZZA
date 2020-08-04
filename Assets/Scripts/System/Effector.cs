@@ -191,7 +191,7 @@ public class Effector : MonoBehaviour
         if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
     #endif
         effectList.Add(new Effect(DisableCoroutine(timeOffset), timeOffset));
-        isDoneSetting = true;
+        isDoneSetting = true;//<-왜?
         return this;
     }
     IEnumerator DisableCoroutine(float timeOffset)
@@ -259,6 +259,7 @@ public class Effector : MonoBehaviour
     {
         int index = 0;
         List<Effect> effectBatch = new List<Effect>();
+        
         while(index < effectList.Count)
         {
             effectBatch.Add(effectList[index]);
@@ -272,6 +273,9 @@ public class Effector : MonoBehaviour
             }
             index++;
         }
+        //YM 추가
+        effectList.Clear();
+        isDoneSetting = false;
     }
 
     static float increCurve(float t)

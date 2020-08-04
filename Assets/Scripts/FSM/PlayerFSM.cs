@@ -115,7 +115,13 @@ public class PlayerFSM : FSMbase
     }
     public override void TakeAttack(float dmg)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
+        if (currentHP <= 0)
+        {
+            setState((int)PlayerState.dead);
+            Weapon.SetDead();
 
+
+        }
     }
     public bool doMove(Vector2 moveDir) {
         moveDir.Normalize();

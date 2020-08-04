@@ -60,6 +60,8 @@ public interface AttackStrategy
     MoveWhileAttack getAttackMoveCondition();
 
     bool canDash();
+    void GetCoolTime(out float remain, out float total);
+    void StartCool();
 }
 public interface SkillStrategy
 {
@@ -79,18 +81,26 @@ public abstract class AttackValues {
     public float ATK_CANCEL_PROGRESS = 0.8f; //공격 캔슬 가능 진행도
     public float ATK_COMMAND_PROGRESS_START = 0f; // 이 진행도 부터 공격 범위
     public float ATK_COMMAND_PROGRESS_END = 0.8f; // 이 진행도 까지 공격 범위
-    public int tempAtkType = 0; 
     public int tempAtkCount; 
     public bool CancelConditonOnce;
     public bool AttackOnce;
+    public bool dashCondition;
     protected MoveWhileAttack attackMoveCondition;
+    protected float[] coolTimes;
+    protected float remainCoolTime;
+    protected float totalCoolTime;
+    protected float coolStartTime;
+    bool isCooldown = false;
     public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
         ATK_COMBO_COUNT = ATK_COMBO_count;
         ATK_CANCEL_PROGRESS = ATK_CANCEL_progress;
         ATK_COMMAND_PROGRESS_START = ATK_COMMAND_progress_START;
         ATK_COMMAND_PROGRESS_END = ATK_COMMAND_progress_END;
         tempAtkCount = ATK_COMBO_count;
+        coolTimes = new float[ATK_COMBO_count];
+        SetCoolTimes();
     }
+    abstract public void SetCoolTimes();
     public void CountCombo(WeaponBase weaponBase)
     {//공격 시 마다 어택콤보 늘어날때 setState에서 호출
         weaponBase.currentMoveCondition = attackMoveCondition;
@@ -108,6 +118,7 @@ public abstract class AttackValues {
             weaponBase.currentMoveCondition = MoveWhileAttack.Move_Cancel_Attack;
             weaponBase.CanAttackCancel = true;
             CancelConditonOnce = true;
+            StartCool();
         }
         HandleOnceInit(weaponBase);
     }
@@ -157,4 +168,43 @@ public abstract class AttackValues {
         CancelConditonOnce = false;
         AttackOnce = false;
     }
+
+    public void StartCool() {
+        if (isCooldown)
+            return;
+        totalCoolTime = coolTimes[tempAtkCount];
+        remainCoolTime = totalCoolTime;
+        coolStartTime = Time.realtimeSinceStartup;
+        isCooldown = true;
+    }
+ 
+    public void GetCoolTime(out float remain, out float total)
+    {
+        if (!isCooldown)
+        {
+            remainCoolTime = 0;
+        }
+        else
+        {
+            remainCoolTime = (coolStartTime + totalCoolTime) - Time.realtimeSinceStartup;
+            if (remainCoolTime <= 0)
+            {
+                remainCoolTime = 0;
+                isCooldown = false;
+            }
+        }
+
+
+        remain = remainCoolTime;
+        total = totalCoolTime;
+    }
+    public bool canDash()
+    {
+        return dashCondition;
+    }
+    public MoveWhileAttack getAttackMoveCondition()
+    {
+        return attackMoveCondition;
+    }
+
 }

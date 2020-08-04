@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class SampleWeapon {
@@ -90,7 +91,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
         /////기본 공격
         if (!weaponBase.isDash&&InputSystem.Instance.getKey(InputKeys.MB_L_click))
         {
-            if (weaponBase.CanAttackCancel)
+            if (!weaponBase.IsAttackCoolTimeRemain()&&weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
 
@@ -294,24 +295,17 @@ public class SampleDashStrategy : DashFunction, DashStrategy
 }
 public class SampleAttackStrategy : AttackValues, AttackStrategy
 {
-    WeaponBase weaponBase;
-    public SampleAttackStrategy(WeaponBase weaponBase) : base(2)
+    public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
     {
-        this.weaponBase = weaponBase;
-        ATK_COMMAND_PROGRESS_START = 0.3f;
-        ATK_COMMAND_PROGRESS_END = 0.7f;
         attackMoveCondition = MoveWhileAttack.Move_Attack;
+        dashCondition = true;
+    }
+    public override void SetCoolTimes()
+    {
+        coolTimes[0] = 0.2f;
+        coolTimes[1] = 0.3f;
     }
 
-    public bool canDash()
-    {
-        return true;
-    }
-
-    public MoveWhileAttack getAttackMoveCondition()
-    {
-        return attackMoveCondition;
-    }
 
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
@@ -329,6 +323,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             }
         }
     }
+
 
     public void SetState(WeaponBase weaponBase)
     {
@@ -357,6 +352,5 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase);
     }
-
 
 }

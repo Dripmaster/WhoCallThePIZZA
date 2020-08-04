@@ -103,6 +103,10 @@ public class StormPistSkillStrategy :  SkillStrategy
         startPos = weaponBase.player.transform.position;
         PreCalculate();
         weaponBase.AnimSpeed = 1 / all_t;
+        //!TODO
+        //날아가는동안 충돌판정 변경 및 지형지물 계산해야함(벽에다가 카직스 e 잘못쓰면)
+        //마우스까지가 아닌 최대 거리 있어서 마우스 방향 최대거리로(안쪽이면 그냥 안쪽)
+
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -190,12 +194,11 @@ public class StormPistDashStrategy : DashFunction,DashStrategy
 }
 public class StormPistAttackStrategy : AttackValues, AttackStrategy
 {
-    int attackConnectCount;
-    public StormPistAttackStrategy(WeaponBase weaponBase) : base(2)
+    int attackConnectCount;//스태틱 몇명
+    public StormPistAttackStrategy(WeaponBase weaponBase) : base(6)
     {
-        attackMoveCondition = MoveWhileAttack.Move_Attack;
-        ATK_COMBO_COUNT = 6;
-        tempAtkCount = 6;
+        attackMoveCondition = MoveWhileAttack.Cannot_Move;
+        dashCondition = false;
         attackConnectCount = 3;
     }
 
@@ -224,10 +227,16 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     }
 
-    public MoveWhileAttack getAttackMoveCondition()
+    public override void SetCoolTimes()
     {
-        return attackMoveCondition;
+        coolTimes[0] = 0.2f;
+        coolTimes[1] = 0.2f;
+        coolTimes[2] = 0.5f;
+        coolTimes[3] = 0.2f;
+        coolTimes[4] = 0.2f;
+        coolTimes[5] = 0.5f;
     }
+
     public void SetState(WeaponBase weaponBase)
     {
 
@@ -247,8 +256,4 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
 
-    public bool canDash()
-    {
-        return true;
-    }
 }

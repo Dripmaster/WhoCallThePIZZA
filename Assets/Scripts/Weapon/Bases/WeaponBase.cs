@@ -301,6 +301,7 @@ public class WeaponBase : MonoBehaviour
             MouseInput();
             yield return null;
         } while (!newState);
+        attackStrategy.StartCool();
         nowAttack = false;
     }
     IEnumerator skill()
@@ -340,6 +341,20 @@ public class WeaponBase : MonoBehaviour
     {
         attackComboCount = c;
         player.SetComboCount(attackComboCount);
+    }
+    public bool IsAttackCoolTimeRemain()
+    {
+        float r;
+        float t;
+        attackStrategy.GetCoolTime(out r, out t);
+        if (r <= 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     public Animator GetAnimatior() {
         return _animator;

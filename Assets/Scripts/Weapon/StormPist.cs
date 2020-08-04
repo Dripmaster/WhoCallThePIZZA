@@ -70,6 +70,11 @@ public class StormPistSkillStrategy :  SkillStrategy
     float t;//경과시간
     float all_t;//전체 이동 시간
     float l;//이동거리
+    float skillRange = 1; //스킬 범위
+
+    int maxSkillTargetCount = 3; //스킬 타격 최대 대상 수
+    int currentSkillTargetCount;
+    
    
 
     void PreCalculate() {
@@ -129,6 +134,30 @@ public class StormPistSkillStrategy :  SkillStrategy
             weaponBase.CanAttackCancel = true;
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
+
+            //스킬이 끝날 때 데미지 판정
+            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(targetPos, skillRange, 1 << 10);
+            int discoveredTargetCount = SkillTargetList.Length;
+
+            //타격대상 개수 확인
+            if(discoveredTargetCount < 1)
+            {
+                currentSkillTargetCount = 0;
+            }
+            else if(discoveredTargetCount < maxSkillTargetCount)
+            {
+                currentSkillTargetCount = discoveredTargetCount;
+            }
+            else
+            {
+                currentSkillTargetCount = maxSkillTargetCount;
+            }
+
+            //데미지
+            for(int i = 0; i < currentSkillTargetCount; i++)
+            {
+                AttackManager.GetInstance().HandleDamage(60, SkillTargetList[i].GetComponent<FSMbase>());
+            }
 
             weaponBase.AnimSpeed = 1;
         }

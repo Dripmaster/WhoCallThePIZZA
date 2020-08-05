@@ -69,6 +69,9 @@ public interface SkillStrategy
     void Update(WeaponBase weaponBase);
     void onWeaponTouch(int colliderType, Collider2D target);
     bool canDash();
+    MoveWhileAttack getSkillMoveCondition();
+    void StartCool();
+    void GetCoolTime(out float remain, out float total);
 }
 
 public interface MouseInputStrategy
@@ -76,6 +79,82 @@ public interface MouseInputStrategy
      void HandleInput(WeaponBase weaponBase);
 }
 #endregion
+
+#region SkillValues
+public abstract class SkillValues
+{
+    protected MoveWhileAttack moveSkillcondition;
+    protected bool dashCondition;
+
+    protected float[] skillCoolTimes;
+    protected float remainCoolTime;
+    protected float totalCoolTime;
+    protected float coolStartTime;
+    int skillCombo = 0;
+    protected int maxSkillCombo;
+    bool isCooldown = false;
+    public SkillValues() {
+        SetCooltime();
+    }
+
+    abstract public void SetCooltime();
+
+    public void initSkillCombo(int maxCombo) {
+        if (maxCombo > 1)
+        {
+            skillCoolTimes = new float[maxCombo];
+            maxSkillCombo = maxCombo;
+        }
+    }
+    public bool canDash() {
+        return dashCondition;
+    }
+    public void upCombo() {
+        skillCombo++;
+        if (skillCombo >= maxSkillCombo)
+        {
+            skillCombo = 0;
+        }
+    }
+
+    public void StartCool()
+    {
+        if (isCooldown)
+            return;
+        if(maxSkillCombo>1)
+        totalCoolTime = skillCoolTimes[skillCombo];
+        remainCoolTime = totalCoolTime;
+        coolStartTime = Time.realtimeSinceStartup;
+        isCooldown = true;
+    }
+
+    public void GetCoolTime(out float remain, out float total)
+    {
+        if (!isCooldown)
+        {
+            remainCoolTime = 0;
+        }
+        else
+        {
+            remainCoolTime = (coolStartTime + totalCoolTime) - Time.realtimeSinceStartup;
+            if (remainCoolTime <= 0)
+            {
+                remainCoolTime = 0;
+                isCooldown = false;
+            }
+        }
+        remain = remainCoolTime;
+        total = totalCoolTime;
+    }
+    public MoveWhileAttack getSkillMoveCondition()
+    {
+        return moveSkillcondition;
+    }
+}
+#endregion
+
+
+#region AttackValues
 public abstract class AttackValues {
     public int ATK_COMBO_COUNT = 3;//공격 콤보
     public float ATK_CANCEL_PROGRESS = 0.8f; //공격 캔슬 가능 진행도
@@ -208,3 +287,4 @@ public abstract class AttackValues {
     }
 
 }
+#endregion

@@ -312,6 +312,7 @@ public class WeaponBase : MonoBehaviour
             MouseInput();
             yield return null;
         } while (!newState);
+        skillStrategy.StartCool();
     }
     public void onWeaponTouch(int colliderType, Collider2D target) {
         if (objectState == PlayerState.skill)
@@ -334,8 +335,13 @@ public class WeaponBase : MonoBehaviour
     public PlayerState getState() {
         return objectState;
     }
-    public MoveWhileAttack getMoveAttackCondition() {
+    public MoveWhileAttack getMoveAttackCondition()
+    {
         return attackStrategy.getAttackMoveCondition();
+    }
+    public MoveWhileAttack getMoveSkillCondition()
+    {
+        return skillStrategy.getSkillMoveCondition();
     }
     public void SetComboCount(int c)
     {
@@ -347,6 +353,20 @@ public class WeaponBase : MonoBehaviour
         float r;
         float t;
         attackStrategy.GetCoolTime(out r, out t);
+        if (r <= 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public bool IsSkillCoolTimeRemain()
+    {
+        float r;
+        float t;
+        skillStrategy.GetCoolTime(out r, out t);
         if (r <= 0)
         {
             return false;

@@ -118,11 +118,11 @@ public class SampleMouseInputStrategy : MouseInputStrategy
         ////스킬
         if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.SkillBtn))
         {
-            if (weaponBase.CanAttackCancel)
+            if (!weaponBase.IsSkillCoolTimeRemain() && weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
                 //!TODO skill도 따로 확인할 것
-                if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
+                if (weaponBase.getMoveSkillCondition() == MoveWhileAttack.Move_Attack)
                 {
                     if (weaponBase.getPlayerState() != PlayerState.move)
                     {
@@ -142,7 +142,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 
     }
 }
-public class SampleSkillStrategy : SkillStrategy
+public class SampleSkillStrategy : SkillValues, SkillStrategy
 {
     Transform headTransform;
     List<Transform> headChain;
@@ -162,8 +162,13 @@ public class SampleSkillStrategy : SkillStrategy
     int chainCount = 100;
     public SampleSkillStrategy()
     {
+        moveSkillcondition = MoveWhileAttack.Cannot_Move;
         headChain = new List<Transform>();
         chains = GameObject.FindGameObjectsWithTag("chain");
+        dashCondition = false;
+    }
+    public override void SetCooltime() {
+        totalCoolTime = 3;
     }
 
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -276,10 +281,6 @@ public class SampleSkillStrategy : SkillStrategy
         }
         weaponBase.SetIdle();
         weaponBase.SetPlayerFree();
-    }
-    public bool canDash()
-    {
-        return false;
     }
 }
 public class SampleDashStrategy : DashFunction, DashStrategy

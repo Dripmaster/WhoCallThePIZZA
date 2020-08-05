@@ -58,7 +58,7 @@ public class StormPistDeadStrategy : DeadStrategy
     }
 }
 
-public class StormPistSkillStrategy :  SkillStrategy
+public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 {
     Vector2 targetPos;//목표지점
     Vector2 startPos;//시작점
@@ -74,8 +74,16 @@ public class StormPistSkillStrategy :  SkillStrategy
 
     int maxSkillTargetCount = 3; //스킬 타격 최대 대상 수
     int currentSkillTargetCount;
-    
-   
+
+    public StormPistSkillStrategy() {
+        dashCondition = false;
+        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+    }
+
+    public override void SetCooltime()
+    {
+        totalCoolTime = 5;
+    }
 
     void PreCalculate() {
        lerpPos =targetPos-startPos;
@@ -174,10 +182,6 @@ public class StormPistSkillStrategy :  SkillStrategy
 
     }
 
-    public bool canDash()
-    {
-        return false;
-    }
 }
 
 

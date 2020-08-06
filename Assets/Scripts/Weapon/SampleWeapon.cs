@@ -316,7 +316,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         {
             if (colliderType == 0)
             {
-                AttackManager.GetInstance().HandleDamage(50, fsm);
+                AttackManager.GetInstance().HandleDamage(50, fsm,1);
             }
             else
             {

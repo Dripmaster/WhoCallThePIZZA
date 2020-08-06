@@ -214,7 +214,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
             alreadyHitTarget.Add(target.GetComponent<Collider2D>());
 
-            AttackManager.GetInstance().HandleDamage(50, fsm);
+            AttackManager.GetInstance().HandleDamage(50, fsm,2);
 
             for (int i = 0; i < attackConnectCount; i++)
             {
@@ -225,7 +225,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             }
             for (int i = 1; i < alreadyHitTarget.Count; i++)
             {
-                AttackManager.GetInstance().HandleDamage(10, alreadyHitTarget[i].GetComponent<FSMbase>());
+                AttackManager.GetInstance().HandleDamage(10, alreadyHitTarget[i].GetComponent<FSMbase>(),0);
             }
         }
 

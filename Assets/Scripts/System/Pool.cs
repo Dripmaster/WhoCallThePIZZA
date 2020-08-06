@@ -12,8 +12,10 @@ public class Pool : MonoBehaviour
 
     void Awake()
     {
-        poolPrefab.SetActive(false);
-        Initialize();
+        if (poolPrefab != null)
+        {
+            Initialize();
+        }
     }
     void AddObject(int count)
     {
@@ -24,14 +26,16 @@ public class Pool : MonoBehaviour
             waitingQueue.Enqueue(poolable);
         }
     }
-    void Initialize()
+    public void Initialize()
     {
-        if(poolPrefab.GetComponent<PoolableObject>() == null)
+
+        if (poolPrefab.GetComponent<PoolableObject>() == null)
         {
         #if UNITY_EDITOR
             Debug.LogError("Pool " + gameObject.name + "'s prefab doesn't have PoolableObject attatched.");
         #endif
         }
+        poolPrefab.SetActive(false);
         AddObject(initialCount);
     }
     public PoolableObject GetObjectDisabled(Transform parent = null)

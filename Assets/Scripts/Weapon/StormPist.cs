@@ -75,6 +75,12 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     int maxSkillTargetCount = 3; //스킬 타격 최대 대상 수
     int currentSkillTargetCount;
 
+    GameObject[] stormPistHitEffects = AttackManager.GetInstance().hitEffects;  // 프리펩 넣는 방법을 모름. 일단 넣을 프리펩은 2개로 예상중
+    float h_Thunder= 0.3f;
+    int stormPistHitEffectinitialCount = 5;
+    int stormPistHitEffectincrementCount = 1;
+    Pool[] stormPistHitEffectPools;
+
     public StormPistSkillStrategy() {
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Cannot_Move;
@@ -111,11 +117,24 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         startPos = weaponBase.player.transform.position;
         PreCalculate();
         weaponBase.AnimSpeed = 1 / all_t;
-        //!TODO
-        //날아가는동안 충돌판정 변경 및 지형지물 계산해야함(벽에다가 카직스 e 잘못쓰면)
-        //마우스까지가 아닌 최대 거리 있어서 마우스 방향 최대거리로(안쪽이면 그냥 안쪽)
 
-    }
+        if (stormPistHitEffectPools == null)
+        {
+            stormPistHitEffectPools = new Pool[stormPistHitEffects.Length];
+            for (int i = 0; i < stormPistHitEffectPools.Length; i++)
+            {
+                stormPistHitEffectPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                stormPistHitEffectPools[i].poolPrefab = stormPistHitEffects[i];
+                stormPistHitEffectPools[i].initialCount = stormPistHitEffectinitialCount;
+                stormPistHitEffectPools[i].incrementCount = stormPistHitEffectincrementCount;
+                stormPistHitEffectPools[i].Initialize();
+            }
+        }
+    //!TODO
+    //날아가는동안 충돌판정 변경 및 지형지물 계산해야함(벽에다가 카직스 e 잘못쓰면)
+    //마우스까지가 아닌 최대 거리 있어서 마우스 방향 최대거리로(안쪽이면 그냥 안쪽)
+
+}
     public void Update(WeaponBase weaponBase)
     {
        
@@ -126,8 +145,15 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         }
         else if(t < all_t * 0.7f)
         {
+            //너무 여러개 생김 if문으로 한번 떨어지게 했더니 안보이는듯 내일 다시 해봄
+            //최고점에서 낙뢰
+            var t = stormPistHitEffectPools[1].GetObjectDisabled();
+            t.transform.position = new Vector2(targetPos.x, targetPos.y + h_Thunder);  //시작점
+            t.gameObject.SetActive(true);
+            t.GetComponent<Effector>().Alpha(0.4f, 0.7f).And().Move(0.4f, new Vector2(0, -h_Thunder)).And().Disable(0.4f).Play();
             
-        }else if(t <= all_t)
+        }
+        else if(t <= all_t)
         {
             h = (all_t-t)*vy;
         }
@@ -147,6 +173,14 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
 
+        //스킬이 끝날 때 이펙트 출력
+       
+            var e = stormPistHitEffectPools[0].GetObjectDisabled();
+            e.transform.position = targetPos;
+            e.gameObject.SetActive(true);
+            e.gameObject.GetComponent<SpriteRenderer>().rendererPriority = -1;  //Order in Layer -1 로 설정 해야함(틀림)
+            e.GetComponent<Effector>().Scale(0.1f, 8f).And().Disable(0.3f).And().Alpha(0.3f, 0.7f).Play();
+        
             //스킬이 끝날 때 데미지 판정
             Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(targetPos, skillRange, 1 << 10);
             int discoveredTargetCount = SkillTargetList.Length;

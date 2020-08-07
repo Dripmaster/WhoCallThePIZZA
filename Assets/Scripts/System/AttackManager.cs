@@ -144,7 +144,4 @@ public class AttackManager : MonoBehaviour
         e.GetComponent<Effector>().Alpha(0.5f,0.7f).And().Disable(0.5f).Play();
 
     }
-
-   
-
 }

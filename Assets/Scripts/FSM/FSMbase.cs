@@ -20,10 +20,9 @@ public abstract class FSMbase : MonoBehaviour
     Type stateType;
     protected bool newState = false;
     int viewDirection;
-    protected float maxHP;
-    protected float currentHP;
     private float animSpeed;
     protected Rigidbody2D _rigidbody2D;
+    public StatusBase status;
     protected float AnimSpeed {
         get {
             return animSpeed;
@@ -56,6 +55,11 @@ public abstract class FSMbase : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
+        status = new StatusBase();
+    }
+    protected void Update()
+    {
+        status.UpdateBuff();
     }
     protected void OnEnable()
     {

@@ -20,9 +20,10 @@ public class TestFSM : FSMbase
     }
     void initData()
     {//현재는 임시 데이터
-
-        maxHP = 100;
-        currentHP = maxHP;
+        status.setStat(STAT.hp, 50);
+        status.setStat(STAT.AtkPoint, 5);
+        status.setStat(STAT.moveSpeed, moveSpeed);
+        status.init();
     }
     IEnumerator move()
     {
@@ -35,6 +36,6 @@ public class TestFSM : FSMbase
 
     public override void TakeAttack(float dmg)
     {
-        Debug.Log("퍽");
+        Debug.Log("데미지 : "+dmg+" -> "+transform.name);
     }
 }

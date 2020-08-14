@@ -295,11 +295,18 @@ public class SampleDashStrategy : DashFunction, DashStrategy
     }
 }
 public class SampleAttackStrategy : AttackValues, AttackStrategy
-{
+{//!TODO 공격중 이속50% 낮추기->웨폰베이스에 변수 만들어서 ㄱ
+    AttackMessage m;
+    float[] Damages;
     public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
     {
         attackMoveCondition = MoveWhileAttack.Move_Attack;
-        dashCondition = true;
+        dashCondition = true; 
+        Damages = new float[] {
+            0.3f,
+            0.35f }; 
+        m = new AttackMessage();
+
     }
     public override void SetCoolTimes()
     {
@@ -311,20 +318,36 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
         //!TODO fsm만이 아니라 그냥 오브젝트들도 다 
+        //!TODO 한 공격에 여러체인 맞는거 수정할 것
+        //!TODO 한 공격에 한번만 맞게 할 것
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {
+            if(tempAtkCount == 1)
+                m.knockBackDegree = 0.3f;
+            else
+                m.knockBackDegree = 0;
             if (colliderType == 0)
             {
-                AttackManager.GetInstance().HandleDamage(50, fsm,1);
+                AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player,Damages[tempAtkCount] * 4);
             }
             else
             {
-                AttackManager.GetInstance().HandleDamage(5, fsm);
+                AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player, Damages[tempAtkCount]);
             }
         }
     }
-
+    AttackMessage AttackHandle(FSMbase target, FSMbase sender, float attackPoint)
+    {
+        m.EffectNum = 0;
+        m.Cri_EffectNum = 0;
+        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        if(m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
+            sender.status.getCurrentStat(STAT.CriticalDamage))){
+            target.status.AddBuff(new Bleeding(5,3,target));
+        }
+        return m;
+    }
 
     public void SetState(WeaponBase weaponBase)
     {

@@ -153,16 +153,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004f425d450235047bfd96778591dc6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleAnimType: 0
-  moveAnimType: 0
-  attackAnimType: 0
-  deadAnimType: 0
-  dashAnimType: 0
+  weaponType: 0
   currentMoveCondition: 0
   CanAttackCancel: 0
+  CanRotateView: 0
+  isDash: 0
   attackComboCount: 0
   nowAttack: 0
   player: {fileID: 7229258638212081577}
+  WeaponViewDirection: 0
 --- !u!1 &7229258638212081579
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +177,7 @@ GameObject:
   - component: {fileID: 7229258638212081583}
   - component: {fileID: 7229258638212081576}
   m_Layer: 9
-  m_Name: player_temp
+  m_Name: player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +282,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
-  Weapon: {fileID: 0}
+  dashSpeed: 0
+  DashFrameCount: 0
+  dashFrameCount: 0
 --- !u!50 &7229258638212081583
 Rigidbody2D:
   serializedVersion: 4

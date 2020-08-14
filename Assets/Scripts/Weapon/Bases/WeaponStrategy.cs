@@ -93,8 +93,10 @@ public abstract class SkillValues
     int skillCombo = 0;
     protected int maxSkillCombo;
     bool isCooldown = false;
+    protected PlayerFSM player;
     public SkillValues() {
         SetCooltime();
+        player = WeaponBase.instance.player;
     }
 
     abstract public void SetCooltime();
@@ -170,6 +172,7 @@ public abstract class AttackValues {
     protected float totalCoolTime;
     protected float coolStartTime;
     bool isCooldown = false;
+    protected PlayerFSM player;
     public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
         ATK_COMBO_COUNT = ATK_COMBO_count;
         ATK_CANCEL_PROGRESS = ATK_CANCEL_progress;
@@ -178,6 +181,7 @@ public abstract class AttackValues {
         tempAtkCount = ATK_COMBO_count;
         coolTimes = new float[ATK_COMBO_count];
         SetCoolTimes();
+        player = WeaponBase.instance.player;
     }
     abstract public void SetCoolTimes();
     public void CountCombo(WeaponBase weaponBase)

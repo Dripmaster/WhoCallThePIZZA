@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,6 +40,7 @@ public class AttackManager : MonoBehaviour
     public GameObject[] hitEffects;
     public int hitEffectinitialCount;
     public int hitEffectincrementCount = 1;
+    public PlayerFSM player;
     Pool[] hitEffectPools;
     void Awake()
     {
@@ -63,7 +63,7 @@ public class AttackManager : MonoBehaviour
     public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)
     {
 
-        Collider2D[] colliders = GetTargetList(point,Range,layerMask);
+        Collider2D[] colliders = GetTargetList(point, Range, layerMask);
         List<Collider2D> colliderList = colliders.ToList();
         foreach (var item in exceptList)
         {
@@ -75,7 +75,7 @@ public class AttackManager : MonoBehaviour
     public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask, List<Collider2D> exceptList)
     {
 
-        Collider2D[] colliders = GetTargetList(point,DegreeRange,ViewDirection, Range, layerMask);
+        Collider2D[] colliders = GetTargetList(point, DegreeRange, ViewDirection, Range, layerMask);
         List<Collider2D> colliderList = colliders.ToList();
         foreach (var item in exceptList)
         {
@@ -87,29 +87,29 @@ public class AttackManager : MonoBehaviour
 
     public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask) {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(point, Range, layerMask);
-        
+
         Collider2D temp;
         for (int i = 0; i < colliders.Length; i++)
         {
-            for (int j = i; j < colliders.Length-i-1; j++)
+            for (int j = i; j < colliders.Length - i - 1; j++)
             {
-                if (((Vector2)colliders[j].transform.position-point).sqrMagnitude > ((Vector2)colliders[j+1].transform.position - point).sqrMagnitude)
+                if (((Vector2)colliders[j].transform.position - point).sqrMagnitude > ((Vector2)colliders[j + 1].transform.position - point).sqrMagnitude)
                 {
                     temp = colliders[j];
                     colliders[j] = colliders[j + 1];
-                    colliders[j+1] = temp;
+                    colliders[j + 1] = temp;
 
                 }
             }
         }
         return colliders;
     }
-    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange,Vector2 ViewDirection ,float Range, int layerMask)
+    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask)
     {
         List<Collider2D> colliders = Physics2D.OverlapCircleAll(point, Range, layerMask).ToList();
-        for (int i = colliders.Count-1; i >= 0; i--)
+        for (int i = colliders.Count - 1; i >= 0; i--)
         {
-            if (Mathf.Abs( Vector2.Angle(ViewDirection, (Vector2)colliders[i].transform.position- point)) > DegreeRange/2) {
+            if (Mathf.Abs(Vector2.Angle(ViewDirection, (Vector2)colliders[i].transform.position - point)) > DegreeRange / 2) {
                 colliders.Remove(colliders[i]);
             }
         }
@@ -131,17 +131,112 @@ public class AttackManager : MonoBehaviour
 
         return colliders.ToArray();
     }
-    public void HandleDamage(float atkPoint, FSMbase target) {
+    /*HandleDamage
+    public bool HandleDamage(float atkPoint, FSMbase target, StatusBase status, out float ResultAttackPoint) {
+        int p = random.Next(100);
+        bool r = false;
+        atkPoint *= status.getCurrentStat(STAT.AtkPoint);
+        if (p < status.getCurrentStat(STAT.CriticalPoint))
+        {
+            atkPoint *= status.getCurrentStat(STAT.CriticalDamage);
+            r = true;
+        }
         target.TakeAttack(atkPoint);
-        Debug.Log(atkPoint+"데미지->"+target.name);
+        ResultAttackPoint = atkPoint;
+        return r;
     }
-    public void HandleDamage(float atkPoint, FSMbase target,int hitEffectNum)
-    {//!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성
-        HandleDamage(atkPoint,target);
+    public bool HandleDamage(float atkPoint, FSMbase target, int hitEffectNum, StatusBase status, int cri_hitEffectNum = 0)
+    {
+        bool r = HandleDamage(atkPoint, target, status, out atkPoint);
+        if (!r)
+            defaultEffect(target, hitEffectNum);
+        else
+            defaultEffect(target, cri_hitEffectNum);
+        return r;
+    }
+    */
+    public void SimpleDamage(float Dmg, FSMbase target) {
+        target.TakeAttack(Dmg);
+
+    }
+    public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint)
+    {
+        AttackMessage m = attack.Invoke(target, sender, attackPoint);
+        if(!m.criCalculated)
+        m.CriCalculate(m.FinalDamage, sender.status.getCurrentStat(STAT.CriticalDamage));
+        m.knockBackDir = (target.transform.position - sender.transform.position).normalized;
+        m.CalcDefense(target,sender);
+        target.TakeAttack(m.FinalDamage);
+        defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
+    }
+    void defaultEffect(FSMbase target, int hitEffectNum)
+    {//!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성하는것도 만들 것
         var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
         e.transform.position = target.transform.position;
         e.gameObject.SetActive(true);
-        e.GetComponent<Effector>().Alpha(0.5f,0.7f).And().Disable(0.5f).Play();
-
+        e.GetComponent<Effector>().Alpha(0.5f, 0.7f).And().Disable(0.5f).Play();
     }
 }
+public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);
+public struct AttackMessage
+{
+    public float FinalDamage;
+    public int EffectNum;
+    public int Cri_EffectNum;
+    public bool isCritical;
+    public bool criCalculated;
+    public Vector2 knockBackDir;
+    public float knockBackDegree;
+
+    public bool CriCalculate(float criPoint,float criticalDamage) {
+        int r = Random.Range(0,100);
+        if (r < criPoint)
+        {
+            isCritical = true;
+            FinalDamage *= criticalDamage;
+        }
+        else
+        {
+            isCritical = false;
+        }
+        criCalculated = true;
+        return isCritical;
+    }
+
+    public void CalcDefense(FSMbase target, FSMbase sender) {
+        if (!target.status.IsBuff(BUFF.Pierced))
+        {
+            FinalDamage -= FinalDamage*target.status.getCurrentStat(STAT.DefensePoint);
+        }
+        if (target.status.IsBuff(BUFF.Bleeding))
+        {
+            FinalDamage *= 1.3f;
+        }
+    }
+}
+/*
+public class AttackMessage {
+    public StatusBase target;
+    public StatusBase sender;
+    public float atkPoint;
+
+    public AdditionalAttack[] additionalAttacks;
+    public AttackMessage(float atkPoint,StatusBase target,StatusBase sender,params AdditionalAttack[] additionalAttack) {
+        this.atkPoint = atkPoint;
+        this.target = target;
+        this.sender = sender;
+        additionalAttacks = additionalAttack;
+    }
+    public void SetAdditionalAttacks(params AdditionalAttack[] additionalAttack)
+    {
+        additionalAttacks=additionalAttack;
+    }
+}
+public class AdditionalAttack//공격 시 뭔가가 일어날 때
+{
+    public float Point;//발동확률
+    public float Damage;//발동 시 추가 데미지(sender공격력과 곱해져서 별도로 들어감)
+    public BUFF buff;//발동 시 걸릴 버프
+    public bool buffTarget = false;//false = 적, true = 본인
+    public delegate bool action(StatusBase target,StatusBase sender);//확률이 아니라 조건문으로도 발동 가능
+}*/

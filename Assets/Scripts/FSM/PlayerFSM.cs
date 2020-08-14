@@ -32,9 +32,11 @@ public class PlayerFSM : FSMbase
     }
     void initData() {//현재는 임시 데이터
         _animator.SetInteger("WeaponNumber", (int)Weapon.weaponType);
-        maxHP = 100;
-        currentHP = maxHP;
-        //moveSpeed = 1;
+        status.setStat(STAT.hp, 50);
+        status.setStat(STAT.AtkPoint, 5);
+        status.setStat(STAT.moveSpeed, moveSpeed);
+        status.setStat(STAT.CriticalDamage, 2);
+        status.init();
     }
     public void SetViewPoint() {
 
@@ -115,12 +117,11 @@ public class PlayerFSM : FSMbase
     }
     public override void TakeAttack(float dmg)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
-        if (currentHP <= 0)
+        //!TODO : 
+        if (status.getStat(STAT.hp) <= 0)
         {
             setState((int)PlayerState.dead);
             Weapon.SetDead();
-
-
         }
     }
     public bool doMove(Vector2 moveDir) {
@@ -160,7 +161,10 @@ public class PlayerFSM : FSMbase
     void MouseInput() {
         Weapon.MouseInput();
     }
-
+    public float getAttackDamage() {
+        float damage = status.getCurrentStat(STAT.AtkPoint);
+        return damage;
+    }
     public PlayerState getState()
     {
         return (PlayerState)objectState;

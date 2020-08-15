@@ -38,7 +38,10 @@ public class TestFSM : FSMbase
     {
         do
         {
-            Debug.Log("가암저언" + transform.name);
+            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가
+            {
+                setState((int)PlayerState.idle);
+            }
             yield return null;
         } while (!newState);
     }

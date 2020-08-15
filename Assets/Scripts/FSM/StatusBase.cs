@@ -169,8 +169,6 @@ public class Electrified : Buff
     }
     public override void StartBuff()
     {
-        target.status.ChangeStat(ChangeSTAT, ChangeSize);
-        //감전 상태 필요
         target.setState((int)PlayerState.CC);
     }
     public override void Update()
@@ -180,9 +178,6 @@ public class Electrified : Buff
 
     public override void EndBuff()
     {
-        target.status.ChangeStat(ChangeSTAT, -ChangeSize);
-        //감전 상태 해제
-        Debug.Log("감전해제");
-        target.setState((int)PlayerState.idle);
+
     }
 }

@@ -15,7 +15,6 @@ public class SampleWeapon {
         a = new SampleAttackStrategy(weaponBase);
         s = new SampleSkillStrategy();
     }
-
 }
 public class SampleIdleStrategy : IdleStrategy
 {

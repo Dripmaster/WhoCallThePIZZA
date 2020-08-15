@@ -305,12 +305,24 @@ public class PlayerFSM : FSMbase
     }
     IEnumerator CC()
     {
+        Weapon.SetCC();
         do
         {
-            Weapon.SetCC();
+            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가
+            {
+                if (MoveInput())
+                {
+                    setState((int)PlayerState.move);
+                    Weapon.SetMove();
+                }
+                else
+                {
+                    setState((int)PlayerState.idle);
+                    Weapon.SetIdle();
+                }
+            }
             yield return null;
         } while (!newState);
-        Weapon.SetIdle();
     }
     public void SetPosition(Vector2 movePos)
     {

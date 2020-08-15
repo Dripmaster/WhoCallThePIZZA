@@ -391,6 +391,7 @@ public class StormPistCCStrategy : CCStrategy
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;
+        weaponBase.setState(PlayerState.CC);
     }
     public void Update(WeaponBase weaponBase)
     {

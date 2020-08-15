@@ -323,6 +323,16 @@ public class WeaponBase : MonoBehaviour
         } while (!newState);
         skillStrategy.StartCool();
     }
+    IEnumerator CC()
+    {
+        do
+        {
+            cCStrategy.Update(this);
+            //MouseInput();
+            yield return null;
+        } while (!newState);
+        CanRotateView = true;
+    }
     public void onWeaponTouch(int colliderType, Collider2D target) {
         if (objectState == PlayerState.skill)
             skillStrategy.onWeaponTouch(colliderType, target);

@@ -31,6 +31,7 @@ public class WeaponBase : MonoBehaviour
     DeadStrategy deadStrategy;
     MouseInputStrategy mouseInputStrategy;
     AttackStrategy attackStrategy;
+    CCStrategy cCStrategy;
     public PlayerFSM player;
     public static WeaponBase instance;
     Transform Rotator;
@@ -94,7 +95,7 @@ public class WeaponBase : MonoBehaviour
                 //애니메이션 컨트롤러 변경
                 break;
             case WeaponType.StormPist:
-                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out skillStrategy, this);
+                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
                 break;
             default:
                 break;
@@ -157,6 +158,14 @@ public class WeaponBase : MonoBehaviour
         if (playerSet)
         {
             player.setState((int)PlayerState.attack);
+        }
+    }
+    public void SetCC(bool playerSet = false)
+    {
+        cCStrategy.SetState(this);
+        if (playerSet)
+        {
+            player.setState((int)PlayerState.CC);
         }
     }
     public void MouseInput() {

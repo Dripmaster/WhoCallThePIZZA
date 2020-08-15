@@ -103,6 +103,13 @@ public abstract class FSMbase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
+    IEnumerator CC()
+    {
+        do
+        {
+            yield return null;
+        } while (!newState);
+    }
     public abstract void TakeAttack(float dmg);
 
 }

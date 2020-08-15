@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 public class StormPist
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out SkillStrategy s, WeaponBase weaponBase)
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out CCStrategy c, out SkillStrategy s, WeaponBase weaponBase)
     {
         i = new StormPistIdleStrategy();
         m = new StormPistMoveStrategy();
@@ -15,6 +16,7 @@ public class StormPist
         ds = new StormPistDashStrategy();
         a = new StormPistAttackStrategy(weaponBase);
         s = new StormPistSkillStrategy();
+        c = new StormPistCCStrategy();
     }
 }
 
@@ -254,10 +256,14 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         e.GetComponent<Effector>().Disable(1f).And().Alpha(0.3f, 0.7f).Play();
     }
     AttackMessage ThunderHandle(FSMbase target, FSMbase sender, float attackPoint)
-    {//감전시키기
+    {
         m.EffectNum = 1;
         m.Cri_EffectNum = 1;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+
+        //감전
+        Debug.Log("낙뢰 감전");
+        target.status.AddBuff(new Electrified(1, target));
         return m;
     }
     AttackMessage GroundHandle(FSMbase target, FSMbase sender, float attackPoint)
@@ -265,6 +271,14 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.EffectNum = 0;
         m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+
+        // 20퍼센트 확률로 감전
+        int r = UnityEngine.Random.Range(0, 100);
+        if (r < 20)
+        {
+            Debug.Log("착지 감전");
+            target.status.AddBuff(new Electrified(1, target));
+        }
         return m;
     }
 }
@@ -303,7 +317,15 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-       return m;
+
+        //20퍼센트 확률로 감전
+        int r = UnityEngine.Random.Range(0, 100);
+        if (r < 20)
+        {
+            Debug.Log("평타 감전");
+            target.status.AddBuff(new Electrified(1, target));
+        }
+        return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
@@ -362,4 +384,16 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
 
+}
+
+public class StormPistCCStrategy : CCStrategy
+{
+    public void SetState(WeaponBase weaponBase)
+    {
+        weaponBase.CanRotateView = false;
+    }
+    public void Update(WeaponBase weaponBase)
+    {
+
+    }
 }

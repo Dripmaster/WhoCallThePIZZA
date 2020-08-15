@@ -60,7 +60,7 @@ public class AttackManager : MonoBehaviour
             hitEffectPools[i].Initialize();
         }
     }
-    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)
+    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)  //원형범위 + 제외대상 제외
     {
 
         Collider2D[] colliders = GetTargetList(point, Range, layerMask);
@@ -72,7 +72,7 @@ public class AttackManager : MonoBehaviour
         return colliderList.ToArray();
 
     }
-    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask, List<Collider2D> exceptList)
+    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask, List<Collider2D> exceptList) // 부채꼴형범위 + 제외대상 제외
     {
 
         Collider2D[] colliders = GetTargetList(point, DegreeRange, ViewDirection, Range, layerMask);
@@ -85,7 +85,8 @@ public class AttackManager : MonoBehaviour
 
     }
 
-    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask) {
+    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask) // 원형 가까운 순 정렬
+    { 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(point, Range, layerMask);
 
         Collider2D temp;
@@ -104,7 +105,7 @@ public class AttackManager : MonoBehaviour
         }
         return colliders;
     }
-    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask)
+    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask) //부채꼴형 가까운 순 정렬
     {
         List<Collider2D> colliders = Physics2D.OverlapCircleAll(point, Range, layerMask).ToList();
         for (int i = colliders.Count - 1; i >= 0; i--)
@@ -163,7 +164,7 @@ public class AttackManager : MonoBehaviour
     {
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
-        m.CriCalculate(m.FinalDamage, sender.status.getCurrentStat(STAT.CriticalDamage));
+            m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));
         m.knockBackDir = (target.transform.position - sender.transform.position).normalized;
         m.CalcDefense(target,sender);
         target.TakeAttack(m.FinalDamage);

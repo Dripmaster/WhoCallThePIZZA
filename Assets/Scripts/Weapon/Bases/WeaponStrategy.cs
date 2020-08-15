@@ -38,6 +38,12 @@ public interface DashStrategy
      void Update(WeaponBase weaponBase);
      void SetState(WeaponBase weaponBase);
 }
+
+public interface CCStrategy
+{
+    void Update(WeaponBase weaponBase);
+    void SetState(WeaponBase weaponBase);
+}
 public abstract class DashFunction
 {
     public void cannotMove(WeaponBase weaponBase)//무빙어택이나 어택하면서 못움직일때 호출

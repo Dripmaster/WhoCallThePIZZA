@@ -34,6 +34,15 @@ public class TestFSM : FSMbase
         } while (!newState);
     }
 
+    IEnumerator CC()
+    {
+        do
+        {
+            Debug.Log("가암저언" + transform.name);
+            yield return null;
+        } while (!newState);
+    }
+
     public override void TakeAttack(float dmg)
     {
         Debug.Log("데미지 : "+dmg+" -> "+transform.name);

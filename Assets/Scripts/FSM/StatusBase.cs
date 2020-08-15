@@ -119,7 +119,7 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
     public virtual void Update() { 
         
     }
-    public void EndBuff() {
+    public virtual void EndBuff() {
         target.status.ChangeStat(ChangeSTAT, -ChangeSize);
     }
     public float RemainTime() {
@@ -156,5 +156,33 @@ public class Bleeding : Buff
             dealedDamage += Damage / totalTime;
         }
             
+    }
+}
+
+public class Electrified : Buff
+{
+    public Electrified(float time, FSMbase target)
+    {
+        buffName = BUFF.Electrified;
+        totalTime = time;
+        SetTarget(target);
+    }
+    public override void StartBuff()
+    {
+        target.status.ChangeStat(ChangeSTAT, ChangeSize);
+        //감전 상태 필요
+        target.setState((int)PlayerState.CC);
+    }
+    public override void Update()
+    {
+        // 행동중인 동작 캔슬?
+    }
+
+    public override void EndBuff()
+    {
+        target.status.ChangeStat(ChangeSTAT, -ChangeSize);
+        //감전 상태 해제
+        Debug.Log("감전해제");
+        target.setState((int)PlayerState.idle);
     }
 }

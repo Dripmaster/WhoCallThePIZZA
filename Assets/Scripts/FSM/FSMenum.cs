@@ -13,6 +13,7 @@ public enum PlayerState { //플레이어와 무기의 스테이트(고유 번호
     dead,
     skill,
     dash,
+    CC, 
 }
 public enum WeaponType { //무기목록
     sampleWeapon = 0,

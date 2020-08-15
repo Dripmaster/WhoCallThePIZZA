@@ -36,6 +36,7 @@ public class PlayerFSM : FSMbase
         status.setStat(STAT.AtkPoint, 5);
         status.setStat(STAT.moveSpeed, moveSpeed);
         status.setStat(STAT.CriticalDamage, 2);
+        status.setStat(STAT.CriticalPoint, 99);
         status.init();
     }
     public void SetViewPoint() {
@@ -301,6 +302,15 @@ public class PlayerFSM : FSMbase
             }
             yield return null;
         } while (!newState);
+    }
+    IEnumerator CC()
+    {
+        do
+        {
+            Weapon.SetCC();
+            yield return null;
+        } while (!newState);
+        Weapon.SetIdle();
     }
     public void SetPosition(Vector2 movePos)
     {

@@ -90,7 +90,7 @@ public class WeaponBase : MonoBehaviour
         switch (weaponType)
         {
             case WeaponType.sampleWeapon:
-                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out skillStrategy, this);
+                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
                 //스트래티지들 싹다 세팅
                 //애니메이션 컨트롤러 변경
                 break;

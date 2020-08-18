@@ -97,6 +97,9 @@ public class WeaponBase : MonoBehaviour
             case WeaponType.StormPist:
                 StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
                 break;
+            case WeaponType.Lance:
+                Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
+                break;
             default:
                 break;
         }

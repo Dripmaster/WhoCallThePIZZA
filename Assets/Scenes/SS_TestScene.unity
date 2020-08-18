@@ -595,7 +595,7 @@ PrefabInstance:
     - target: {fileID: 7229258637901855801, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: weaponType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7229258637901855802, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -1752,6 +1752,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LanceParent
       objectReference: {fileID: 0}
+    - target: {fileID: 226065664794136390, guid: 0ccd398394c88b942825493b53255b3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 226065664794136391, guid: 0ccd398394c88b942825493b53255b3a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1845,7 +1850,7 @@ PrefabInstance:
     - target: {fileID: 226065664963836567, guid: 0ccd398394c88b942825493b53255b3a,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ccd398394c88b942825493b53255b3a, type: 3}

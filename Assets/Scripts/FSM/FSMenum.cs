@@ -31,6 +31,7 @@ public enum EnemyType
 public enum WeaponType { //무기목록
     sampleWeapon = 0,
     StormPist,
+    Lance,
 }
 public enum MoveWhileAttack { 
     Move_Attack = 0, // player-move weapon-attack

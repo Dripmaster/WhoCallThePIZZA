@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 226065664963836567}
   - component: {fileID: 226065664963836565}
   - component: {fileID: 226065664963836564}
-  - component: {fileID: 226065664963836554}
+  - component: {fileID: 8356365826595090656}
   m_Layer: 8
   m_Name: LanceHead
   m_TagString: Untagged
@@ -109,7 +109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226065664963836566}
   m_LocalRotation: {x: 0, y: 0, z: 0.53729963, w: 0.8433915}
-  m_LocalPosition: {x: 0.064, y: 0.154, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 226065663908698000}
@@ -164,7 +164,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &226065664963836564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,8 +178,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myColliderType: 0
---- !u!60 &226065664963836554
-PolygonCollider2D:
+--- !u!61 &8356365826595090656
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -191,21 +191,16 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.65, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.39, y: 0.15}
+    pivot: {x: 0, y: 0.5}
+    oldSize: {x: 1.21875, y: 0.46875}
     newSize: {x: 0.39, y: 0.15}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.16, y: 0.074999996}
-      - {x: -0.16, y: -0.074999996}
-      - {x: -0.005, y: -0.03}
-      - {x: 0.195, y: -0.001}
-      - {x: 0.195, y: 0.001}
-      - {x: -0.024999999, y: 0.03}
+  serializedVersion: 2
+  m_Size: {x: 1.1, y: 0.2}
+  m_EdgeRadius: 0

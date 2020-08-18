@@ -201,6 +201,12 @@ public abstract class AttackValues {
         weaponBase.SetComboCount(tempAtkCount);
         weaponBase.setState(PlayerState.attack);
     }
+    public void DoAttack(WeaponBase weaponBase, int combo)
+    {
+        weaponBase.currentMoveCondition = attackMoveCondition;
+        weaponBase.SetComboCount(combo);
+        weaponBase.setState(PlayerState.attack);
+    }
     public void HandleAttackCancel(WeaponBase weaponBase) {//ATK_CANCEL_PROGRESS에 도달하면 끊고 이동 및 다음 공격이 가능해지는 애들 업데이트에서 호출
         if (!CancelConditonOnce && weaponBase.getAnimProgress() >= ATK_CANCEL_PROGRESS)
         {//프로그래스 이상 진행 시 끊고 이동 가능, 다음 공격 가능
@@ -238,6 +244,14 @@ public abstract class AttackValues {
             weaponBase.SetPlayerFree();
         }
     }
+    public void HandleAttackEND(WeaponBase weaponBase, Action<WeaponBase> callback)
+    {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
+        if (weaponBase.getAnimEnd())
+        {
+            HandleAttackEND(weaponBase);
+            callback.Invoke(weaponBase);
+        }
+    }
     public void HandleAttackEND(WeaponBase weaponBase,Action callback)
     {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
@@ -265,6 +279,7 @@ public abstract class AttackValues {
         remainCoolTime = totalCoolTime;
         coolStartTime = Time.realtimeSinceStartup;
         isCooldown = true;
+        Debug.Log(totalCoolTime);
     }
  
     public void GetCoolTime(out float remain, out float total)

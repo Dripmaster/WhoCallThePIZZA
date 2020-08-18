@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Effector : MonoBehaviour
@@ -185,19 +186,22 @@ public class Effector : MonoBehaviour
 #endregion
 
 #region Disable
-    public Effector Disable(float timeOffset = 0f)
+    public Effector Disable(float timeOffset = 0f, bool destroy = false)
     {
     #if UNITY_EDITOR
         if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
     #endif
-        effectList.Add(new Effect(DisableCoroutine(timeOffset), timeOffset));
+        effectList.Add(new Effect(DisableCoroutine(timeOffset,destroy), timeOffset));
         return this;
     }
-    IEnumerator DisableCoroutine(float timeOffset)
+    IEnumerator DisableCoroutine(float timeOffset, bool destroy)
     {
         if(timeOffset != 0f)
             yield return new WaitForSeconds(timeOffset);
-        gameObject.SetActive(false);
+        if (!destroy)
+            gameObject.SetActive(false);
+        else
+            Destroy(gameObject);
         isDoneSetting = false;
     }
 #endregion

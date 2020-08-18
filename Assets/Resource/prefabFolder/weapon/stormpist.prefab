@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3924143022164124537}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.012, y: 0.004, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3924143022818776073}
@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3924143022341742000}
   - component: {fileID: 3924143022341742001}
+  - component: {fileID: 619030567}
   m_Layer: 8
   m_Name: stormpist
   m_TagString: Untagged
@@ -83,6 +84,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &619030567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3924143022341742003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5820ff02001abc4fa962490a6903f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effcetParent: {fileID: 0}
+  Effects:
+  - {fileID: 6821691967331111490, guid: 2dc035f8b42bbf749a05a11352da2b03, type: 3}
+  - {fileID: 933049790365870660, guid: ea0e2da3287578040b201588e5bb7cff, type: 3}
 --- !u!1 &3924143022818776072
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +111,7 @@ GameObject:
   - component: {fileID: 3924143022818776073}
   - component: {fileID: 3924143022818776076}
   - component: {fileID: 3924143022818776078}
-  - component: {fileID: 6563611869816597509}
+  - component: {fileID: 5178852415868906417}
   m_Layer: 8
   m_Name: pist1
   m_TagString: Untagged
@@ -110,7 +127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3924143022818776072}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.012, y: 0, z: 0}
+  m_LocalPosition: {x: -0.04, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3924143022164124542}
@@ -155,7 +172,7 @@ SpriteRenderer:
   m_SortingLayerID: -1468923991
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 5417182071251884829, guid: 888a565c058c11a4ca4507511555d3ff,
+  m_Sprite: {fileID: -1105903219449130157, guid: 888a565c058c11a4ca4507511555d3ff,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -180,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myColliderType: 0
---- !u!58 &6563611869816597509
+--- !u!58 &5178852415868906417
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,9 +210,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.15, y: 0}
   serializedVersion: 2
-  m_Radius: 0.035
+  m_Radius: 0.15
 --- !u!1 &6337469738030220939
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +240,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6337469738030220939}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.089, y: 0, z: 0}
+  m_LocalPosition: {x: 0.04, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3924143022164124542}
@@ -268,7 +285,7 @@ SpriteRenderer:
   m_SortingLayerID: -1468923991
   m_SortingLayer: 2
   m_SortingOrder: -1
-  m_Sprite: {fileID: 5417182071251884829, guid: 888a565c058c11a4ca4507511555d3ff,
+  m_Sprite: {fileID: -1105903219449130157, guid: 888a565c058c11a4ca4507511555d3ff,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -306,6 +323,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.15, y: 0}
   serializedVersion: 2
-  m_Radius: 0.035
+  m_Radius: 0.15

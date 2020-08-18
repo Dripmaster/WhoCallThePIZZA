@@ -18,7 +18,7 @@ public class WeaponBase : MonoBehaviour
     public bool isDash;
 
     Animator _animator;
-    PlayerState objectState;
+    public PlayerState objectState;
     protected bool newState;
     int viewDirection;
     public int attackComboCount;
@@ -247,6 +247,18 @@ public class WeaponBase : MonoBehaviour
             tempScaleY = value;
             Rotator.transform.localScale = new Vector3(Rotator.transform.localScale.x, tempScaleY);
         }
+    }
+    public bool SP_FlipX()  // StormPist용 flip
+    {
+        bool flip = false;
+        if (ViewDirection < 2 || ViewDirection > 6)
+        {// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
+            setFlipScaleX(-1); // -1 : 좌우 뒤집기
+            flip = true;
+        }
+        else
+            setFlipScaleX(1); // 원래 대로
+        return flip;
     }
 
     public void SP_FlipY()  // StormPist용 flip

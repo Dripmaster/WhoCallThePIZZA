@@ -128,6 +128,12 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
     {
         this.target = target;
     }
+    public Effector showEffect(GameObject o)
+    {
+        var e =GameObject.Instantiate(o, target.transform.parent).GetComponent<Effector>();
+        e.transform.position = target.transform.position;
+        return e;
+    }
     public virtual void StartBuff()
     {
         target.status.ChangeStat(ChangeSTAT, ChangeSize);
@@ -185,6 +191,8 @@ public class Electrified : Buff
     public override void StartBuff()
     {
         target.TakeCC();
+        showEffect(Resources.Load<GameObject>("BuffEffect/Electrified"))
+       .Alpha(0.5f, 0.3f).And().Disable(0.5f,true).Play();
     }
     public override void Update()
     {

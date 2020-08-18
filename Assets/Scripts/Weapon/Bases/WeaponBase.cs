@@ -161,7 +161,7 @@ public class WeaponBase : MonoBehaviour
         }
     }
     public void SetCC(bool playerSet = false)
-    {
+    {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
         cCStrategy.SetState(this);
         if (playerSet)
         {
@@ -322,6 +322,13 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
         skillStrategy.StartCool();
+    }
+    IEnumerator dead()
+    {
+        do
+        {
+            yield return null;
+        } while (!newState);
     }
     IEnumerator CC()
     {

@@ -6,13 +6,20 @@ public class StatusBase
 {
     public float[] CurrentStats;
     public float[] Stats;
-    public float[] StatValue;
+    public float[] StatValuePlus;
+    public float[] StatValueMultiply;
     public List<Buff> buffs;
     public StatusBase()
     {
         Stats = new float[Enum.GetValues(typeof(STAT)).Length];
-        StatValue = new float[Enum.GetValues(typeof(STAT)).Length+
+        StatValuePlus = new float[Enum.GetValues(typeof(STAT)).Length+
             Enum.GetValues(typeof(BUFF)).Length];
+        StatValueMultiply = new float[Enum.GetValues(typeof(STAT)).Length +
+            Enum.GetValues(typeof(BUFF)).Length];
+        for (int i = 0; i < StatValueMultiply.Length; i++)
+        {
+            StatValueMultiply[i] = 1;
+        }
         buffs = new List<Buff>();
     }
     public void setCurrentStat(STAT s,float value) {
@@ -30,20 +37,25 @@ public class StatusBase
     {
         return Stats[(int)s];
     }
-    public void ChangeStat(STAT s, float value)
-    {
-        StatValue[(int)s] += value;
+    public void ChangeStat(STAT s, float value, bool Multiply = false)
+    {//주의 : 곱연산은 +10퍼 일 시 1.1로 줄 것
+        
+        if(Multiply)
+            StatValueMultiply[(int)s] *= value;
+        else
+            StatValuePlus[(int)s] += value;
+        CurrentStats[(int)s] = (Stats[(int)s] + StatValuePlus[(int)s]) * StatValueMultiply[(int)s];
     }
     public void AddBuff(Buff buff)
-    {
-        StatValue[(int)buff.buffName + Stats.Length] += 1;
+    {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
+        StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
         buff.StartBuff();
         buff.tempTime = Time.realtimeSinceStartup;
         buffs.Add(buff);
     }
     public bool IsBuff(BUFF buff)
     {
-        return StatValue[(int)buff+Stats.Length] >0 ;
+        return StatValuePlus[(int)buff+Stats.Length] >0 ;
     }
     public void UpdateBuff()
     {
@@ -70,7 +82,7 @@ public class StatusBase
     }
     public void EndBuff(Buff buff)
     {
-        StatValue[(int)buff.buffName + Stats.Length] -= 1;
+        StatValuePlus[(int)buff.buffName + Stats.Length] -= 1;
         buff.EndBuff();
     }
 
@@ -97,8 +109,12 @@ public enum BUFF//아이콘, 시각표시 이펙트용 구분
 {
     Electrified = 0,
     Pierced,
+    Poisoned,
+    Burn,
+    Cloak,
     Bleeding,
-    SuperArmor
+    SuperArmor,
+
 }
 public class Buff {//상속해서 사용, 필요없으면 안해도됨
     public BUFF buffName;//아이콘, 시각표시 이펙트용 구분
@@ -141,7 +157,6 @@ public class Bleeding : Buff
     }
     public override void StartBuff()
     {
-        target.status.ChangeStat(ChangeSTAT, ChangeSize);
         AttackManager.Instance.SimpleDamage(Damage / totalTime, target); 
         dealedDamage += Damage / totalTime;
     }
@@ -169,7 +184,7 @@ public class Electrified : Buff
     }
     public override void StartBuff()
     {
-        target.setState((int)PlayerState.CC);
+        target.TakeCC();
     }
     public override void Update()
     {

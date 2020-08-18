@@ -83,6 +83,10 @@ public abstract class FSMbase : MonoBehaviour
         _animator.SetInteger("State", objectState);
         _animator.SetInteger("ComboCount", combo);
     }
+    public void SetComboCount(int c)
+    {
+        _animator.SetInteger("ComboCount", c);
+    }
     IEnumerator FSMmain() {
         while (true)
         {
@@ -107,9 +111,22 @@ public abstract class FSMbase : MonoBehaviour
     {
         do
         {
+            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
+            {
+                CCfree();
+            }
+            yield return null;
+        } while (!newState);
+    }
+    IEnumerator dead()
+    {
+        _sr.color = new Color(0.2f, 0.2f, 0.2f);
+        do
+        {
             yield return null;
         } while (!newState);
     }
     public abstract void TakeAttack(float dmg);
-
+    public abstract void TakeCC();
+    public abstract void CCfree();
 }

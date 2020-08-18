@@ -36,7 +36,7 @@ public class PlayerFSM : FSMbase
         status.setStat(STAT.AtkPoint, 5);
         status.setStat(STAT.moveSpeed, moveSpeed);
         status.setStat(STAT.CriticalDamage, 2);
-        status.setStat(STAT.CriticalPoint, 99);
+        status.setStat(STAT.CriticalPoint, 5);
         status.init();
     }
     public void SetViewPoint() {
@@ -119,7 +119,8 @@ public class PlayerFSM : FSMbase
     public override void TakeAttack(float dmg)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
         //!TODO : 
-        if (status.getStat(STAT.hp) <= 0)
+        status.ChangeStat(STAT.hp, -dmg);
+        if (status.getCurrentStat(STAT.hp) <= 0)
         {
             setState((int)PlayerState.dead);
             Weapon.SetDead();
@@ -171,9 +172,6 @@ public class PlayerFSM : FSMbase
         return (PlayerState)objectState;
     }
 
-    public void SetComboCount(int c) {
-        _animator.SetInteger("ComboCount",c);
-    }
     private void FixedUpdate()
     {
         if (moveDir != Vector2.zero)
@@ -303,23 +301,31 @@ public class PlayerFSM : FSMbase
             yield return null;
         } while (!newState);
     }
+    public override void TakeCC()
+    {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
+        setState((int)PlayerState.CC);
+    }
+    public override void CCfree()
+    {
+        if (MoveInput())
+        {
+            setState((int)PlayerState.move);
+            Weapon.SetMove();
+        }
+        else
+        {
+            setState((int)PlayerState.idle);
+            Weapon.SetIdle();
+        }
+    }
     IEnumerator CC()
     {
         Weapon.SetCC();
         do
         {
-            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가
+            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
             {
-                if (MoveInput())
-                {
-                    setState((int)PlayerState.move);
-                    Weapon.SetMove();
-                }
-                else
-                {
-                    setState((int)PlayerState.idle);
-                    Weapon.SetIdle();
-                }
+                CCfree();
             }
             yield return null;
         } while (!newState);

@@ -157,6 +157,7 @@ public class AttackManager : MonoBehaviour
     }
     */
     public void SimpleDamage(float Dmg, FSMbase target) {
+        //TODO : cri계산??
         target.TakeAttack(Dmg);
 
     }

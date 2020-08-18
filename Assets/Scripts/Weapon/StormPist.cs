@@ -322,7 +322,6 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         int r = UnityEngine.Random.Range(0, 100);
         if (r < 20)
         {
-            Debug.Log("평타 감전");
             target.status.AddBuff(new Electrified(1, target));
         }
         return m;

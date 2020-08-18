@@ -15,6 +15,19 @@ public enum PlayerState { //플레이어와 무기의 스테이트(고유 번호
     dash,
     CC, 
 }
+public enum EnemyState{//몬스터의 스테이트(고유 번호 고정)
+    idle = 0,
+    patrol,
+    aggro,
+    attack,
+    dead,
+    CC,
+}
+public enum EnemyType
+{
+    Slime =0,
+
+}
 public enum WeaponType { //무기목록
     sampleWeapon = 0,
     StormPist,

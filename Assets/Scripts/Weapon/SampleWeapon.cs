@@ -6,7 +6,8 @@ using UnityEditorInternal;
 using UnityEngine;
 
 public class SampleWeapon {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out SkillStrategy s, WeaponBase weaponBase) {
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out CCStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    { 
         i = new SampleIdleStrategy();
         m = new SampleMoveStrategy();
         d = new SampleDeadStrategy();
@@ -14,6 +15,7 @@ public class SampleWeapon {
         ds= new SampleDashStrategy();
         a = new SampleAttackStrategy(weaponBase);
         s = new SampleSkillStrategy();
+        c = new SampleCCStrategy();
     }
 }
 public class SampleIdleStrategy : IdleStrategy
@@ -376,4 +378,17 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         HandleAttackEND(weaponBase);
     }
 
+}
+
+public class SampleCCStrategy : CCStrategy
+{
+    public void SetState(WeaponBase weaponBase)
+    {
+        weaponBase.CanRotateView = false;
+        weaponBase.setState(PlayerState.CC);
+    }
+    public void Update(WeaponBase weaponBase)
+    {
+
+    }
 }

@@ -39,6 +39,7 @@ public class WeaponBase : MonoBehaviour
     float tempX;
     float tempScaleX;
     float tempScaleY;
+    Collider2D[] colliders;
     private WeaponBase() {
         instance = this;
     }
@@ -118,6 +119,8 @@ public class WeaponBase : MonoBehaviour
     /// 3. 스트래티지 설정
     public void InitData() {
         setStateEnum(weaponType);
+        colliders = transform.GetComponentsInChildren<Collider2D>();
+        SetColliderEnable(false);
     }
     public void SetPlayerFree() {
 
@@ -227,7 +230,7 @@ public class WeaponBase : MonoBehaviour
             _animator.SetInteger("State", (int)objectState);
             _animator.SetInteger("ComboCount", attackComboCount);
         }
-        attackComboCount = 0;
+        //attackComboCount = 0;
     }
     public void setRotate(float value) {
         Rotator.rotation = Quaternion.Euler(0, 0, value);
@@ -327,6 +330,9 @@ public class WeaponBase : MonoBehaviour
         } while (!newState);
         attackStrategy.StartCool();
         nowAttack = false;
+        CanRotateView = true;
+        CanAttackCancel = true;
+        SetColliderEnable(false);
     }
     IEnumerator skill()
     {
@@ -337,6 +343,9 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
         skillStrategy.StartCool();
+        CanRotateView = true;
+        CanAttackCancel = true;
+        SetColliderEnable(false);
     }
     IEnumerator dead()
     {
@@ -361,7 +370,9 @@ public class WeaponBase : MonoBehaviour
 
 
         if (!nowAttack)
+        {
             return;
+        }
 
         attackStrategy.onWeaponTouch(colliderType,target);
     }
@@ -387,6 +398,7 @@ public class WeaponBase : MonoBehaviour
     public void SetComboCount(int c)
     {
         attackComboCount = c;
+        _animator.SetInteger("ComboCount", c);
         player.SetComboCount(attackComboCount);
     }
     public bool IsAttackCoolTimeRemain()
@@ -419,5 +431,37 @@ public class WeaponBase : MonoBehaviour
     }
     public Animator GetAnimatior() {
         return _animator;
+    }
+    public void SetColliderEnable(bool v)
+    {
+        foreach (var item in colliders)
+        {
+            item.enabled = v;
+        }
+    }
+    public void motionEvent(int value)
+    {
+        //!TODO 모든 스테이트에 대해 모션 이벤트 받도록
+        //스트래티지 인터페이스 수정 필요.
+        switch (objectState)
+        {
+            case PlayerState.idle:
+                break;
+            case PlayerState.move:
+                break;
+            case PlayerState.attack:
+                attackStrategy.motionEvent(value);
+                break;
+            case PlayerState.dead:
+                break;
+            case PlayerState.skill:
+                break;
+            case PlayerState.dash:
+                break;
+            case PlayerState.CC:
+                break;
+            default:
+                break;
+        }
     }
 }

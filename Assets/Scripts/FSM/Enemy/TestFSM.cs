@@ -175,7 +175,7 @@ public class TestFSM : FSMbase
     public void doAttack()
     {
         if(Vector2.Distance(player.position, transform.position) <= disAttackRange)
-        {
+        { 
             hadAttack = true;
             AttackManager.Instance.SimpleDamage(damages[tempAttackCount] *
                 status.getCurrentStat(STAT.AtkPoint), playerFsm);

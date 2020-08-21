@@ -146,17 +146,18 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 public class SampleSkillStrategy : SkillValues, SkillStrategy
 {
     Transform headTransform;
+    BoxCollider2D headCollider;
     List<Transform> headChain;
     Transform headChainP;
-    float v=3;//head속도
-    float v2 = 3;//날라가는 속도
+    float v=9;//head속도
+    float v2 = 7;//날라가는 속도
     WeaponBase weaponBase;
     bool collisionFlag = false;
     Vector2 targetPos;
     Vector2 moveDir;
     Vector2 tempPos;
     Vector2 startPos;
-    float distance = 0.57f;
+    float distance = 1.7f;
     Pool pool;
     GameObject[] chains;
 
@@ -195,7 +196,11 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         if (this.weaponBase == null)
             this.weaponBase = weaponBase;
         if (headTransform == null)
+        {
             headTransform = weaponBase.transform.Find("ironhookParent/ironhook/headChain/head");
+
+            headCollider = headTransform.GetComponent<BoxCollider2D>();
+        }
         if (headChainP == null)
             headChainP = weaponBase.transform.Find("ironhookParent/ironhook/headChain");
         if (pool == null)
@@ -225,6 +230,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
         headChain.Add(headTransform);
+        headCollider.enabled = true;
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -235,7 +241,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
                 item.localPosition += new Vector3(0, v * Time.deltaTime, 0);
             }
 
-            if((headChain.Last().localPosition).sqrMagnitude > 0.03f * 0.03f)
+            if((headChain.Last().localPosition).sqrMagnitude > 0.16f * 0.16f)
             {
                 var p = pool.GetObjectDisabled();
                 p.transform.localPosition = Vector2.zero;
@@ -252,7 +258,8 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
             weaponBase.player.AddPosition(moveDir * Time.deltaTime);
             headChainP.transform.position = tempPos;
 
-            int a = (int)((startPos - (Vector2)weaponBase.transform.localPosition).sqrMagnitude/0.07f*0.07f);
+            int a = (int)((targetPos - (Vector2)weaponBase.player.transform.position).sqrMagnitude/0.16f*0.16f);
+           
             if (headChain.Count > a && headChain.Count>1)
             {
                 headChain.Last().gameObject.SetActive(false);
@@ -269,6 +276,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         weaponBase.CanRotateView = true;
         weaponBase.CanAttackCancel = true;
         collisionFlag = false;
+        headCollider.enabled = false;
         for (int i = headChain.Count-1; i > 0; i--)
         {
             headChain[i].transform.localPosition = Vector2.zero;
@@ -299,6 +307,17 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 {//!TODO 공격중 이속50% 낮추기->웨폰베이스에 변수 만들어서 ㄱ
     AttackMessage m;
     float[] Damages;
+
+    GameObject[]ironHookEffects;  // 프리펩 넣는 방법을 모름. 일단 넣을 프리펩은 2개로 예상중
+    //float h_Thunder= 0.3f;
+    int ironHookEffectsinitialCount = 10;
+    int ironHookEffectsincrementCount = 5;
+    Pool[] ironHookEffectsPools;
+    Transform effcetParent;
+
+    Transform chainHead;
+    int effectLevel = 0;
+
     public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
     {
         attackMoveCondition = MoveWhileAttack.Move_Attack;
@@ -307,7 +326,22 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             0.3f,
             0.35f }; 
         m = new AttackMessage();
-
+        if (ironHookEffectsPools == null)
+        {
+            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
+            ironHookEffects = e.Effects;
+            effcetParent = e.effcetParent;
+            ironHookEffectsPools = new Pool[ironHookEffects.Length];
+            for (int i = 0; i < ironHookEffectsPools.Length; i++)
+            {
+                ironHookEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                ironHookEffectsPools[i].poolPrefab = ironHookEffects[i];
+                ironHookEffectsPools[i].initialCount = ironHookEffectsinitialCount;
+                ironHookEffectsPools[i].incrementCount = ironHookEffectsincrementCount;
+                ironHookEffectsPools[i].Initialize();
+            }
+        }
+            chainHead = weaponBase.transform.Find("ironhookParent/ironhook/headChain/head");
     }
     public override void SetCoolTimes()
     {
@@ -352,7 +386,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection-45);
         switch (weaponBase.ViewDirection)
         {
             case 0:
@@ -370,14 +404,48 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         }
 
         CountCombo(weaponBase);
+        effectLevel = 0;
     }
     public void Update(WeaponBase weaponBase)
     {
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase);
-    }
 
+    }
+    public override void motionEvent(int value)
+    {
+        if(value == 0)
+        {
+            E_Slash(chainHead.position);
+        }
+    }
+    void E_Slash(Vector2 point)
+    {
+
+        var t = ironHookEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.position = point;
+        t.transform.rotation = Quaternion.FromToRotation(Vector2.right,(point- (Vector2)player.transform.position).normalized);
+        t.gameObject.SetActive(true);
+        t.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+        float duration= 1;
+        switch (effectLevel)
+        {
+            case 0:
+                duration = 0.3f;
+                break;
+            case 1:
+                duration = 0.45f;
+                break;
+            case 2:
+                duration = 0.6f;
+                break;
+            default:
+                break;
+        }
+        effectLevel++;
+        t.GetComponent<Effector>().Alpha(duration, 0f).Then().Disable().Play();
+    }
 }
 
 public class SampleCCStrategy : CCStrategy

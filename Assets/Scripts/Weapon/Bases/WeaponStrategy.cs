@@ -68,6 +68,7 @@ public interface AttackStrategy
     bool canDash();
     void GetCoolTime(out float remain, out float total);
     void StartCool();
+    void motionEvent(int value);
 }
 public interface SkillStrategy
 {
@@ -158,6 +159,17 @@ public abstract class SkillValues
     {
         return moveSkillcondition;
     }
+    public void HandleSkillEND(WeaponBase weaponBase)
+    {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
+        if (weaponBase.getAnimEnd())
+        {
+            weaponBase.CanRotateView = true;
+            weaponBase.CanAttackCancel = true;
+            weaponBase.SetIdle();
+            weaponBase.SetPlayerFree();
+            weaponBase.SetColliderEnable(false);
+        }
+    }
 }
 #endregion
 
@@ -199,13 +211,15 @@ public abstract class AttackValues {
             tempAtkCount = 0;
         }
         weaponBase.SetComboCount(tempAtkCount);
+        if(weaponBase.objectState != PlayerState.attack)
         weaponBase.setState(PlayerState.attack);
     }
     public void DoAttack(WeaponBase weaponBase, int combo)
     {
         weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.SetComboCount(combo);
-        weaponBase.setState(PlayerState.attack);
+        if (weaponBase.objectState != PlayerState.attack)
+            weaponBase.setState(PlayerState.attack);
     }
     public void HandleAttackCancel(WeaponBase weaponBase) {//ATK_CANCEL_PROGRESS에 도달하면 끊고 이동 및 다음 공격이 가능해지는 애들 업데이트에서 호출
         if (!CancelConditonOnce && weaponBase.getAnimProgress() >= ATK_CANCEL_PROGRESS)
@@ -228,6 +242,7 @@ public abstract class AttackValues {
             if (progress >= ATK_COMMAND_PROGRESS_START)
             {
                 weaponBase.nowAttack = true;
+                weaponBase.SetColliderEnable(true);
             }
         }
         else {
@@ -240,8 +255,11 @@ public abstract class AttackValues {
     public void HandleAttackEND(WeaponBase weaponBase) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
         {
+            weaponBase.CanRotateView = true;
+            weaponBase.CanAttackCancel = true;
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
+            weaponBase.SetColliderEnable(false);
         }
     }
     public void HandleAttackEND(WeaponBase weaponBase, Action<WeaponBase> callback)
@@ -279,7 +297,6 @@ public abstract class AttackValues {
         remainCoolTime = totalCoolTime;
         coolStartTime = Time.realtimeSinceStartup;
         isCooldown = true;
-        Debug.Log(totalCoolTime);
     }
  
     public void GetCoolTime(out float remain, out float total)
@@ -311,5 +328,9 @@ public abstract class AttackValues {
         return attackMoveCondition;
     }
 
+    public virtual void motionEvent(int value)
+    {
+
+    }
 }
 #endregion

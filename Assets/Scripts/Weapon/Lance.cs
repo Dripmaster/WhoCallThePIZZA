@@ -85,6 +85,14 @@ public class LanceMouseInputStrategy : MouseInputStrategy
                 }
             }
         }
+        if (weaponBase.attackComboCount==0 && InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
+        {
+            weaponBase.SetAttack(true);
+        }
+        else if (InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
+        {
+            //weaponBase.attackComboCount = 0;
+        }
         ////스킬
         if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.SkillBtn))
         {
@@ -115,7 +123,8 @@ public class LanceMouseInputStrategy : MouseInputStrategy
 public class LanceSkillStrategy : SkillValues, SkillStrategy
 {
     AttackMessage m;
-
+    float tempTime;//경과시간
+    bool colliderEnable;//콜라이더 켜졌는지
     public LanceSkillStrategy()
     {
         dashCondition = false;
@@ -134,15 +143,37 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
+
+        weaponBase.SetColliderEnable(true);
+        tempTime = 0;
+        colliderEnable = true;
     }
     public void Update(WeaponBase weaponBase)
     {
+        tempTime += Time.deltaTime;
+        if(tempTime>=0.083f)
+        {
+            tempTime = 0;
+            colliderEnable = !colliderEnable;
+            weaponBase.SetColliderEnable(colliderEnable);
+        }
 
+        HandleSkillEND(weaponBase);
     }
-
+    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
+    {
+        m.EffectNum = 2;
+        m.Cri_EffectNum = 2;
+        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        return m;
+    }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-
+        var fsm = target.GetComponent<FSMbase>();
+        if (fsm != null)
+        {//!TODO 한 공격에 한번만 맞게 할 것
+                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
+        }
     }
 }
              
@@ -151,7 +182,8 @@ public class LanceDashStrategy : DashFunction, DashStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        cannotMove(weaponBase);
+        attack_Cancel(weaponBase);
+        weaponBase.attackComboCount = 1;
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -165,23 +197,47 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     float[] Damages;
     AttackMessage m;
     bool firstTime = true;
+
+    Vector2 chargeDir;
+    float chargeSpeed;
+    float chargeLength;
+    float pierceTime;
+
+    public void preCalculate()
+    {
+        chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+        chargeDir.Normalize();
+        if(tempTime>=2)
+            tempTime = 2;
+        chargeLength = tempTime*1.5f + 3;
+        chargeSpeed = chargeLength*1.33f;
+        if (tempTime >= 1)
+            pierceTime = (tempTime-1)*2+3;
+        tempTime = 0;
+    }
     public LanceAttackStrategy(WeaponBase weaponBase) : base(3)
     {
-        tempAtkCount = 0;
+        tempAtkCount = 1;
         m.EffectNum = 0;
         m.Cri_EffectNum = 2;
 
-        attackMoveCondition = MoveWhileAttack.Cannot_Move;
-        dashCondition = false;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
+        dashCondition = true;
         Damages = new float[] {
             1,
             2f };
     }
-    AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
-        
+        return m;
+    }
+    AttackMessage rushHandle(FSMbase target, FSMbase sender, float attackPoint)
+    {
+        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+
+        target.status.AddBuff(new Pierced(pierceTime, target));
         return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -189,7 +245,13 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
-           
+            if (tempAtkCount == 1)//그냥찌르기
+            {
+                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, Damages[tempAtkCount-1]);
+            }else if(tempAtkCount == 2)
+            {
+                AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1]);
+            }
         }
     }
 
@@ -208,7 +270,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             firstTime = false;
             return;
         }
-
+        tempAtkCount = weaponBase.attackComboCount;
         switch (tempAtkCount)
         {
             case 0:
@@ -236,9 +298,32 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 //발광이펙트
                 effectLevel++;
             }
+            weaponBase.CanRotateView = true;
+            weaponBase.setViewPoint();
+            if (weaponBase.SP_FlipX())
+            {
+                weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            }
+            else
+            {
+                weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+
+            }
         }
         else
         {
+            if(tempAtkCount == 2)
+            {
+                tempTime += Time.deltaTime;
+                if (tempTime < 0.75f)
+                {
+                    player.AddPosition(chargeDir * chargeSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    weaponBase.nowAttack = false;
+                }
+            }
             HandleAttackEND(weaponBase,endAttack);
         }
     }
@@ -254,7 +339,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     void ChargeEnd(WeaponBase weaponBase)
     {
-        StartCool();
         if (tempTime <= 0.4f)
         {//찌르기
             DoAttack(weaponBase, 1);
@@ -264,28 +348,24 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         {//돌진찌르기
             DoAttack(weaponBase, 2);
             tempAtkCount = 2;
+            preCalculate();
         }
+        weaponBase.CanRotateView = false;
         weaponBase.nowAttack = true;
         weaponBase.CanAttackCancel = false;
+        weaponBase.SetColliderEnable(true);
+        weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
+        dashCondition = false;
     }
     void ChargeStart(WeaponBase weaponBase)
     {
+        weaponBase.CanAttackCancel = false;
         tempTime = 0;
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        if (weaponBase.SP_FlipX())
-        {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
-        }
-        else
-        {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-
-        }
+        
         DoAttack(weaponBase, 0);
         effectLevel = 0;
         tempAtkCount = 0;
-        weaponBase.CanRotateView = false;
+        dashCondition = true;
     }
 
 }

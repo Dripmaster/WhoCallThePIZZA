@@ -49,8 +49,8 @@ public class StatusBase
     public void AddBuff(Buff buff)
     {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
         StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
-        buff.StartBuff();
         buff.tempTime = Time.realtimeSinceStartup;
+        buff.StartBuff();
         buffs.Add(buff);
     }
     public bool IsBuff(BUFF buff)
@@ -197,6 +197,29 @@ public class Electrified : Buff
     public override void Update()
     {
         // 행동중인 동작 캔슬?
+    }
+
+    public override void EndBuff()
+    {
+
+    }
+}
+public class Pierced : Buff
+{
+    public Pierced(float time, FSMbase target)
+    {
+        buffName = BUFF.Pierced;
+        totalTime = time;
+        SetTarget(target);
+    }
+    public override void StartBuff()
+    {
+        showEffect(Resources.Load<GameObject>("BuffEffect/Pierced"))
+       .Alpha(1f, 0.1f).And().Disable(1f, true).Play();
+        Debug.Log(tempTime);
+    }
+    public override void Update()
+    {
     }
 
     public override void EndBuff()

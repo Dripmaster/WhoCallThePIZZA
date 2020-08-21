@@ -166,6 +166,7 @@ public class AttackManager : MonoBehaviour
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
             m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));
+        //!TODO 이렇게 말고..
         m.knockBackDir = (target.transform.position - sender.transform.position).normalized;
         m.CalcDefense(target,sender);
         target.TakeAttack(m.FinalDamage);
@@ -205,14 +206,15 @@ public struct AttackMessage
         return isCritical;
     }
 
-    public void CalcDefense(FSMbase target, FSMbase sender) {
-        if (!target.status.IsBuff(BUFF.Pierced))
-        {
-            FinalDamage -= FinalDamage*target.status.getCurrentStat(STAT.DefensePoint);
-        }
+    public void CalcDefense(FSMbase target, FSMbase sender)
+    {
         if (target.status.IsBuff(BUFF.Bleeding))
         {
             FinalDamage *= 1.3f;
+        }
+        if (!target.status.IsBuff(BUFF.Pierced))
+        {
+            FinalDamage -= FinalDamage*target.status.getCurrentStat(STAT.DefensePoint);
         }
     }
 }

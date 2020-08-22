@@ -158,7 +158,7 @@ public class AttackManager : MonoBehaviour
     */
     public void SimpleDamage(float Dmg, FSMbase target) {
         //TODO : cri계산??
-        target.TakeAttack(Dmg);
+        target.TakeAttack(Dmg,false);
 
     }
     public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint)
@@ -166,10 +166,15 @@ public class AttackManager : MonoBehaviour
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
             m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));
-        //!TODO 이렇게 말고..
-        m.knockBackDir = (target.transform.position - sender.transform.position).normalized;
+        
         m.CalcDefense(target,sender);
-        target.TakeAttack(m.FinalDamage);
+        target.TakeAttack(m.FinalDamage,m.cancelAttack);
+        if (m.isKnockBack)
+        {
+            target.TakeKnockBack(m.knockBackDegree, m.knockBackDir);
+            m.isKnockBack = false;
+        }
+        
         defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
     }
     void defaultEffect(FSMbase target, int hitEffectNum)
@@ -190,6 +195,8 @@ public struct AttackMessage
     public bool criCalculated;
     public Vector2 knockBackDir;
     public float knockBackDegree;
+    public bool cancelAttack;
+    public bool isKnockBack;
 
     public bool CriCalculate(float criPoint,float criticalDamage) {
         int r = Random.Range(0,100);
@@ -216,6 +223,18 @@ public struct AttackMessage
         {
             FinalDamage -= FinalDamage*target.status.getCurrentStat(STAT.DefensePoint);
         }
+    }
+    public void CalcKnockBack(Vector2 knockBackDir,float knockBackDegree)
+    {
+        this.knockBackDegree = knockBackDegree;
+        this.knockBackDir = knockBackDir;
+        isKnockBack = true;
+    }
+    public void CalcKnockBack(FSMbase target, FSMbase sender, float knockBackDegree)
+    {
+        this.knockBackDegree = knockBackDegree;
+        knockBackDir = (target.transform.position - sender.transform.position).normalized;
+        isKnockBack = true;
     }
 }
 /*

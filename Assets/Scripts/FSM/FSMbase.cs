@@ -16,13 +16,17 @@ public abstract class FSMbase : MonoBehaviour
 {
     protected Animator _animator;
     protected SpriteRenderer _sr;
-    protected int objectState;
+    public int objectState;
     Type stateType;
     protected bool newState = false;
     int viewDirection;
     private float animSpeed;
     protected Rigidbody2D _rigidbody2D;
     public StatusBase status;
+    CircleCollider2D[] _colliders;
+
+    protected float knockDegree;
+    protected Vector2 knockDir;
     protected float AnimSpeed {
         get {
             return animSpeed;
@@ -56,6 +60,7 @@ public abstract class FSMbase : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         status = new StatusBase();
+        _colliders = GetComponentsInChildren<CircleCollider2D>();
     }
     protected void Update()
     {
@@ -111,7 +116,18 @@ public abstract class FSMbase : MonoBehaviour
     {
         do
         {
-            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
+            if (!CCreamin())//CC상태 쭉 추가(속박 등 나중엔 배열로)
+            {
+                CCfree();
+            }
+            yield return null;
+        } while (!newState);
+    }
+    IEnumerator hitted()
+    {
+        do
+        {
+            if(knockDegree<=0)
             {
                 CCfree();
             }
@@ -121,12 +137,54 @@ public abstract class FSMbase : MonoBehaviour
     IEnumerator dead()
     {
         _sr.color = new Color(0.2f, 0.2f, 0.2f);
+        foreach (var item in _colliders)
+        {
+            item.enabled = false;
+        }
         do
         {
             yield return null;
         } while (!newState);
     }
-    public abstract void TakeAttack(float dmg);
+    public abstract void TakeAttack(float dmg, bool cancelAttack);
+    public abstract void TakeKnockBack(float degree, Vector2 knockBackDir);
     public abstract void TakeCC();
     public abstract void CCfree();
+
+    public bool CCreamin()
+    {
+        if (status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
+        {
+            return true;
+        }
+        return false;
+    }
+    public virtual void AddPosition(Vector2 movePos)
+    {
+        //TODO : fixedUpdate에서 이동하도록 해야함
+        transform.position += (Vector3)movePos;
+
+        //_rigidbody2D.MovePosition(movePos);
+    }
+    public virtual void SetPosition(Vector2 movePos)
+    {
+        //TODO : fixedUpdate에서 이동하도록 해야함
+        transform.position = movePos;
+
+        //_rigidbody2D.MovePosition(movePos);
+    }
+
+    public void IgnoreEnemyPlayerCollison(bool value)//플레이어와 적의 충돌 무시
+    {//도약, 돌진, 넉백 시 호출
+        Physics2D.IgnoreLayerCollision(14, 9, value);
+        Physics2D.IgnoreLayerCollision(15, 10, value);
+    }
+    public CircleCollider2D getChildCollider()
+    {
+        return _colliders[1];
+    }
+    public CircleCollider2D getCollider()
+    {
+        return _colliders[0];
+    }
 }

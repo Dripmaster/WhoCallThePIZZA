@@ -12,18 +12,20 @@ public class WeaponBase : MonoBehaviour
     /// </summary>
 
     public WeaponType weaponType;
+
     public MoveWhileAttack currentMoveCondition;
     public bool CanAttackCancel;
     public bool CanRotateView;
     public bool isDash;
+    public int attackComboCount;
+    public bool nowAttack;
 
     Animator _animator;
     public PlayerState objectState;
     protected bool newState;
-    int viewDirection;
-    public int attackComboCount;
-    public bool nowAttack;
     private float animSpeed;
+    int viewDirection;
+
     IdleStrategy idleStrategy;
     SkillStrategy skillStrategy;
     MoveStrategy moveStrategy;
@@ -32,14 +34,21 @@ public class WeaponBase : MonoBehaviour
     MouseInputStrategy mouseInputStrategy;
     AttackStrategy attackStrategy;
     CCStrategy cCStrategy;
+
     public PlayerFSM player;
     public static WeaponBase instance;
+
     Transform Rotator;
     bool flipValue;
     float tempX;
     float tempScaleX;
     float tempScaleY;
     Collider2D[] colliders;
+
+    public float weakedSpeed;
+
+    WeaponInfo[] equipedWeapons;
+    int currentWeapon;
     private WeaponBase() {
         instance = this;
     }
@@ -80,8 +89,17 @@ public class WeaponBase : MonoBehaviour
     public float WeaponViewDirection;
     protected void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
-        InitData();
+    }
+    public void setWeapon(int num)
+    {
+        equipedWeapons[currentWeapon].gameObject.SetActive(false);
+        currentWeapon = num;
+        equipedWeapons[currentWeapon].transform.SetAsFirstSibling();
+        equipedWeapons[currentWeapon].gameObject.SetActive(true);
+        setWeapon(equipedWeapons[currentWeapon].wType);
+        player.refreshWeapon((int)weaponType);
+        attackComboCount = 0;
+        SetIdle();
     }
     public void setWeapon(WeaponType weaponType) {
         this.weaponType = weaponType;
@@ -121,6 +139,24 @@ public class WeaponBase : MonoBehaviour
         setStateEnum(weaponType);
         colliders = transform.GetComponentsInChildren<Collider2D>();
         SetColliderEnable(false);
+
+        _animator = transform.GetChild(0).GetComponentInChildren<Animator>();
+        Rotator = transform.GetChild(0);
+        tempX = Rotator.transform.localPosition.x;
+        tempScaleX = Rotator.transform.localScale.x;
+        tempScaleY = Rotator.transform.localScale.y;
+
+        weakedSpeed = 1;
+        ViewDirection = 6;
+        isDash = false;
+        AnimSpeed = 1;
+        attackComboCount = 0;
+        CanAttackCancel = true;
+        CanRotateView = true;
+        currentMoveCondition = 0;
+        newState = false;
+        nowAttack = false;
+        flipValue = false;
     }
     public void SetPlayerFree() {
 
@@ -194,21 +230,18 @@ public class WeaponBase : MonoBehaviour
     }
     protected void OnEnable()
     {
-        ViewDirection = 6;
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player").GetComponent<PlayerFSM>();
+        }
+
+        equipedWeapons = GetComponentsInChildren<WeaponInfo>();
+        equipedWeapons[1].gameObject.SetActive(false);
+        equipedWeapons[2].gameObject.SetActive(false);
+        currentWeapon = 0;
+        setWeapon(equipedWeapons[currentWeapon].wType);
+
         SetIdle();
-        isDash = false;
-        AnimSpeed = 1;
-        attackComboCount = 0;
-        CanAttackCancel = true;
-        CanRotateView = true;
-        currentMoveCondition = 0;
-        newState = false;
-        nowAttack = false;
-        Rotator = transform.GetChild(0);
-        flipValue = false;
-        tempX = Rotator.transform.localPosition.x;
-        tempScaleX = Rotator.transform.localScale.x;
-        tempScaleY = Rotator.transform.localScale.y;
         StartCoroutine(FSMmain());
     }
     public bool getAnimEnd(float targetTime=0.99f) {
@@ -230,6 +263,7 @@ public class WeaponBase : MonoBehaviour
             _animator.SetInteger("State", (int)objectState);
             _animator.SetInteger("ComboCount", attackComboCount);
         }
+        weakedSpeed = 1f;
         //attackComboCount = 0;
     }
     public void setRotate(float value) {
@@ -329,6 +363,7 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
         attackStrategy.StartCool();
+        attackStrategy.StateEnd();
         nowAttack = false;
         CanRotateView = true;
         CanAttackCancel = true;
@@ -343,6 +378,7 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
         skillStrategy.StartCool();
+        skillStrategy.StateEnd();
         CanRotateView = true;
         CanAttackCancel = true;
         SetColliderEnable(false);
@@ -462,6 +498,19 @@ public class WeaponBase : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        if (InputSystem.Instance.getKeyDown(InputKeys.MB_R_click))
+        {
+            int num = currentWeapon;
+            if (num == equipedWeapons.Length - 1)
+            {
+                num = -1;
+            }
+            setWeapon(num + 1);
         }
     }
 }

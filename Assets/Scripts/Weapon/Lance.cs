@@ -128,7 +128,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     public LanceSkillStrategy()
     {
         dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+        moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
     }
 
@@ -140,13 +140,14 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
+        weaponBase.currentMoveCondition = moveSkillcondition;
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
 
         weaponBase.SetColliderEnable(true);
         tempTime = 0;
         colliderEnable = true;
+        weaponBase.weakedSpeed = 0.8f;
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -238,6 +239,16 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
         target.status.AddBuff(new Pierced(pierceTime, target));
+
+        Vector2 dir = (target.transform.position - sender.transform.position).normalized;
+        Vector3 v3Original = dir; 
+        //!TODO 그냥 90도 회전값인데 좀 디테일하게 -90도도 적용 해야함...
+        Quaternion qRotate = Quaternion.AngleAxis(90.0f, Vector3.forward);
+        Vector3 v3Dest = qRotate * v3Original;
+        dir = v3Dest;
+        dir.Normalize(); 
+
+        m.CalcKnockBack(dir, 3);
         return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -349,6 +360,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             DoAttack(weaponBase, 2);
             tempAtkCount = 2;
             preCalculate();
+            player.IgnoreEnemyPlayerCollison(true);
         }
         weaponBase.CanRotateView = false;
         weaponBase.nowAttack = true;
@@ -366,8 +378,12 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         effectLevel = 0;
         tempAtkCount = 0;
         dashCondition = true;
+        weaponBase.weakedSpeed = 0.8f;
     }
-
+    public override void StateEnd()
+    {
+        player.IgnoreEnemyPlayerCollison(false);
+    }
 }
              
 public class LanceCCStrategy : CCStrategy

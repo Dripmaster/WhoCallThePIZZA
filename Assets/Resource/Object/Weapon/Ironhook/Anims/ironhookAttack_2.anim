@@ -2245,7 +2245,7 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.25
+  - time: 0.33333334
     functionName: motionEvent
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -2259,7 +2259,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.5833333
+  - time: 0.5
     functionName: motionEvent
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -10,6 +10,7 @@ public class TestFSM : FSMbase
     Vector2 moveDir;
     Transform player;
     PlayerFSM playerFsm;
+    CircleCollider2D playerCollider;
     float[] coolTimes;
     float[] damages;
     int attackCount;
@@ -26,7 +27,7 @@ public class TestFSM : FSMbase
     new void Awake()
     {
         base.Awake();
-        Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), GetComponentsInChildren<BoxCollider2D>()[1]);
+        Physics2D.IgnoreCollision(GetComponent<CircleCollider2D>(), GetComponentsInChildren<CircleCollider2D>()[1]);
         setStateType(typeof(EnemyState));
         initData();
     }
@@ -44,6 +45,16 @@ public class TestFSM : FSMbase
         if (objectState == (int)EnemyState.aggro && moveDir != Vector2.zero)
         {
             _rigidbody2D.MovePosition((Vector2)transform.position + moveDir * aggroSpeed * Time.deltaTime);
+        }
+        if (knockDegree > 0)
+        {
+            Vector2 movePos = Vector2.Lerp(transform.position, knockDir, Time.deltaTime);
+            if((movePos - (Vector2)transform.position).sqrMagnitude <= 0.0001)
+            {
+                KnockBackEnd();
+            }
+            _rigidbody2D.MovePosition(movePos);
+            
         }
     }
     void initData()
@@ -124,6 +135,10 @@ public class TestFSM : FSMbase
     }
     void setAggro()
     {
+        if (CCreamin())
+        {
+            return;
+        }
         setState((int)EnemyState.aggro);
         aggroTime = 0;
         moveDir = (player.position - transform.position).normalized;
@@ -181,14 +196,41 @@ public class TestFSM : FSMbase
                 status.getCurrentStat(STAT.AtkPoint), playerFsm);
         }
     }
-    public override void TakeAttack(float dmg)
+    public override void TakeAttack(float dmg, bool cancelAttack = false)
     {
+        //TODO
+        //바로 setAggro 하지말고 Hitted(넉백) 끝나고 어그로 ㄱㄱ
+        if(cancelAttack)
         setAggro();
         status.ChangeStat(STAT.hp,-dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
             setState((int)EnemyState.dead);
         }
+    }
+    public override void TakeKnockBack(float degree, Vector2 knockBackDir)
+    {
+        if(objectState != (int)EnemyState.attack)
+        {
+            setState((int)EnemyState.hitted);
+        }
+        if(playerFsm == null)
+        {
+            playerFsm = WeaponBase.instance.player;
+            playerCollider = playerFsm.getChildCollider();
+        }
+        knockDir = knockBackDir.normalized * degree+(Vector2)transform.position;
+        knockDegree = degree;
+        Physics2D.IgnoreCollision(getCollider(),playerFsm.getChildCollider());
+        getChildCollider().isTrigger = true;
+    }
+    public void KnockBackEnd()
+    {
+        knockDir = Vector2.zero;
+        knockDegree = 0;
+        Physics2D.IgnoreCollision(getCollider(), playerFsm.getChildCollider(),false);
+        getChildCollider().isTrigger = false;
+
     }
     public override void TakeCC()
     {

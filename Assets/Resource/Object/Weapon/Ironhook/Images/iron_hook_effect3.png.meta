@@ -1,28 +1,25 @@
 fileFormatVersion: 2
-guid: 6aa271bbaaaf3f84ab70f0b6f1d57e46
+guid: e71aa6cc7d15be143838a24abb1b5e0d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8894648065906472422
-    second: player1-Sheet_0
+      213: -4283802808609677205
+    second: iron_hook_effect3_0
   - first:
-      213: -7246671666058114617
-    second: player1-Sheet_0
+      213: 4006023116392006815
+    second: iron_hook_effect3_1
   - first:
-      213: 8925679281402676403
-    second: player1-Sheet_1
+      213: 921934230978146479
+    second: iron_hook_effect3_2
   - first:
-      213: -9200087815291417665
-    second: player1-Sheet_2
+      213: -5671148972635683736
+    second: iron_hook_effect3_3
   - first:
-      213: 3401922406796283300
-    second: player1-Sheet_3
+      213: -1986572283740514733
+    second: iron_hook_effect3_4
   - first:
-      213: 4481600157603698963
-    second: player1-Sheet_4
-  - first:
-      213: -5213304090694948570
-    second: player1-Sheet_5
+      213: 3334936218757428426
+    second: iron_hook_effect3_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -82,7 +79,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -94,7 +91,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -108,127 +105,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player1-Sheet_0
+      name: iron_hook_effect3_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 22
-        width: 16
-        height: 22
+        y: 64
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e578724a43207b70800000000000000
-      internalID: 8894648065906472422
+      spriteID: b60eff8ca00ec84c0800000000000000
+      internalID: -4283802808609677205
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player1-Sheet_1
+      name: iron_hook_effect3_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 22
-        width: 16
-        height: 22
+        x: 64
+        y: 64
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b4021324026edb70800000000000000
-      internalID: 8925679281402676403
+      spriteID: f948c8eacc0489730800000000000000
+      internalID: 4006023116392006815
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player1-Sheet_2
+      name: iron_hook_effect3_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 64
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa0b9b76c4e5bcc00800000000000000
+      internalID: 921934230978146479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: iron_hook_effect3_3
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 22
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbbc72b40e8b25080800000000000000
-      internalID: -9200087815291417665
+      spriteID: 8648ab17e080c41b0800000000000000
+      internalID: -5671148972635683736
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player1-Sheet_3
+      name: iron_hook_effect3_4
       rect:
         serializedVersion: 2
-        x: 16
+        x: 64
         y: 0
-        width: 16
-        height: 22
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4adc882a76e063f20800000000000000
-      internalID: 3401922406796283300
+      spriteID: 356920388074e64e0800000000000000
+      internalID: -1986572283740514733
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player1-Sheet_4
+      name: iron_hook_effect3_5
       rect:
         serializedVersion: 2
-        x: 32
+        x: 128
         y: 0
-        width: 16
-        height: 22
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3199d4b4997d13e30800000000000000
-      internalID: 4481600157603698963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: player1-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 22
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 62969000d8f96a7b0800000000000000
-      internalID: -5213304090694948570
+      spriteID: ac4fe9b52d2184e20800000000000000
+      internalID: 3334936218757428426
       vertices: []
       indices: 
       edges: []

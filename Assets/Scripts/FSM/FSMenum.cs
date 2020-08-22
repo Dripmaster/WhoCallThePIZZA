@@ -14,6 +14,7 @@ public enum PlayerState { //플레이어와 무기의 스테이트(고유 번호
     skill,
     dash,
     CC, 
+    hitted,
 }
 public enum EnemyState{//몬스터의 스테이트(고유 번호 고정)
     idle = 0,
@@ -22,6 +23,7 @@ public enum EnemyState{//몬스터의 스테이트(고유 번호 고정)
     attack,
     dead,
     CC,
+    hitted,
 }
 public enum EnemyType
 {

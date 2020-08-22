@@ -30,7 +30,12 @@ public class PlayerFSM : FSMbase
         dashFrameCount = 0;
         setState((int)PlayerState.idle);
     }
-    void initData() {//현재는 임시 데이터
+    public void refreshWeapon(int weaponType)
+    {
+        _animator.SetInteger("WeaponNumber", weaponType);
+    }
+    void initData()
+    {//현재는 임시 데이터
         _animator.SetInteger("WeaponNumber", (int)Weapon.weaponType);
         status.setStat(STAT.hp, 50);
         status.setStat(STAT.AtkPoint, 5);
@@ -116,7 +121,7 @@ public class PlayerFSM : FSMbase
             return false;
         }
     }
-    public override void TakeAttack(float dmg)
+    public override void TakeAttack(float dmg, bool cancelAttack = false)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
         //!TODO : 
         status.ChangeStat(STAT.hp, -dmg);
@@ -130,7 +135,8 @@ public class PlayerFSM : FSMbase
         moveDir.Normalize();
         if (moveDir != Vector2.zero)
         {
-            _rigidbody2D.MovePosition((Vector2)transform.position + moveDir * moveSpeed * Time.deltaTime);
+            _rigidbody2D.MovePosition((Vector2)transform.position + moveDir * status.getCurrentStat(STAT.moveSpeed)*Weapon.weakedSpeed * Time.deltaTime);
+            
             return true;
         }
         return false;
@@ -323,21 +329,33 @@ public class PlayerFSM : FSMbase
         Weapon.SetCC();
         do
         {
-            if (!status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
+            if (!CCreamin())//CC상태 쭉 추가(속박 등 나중엔 배열로)
             {
                 CCfree();
             }
             yield return null;
         } while (!newState);
     }
-    public void SetPosition(Vector2 movePos)
+    public override void TakeKnockBack(float degree, Vector2 knockBackDir)
+    {
+        knockDir = knockBackDir;
+        knockDegree = degree;
+        IgnoreEnemyPlayerCollison(true);
+    }
+    public void KnockBackEnd()
+    {
+        knockDir = Vector2.zero;
+        knockDegree = 0;
+        IgnoreEnemyPlayerCollison(false);
+    }
+    public override void SetPosition(Vector2 movePos)
     {
         //TODO : fixedUpdate에서 이동하도록 해야함
         transform.position = movePos;
 
         //_rigidbody2D.MovePosition(movePos);
     }
-    public void AddPosition(Vector2 movePos)
+    public override void AddPosition(Vector2 movePos)
     {
         //TODO : fixedUpdate에서 이동하도록 해야함
         transform.position += (Vector3)movePos;

@@ -318,6 +318,8 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     Transform chainHead;
     int effectLevel = 0;
 
+    float distance = 1.7f;
+
     public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
     {
         attackMoveCondition = MoveWhileAttack.Move_Attack;
@@ -358,10 +360,6 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {
-            if(tempAtkCount == 1)
-                m.knockBackDegree = 0.3f;
-            else
-                m.knockBackDegree = 0;
             if (colliderType == 0)
             {
                 AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player,Damages[tempAtkCount] * 4);
@@ -405,6 +403,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
         CountCombo(weaponBase);
         effectLevel = 0;
+        weaponBase.weakedSpeed = 0.5f;
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -423,8 +422,19 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     void E_Slash(Vector2 point)
     {
 
+        point = point-(Vector2)player.transform.position;
+        point.Normalize();
+        point *= distance;
+        point += (Vector2)player.transform.position;
         var t = ironHookEffectsPools[0].GetObjectDisabled(effcetParent);
         t.transform.position = point;
+        if (tempAtkCount == 0)
+            t.transform.localScale = new Vector2(1, -1);
+        else
+        {
+            t.transform.localScale = new Vector2(1, 1);
+
+        }
         t.transform.rotation = Quaternion.FromToRotation(Vector2.right,(point- (Vector2)player.transform.position).normalized);
         t.gameObject.SetActive(true);
         t.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);

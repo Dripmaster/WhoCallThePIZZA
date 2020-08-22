@@ -64,15 +64,17 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 {
     Vector2 targetPos;//목표지점
     Vector2 startPos;//시작점
-    Vector2 lerpPos;//프레임 당 이동
+    Vector2 lerpPos;//프레임 당 이동(방향벡터)
 
-    float v = 2.5f;//속도
-    float vy = 1f;//y가짜 포물선 속도
+    float v = 7f;//속도
+    float vy = 5f;//y가짜 포물선 속도
     float h;
     float t;//경과시간
     float all_t;//전체 이동 시간
     float l;//이동거리
     float skillRange = 1; //스킬 범위
+
+    float maxRange = 4; // 최대도약거리
 
     int maxSkillTargetCount = 5; //스킬 타격 최대 대상 수
     int currentSkillTargetCount;
@@ -97,13 +99,28 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 5;
+        totalCoolTime = 1;
     }
 
     void PreCalculate() {
+        //!TODO(나중에)
+        //벽 못넘게 Ray쏴서 확인해서 targetPos 조절
        lerpPos =targetPos-startPos;
-        l = lerpPos.magnitude;
-       lerpPos.Normalize();
+
+        if (lerpPos.sqrMagnitude >= maxRange * maxRange)
+        {
+            lerpPos.Normalize();
+            targetPos = startPos + lerpPos * maxRange;
+            l = maxRange;
+            
+        }
+        else
+        {
+
+            l = lerpPos.magnitude;
+            lerpPos.Normalize();
+        }
+
         lerpPos *= v;
 
         h = 0;
@@ -123,10 +140,11 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        startPos = weaponBase.player.transform.position;
+        startPos = player.transform.position;
         PreCalculate();
         weaponBase.AnimSpeed = 1 / all_t;
         had_Thunder = false;
+        player.IgnoreEnemyPlayerCollison(true);
         if (stormPistHitEffectPools == null)
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
@@ -209,7 +227,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             //스킬이 끝날 때 이펙트 출력
             E_GroundDown(); 
             
-            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(weaponBase.player.transform.position, skillRange, 1 << 10); ;
+            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(player.transform.position, skillRange, 1 << 10); ;
             int discoveredTargetCount = SkillTargetList.Length;
 
             //타격대상 개수 확인
@@ -251,7 +269,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     void E_GroundDown() {
 
         var e = stormPistHitEffectPools[1].GetObjectDisabled(effcetParent);
-        e.transform.position = targetPos - new Vector2(0,0.1f); ;
+        e.transform.position = (Vector2)player.transform.position - new Vector2(0,0.1f); ;
         e.gameObject.SetActive(true);
         e.GetComponent<Effector>().Disable(1f).And().Alpha(0.3f, 0.7f).Play();
     }
@@ -280,6 +298,11 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             target.status.AddBuff(new Electrified(1, target));
         }
         return m;
+    }
+    public override void StateEnd()
+    {
+        player.IgnoreEnemyPlayerCollison(false);
+        WeaponBase.instance.AnimSpeed = 1;
     }
 }
 
@@ -333,10 +356,6 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         {//!TODO 한 공격에 한번만 맞게 할 것
             List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
             alreadyHitTarget.Add(target.GetComponent<Collider2D>());
-            if (tempAtkCount == 2 || tempAtkCount == 5)
-                m.knockBackDegree = 0.5f;
-            else
-                m.knockBackDegree = 0.3f;
             AttackManager.GetInstance().HandleAttack(attackHandle, fsm,player,Damages[tempAtkCount]);
 
             for (int i = 0; i < attackConnectCount; i++)
@@ -346,7 +365,6 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
                     break;
                 alreadyHitTarget.Add(targetList[0]);
             }
-            m.knockBackDegree = 0.1f;
             for (int i = 1; i < alreadyHitTarget.Count; i++)
             {
                 AttackManager.GetInstance().HandleAttack(attackHandle, alreadyHitTarget[i].GetComponent<FSMbase>(),player, Damages[tempAtkCount]);

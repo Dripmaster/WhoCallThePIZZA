@@ -69,6 +69,7 @@ public interface AttackStrategy
     void GetCoolTime(out float remain, out float total);
     void StartCool();
     void motionEvent(int value);
+    void StateEnd();
 }
 public interface SkillStrategy
 {
@@ -79,6 +80,7 @@ public interface SkillStrategy
     MoveWhileAttack getSkillMoveCondition();
     void StartCool();
     void GetCoolTime(out float remain, out float total);
+    void StateEnd();
 }
 
 public interface MouseInputStrategy
@@ -169,6 +171,10 @@ public abstract class SkillValues
             weaponBase.SetPlayerFree();
             weaponBase.SetColliderEnable(false);
         }
+    }
+    public virtual void StateEnd()
+    {
+
     }
 }
 #endregion
@@ -293,6 +299,8 @@ public abstract class AttackValues {
     public void StartCool() {
         if (isCooldown)
             return;
+        if (coolTimes == null)
+            return;
         totalCoolTime = coolTimes[tempAtkCount];
         remainCoolTime = totalCoolTime;
         coolStartTime = Time.realtimeSinceStartup;
@@ -329,6 +337,10 @@ public abstract class AttackValues {
     }
 
     public virtual void motionEvent(int value)
+    {
+
+    }
+    public virtual void StateEnd()
     {
 
     }

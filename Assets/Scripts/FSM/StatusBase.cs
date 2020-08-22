@@ -216,7 +216,6 @@ public class Pierced : Buff
     {
         showEffect(Resources.Load<GameObject>("BuffEffect/Pierced"))
        .Alpha(1f, 0.1f).And().Disable(1f, true).Play();
-        Debug.Log(tempTime);
     }
     public override void Update()
     {

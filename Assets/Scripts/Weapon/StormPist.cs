@@ -401,6 +401,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
 
+
 }
 
 public class StormPistCCStrategy : CCStrategy

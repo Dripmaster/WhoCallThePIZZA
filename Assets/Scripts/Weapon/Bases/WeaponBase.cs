@@ -491,6 +491,7 @@ public class WeaponBase : MonoBehaviour
             case PlayerState.dead:
                 break;
             case PlayerState.skill:
+                skillStrategy.motionEvent(value);
                 break;
             case PlayerState.dash:
                 break;

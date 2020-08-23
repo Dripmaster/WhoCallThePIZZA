@@ -81,6 +81,7 @@ public interface SkillStrategy
     void StartCool();
     void GetCoolTime(out float remain, out float total);
     void StateEnd();
+    void motionEvent(int value);
 }
 
 public interface MouseInputStrategy
@@ -171,6 +172,10 @@ public abstract class SkillValues
             weaponBase.SetPlayerFree();
             weaponBase.SetColliderEnable(false);
         }
+    }
+    public virtual void motionEvent(int value)
+    {
+
     }
     public virtual void StateEnd()
     {

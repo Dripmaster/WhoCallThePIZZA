@@ -216,6 +216,21 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1259094402}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1012234142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012234141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5820ff02001abc4fa962490a6903f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effcetParent: {fileID: 1161551798}
+  Effects:
+  - {fileID: 8275508644482576104, guid: 0bd22a1ac680340479c640cf48d8e5d4, type: 3}
 --- !u!114 &1012234143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1625,6 +1640,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 410302232430944633, guid: eee7c2ab30e5cdf449c948577e777668,
+        type: 3}
+      propertyPath: m_UsedByComposite
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410302232430944636, guid: eee7c2ab30e5cdf449c948577e777668,
         type: 3}

@@ -26,7 +26,13 @@ public class Effector : MonoBehaviour
     SpriteRenderer spriteRenderer;
     IEnumerator mainCoroutine;
 
-#region Scale
+    Vector3 original_Scale;
+    Vector3 original_Pos;
+    float original_Alpha;
+    float original_Roate;
+    Color original_Color;
+
+    #region Scale
     public Effector Scale(float duration, Vector2 target)
     { 
         return Scale(duration, target, increCurve); 
@@ -51,6 +57,7 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         Vector3 originalScale = transform.localScale;
+        original_Scale = originalScale;
         Vector3 targetScale = new Vector3(target.x,target.y,originalScale.z);
         while(eTime <= duration)
         {
@@ -79,6 +86,7 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         Vector3 originalPos = transform.localPosition;
+        original_Pos = originalPos;
         Vector3 targetPos = originalPos + new Vector3(offset.x,offset.y,0);
         while(eTime <= duration)
         {
@@ -108,6 +116,7 @@ public class Effector : MonoBehaviour
         float eTime = 0f;
         Color c = spriteRenderer.color;
         float originalAlpha = c.a;
+        original_Alpha = originalAlpha;
         while(eTime <= duration)
         {
             c.a = Mathf.Lerp(originalAlpha, target, Curve(eTime/duration));
@@ -145,7 +154,8 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         float originalRot = transform.eulerAngles.z;
-        while(eTime <= duration)
+        original_Roate = originalRot;
+        while (eTime <= duration)
         {
             transform.rotation = Quaternion.Euler(0,0,Mathf.Lerp(originalRot, target, Curve(eTime/duration)));
             eTime += Time.deltaTime;
@@ -174,7 +184,8 @@ public class Effector : MonoBehaviour
         float eTime = 0f;
         Color c = spriteRenderer.color;
         Color originalColor = c;
-        while(eTime <= duration)
+        original_Color = originalColor;
+        while (eTime <= duration)
         {
             c = Color.Lerp(originalColor, target, Curve(eTime/duration));
             spriteRenderer.color = c;
@@ -196,7 +207,7 @@ public class Effector : MonoBehaviour
     }
     IEnumerator DisableCoroutine(float timeOffset, bool destroy)
     {
-        if(timeOffset != 0f)
+        if (timeOffset != 0f)
             yield return new WaitForSeconds(timeOffset);
         if (!destroy)
             gameObject.SetActive(false);
@@ -204,7 +215,7 @@ public class Effector : MonoBehaviour
             Destroy(gameObject);
         isDoneSetting = false;
     }
-#endregion
+    #endregion
  
 
 #region Connections
@@ -280,6 +291,12 @@ public class Effector : MonoBehaviour
         //YM 추가
         effectList.Clear();
         isDoneSetting = false;
+
+        transform.position = original_Pos;
+        transform.localScale = original_Scale;
+        transform.rotation = transform.rotation = Quaternion.Euler(0, 0,original_Roate);
+        original_Color.a = original_Alpha;
+        spriteRenderer.color = original_Color;
     }
 
     static float increCurve(float t)

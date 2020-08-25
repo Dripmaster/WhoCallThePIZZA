@@ -200,8 +200,10 @@ public class TestFSM : FSMbase
     {
         //TODO
         //바로 setAggro 하지말고 Hitted(넉백) 끝나고 어그로 ㄱㄱ
-        if(cancelAttack)
-        setAggro();
+        if (cancelAttack)
+        {
+            setAggro();
+        }
         status.ChangeStat(STAT.hp,-dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {

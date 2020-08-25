@@ -161,18 +161,16 @@ public class AttackManager : MonoBehaviour
         target.TakeAttack(Dmg,false);
 
     }
-    public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint)
+    public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
             m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));
-        
         m.CalcDefense(target,sender);
-        target.TakeAttack(m.FinalDamage,m.cancelAttack);
-        if (m.isKnockBack)
+        target.TakeAttack(m.FinalDamage,cancelAttack);
+        if (isKnockBack)
         {
             target.TakeKnockBack(m.knockBackDegree, m.knockBackDir);
-            m.isKnockBack = false;
         }
         
         defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
@@ -182,7 +180,7 @@ public class AttackManager : MonoBehaviour
         var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
         e.transform.position = target.transform.position;
         e.gameObject.SetActive(true);
-        e.GetComponent<Effector>().Alpha(0.5f, 0.7f).And().Disable(0.5f).Play();
+        e.GetComponent<Effector>().Alpha(0.5f, 0).And().Disable(0.5f).Play();
     }
 }
 public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);
@@ -195,8 +193,6 @@ public struct AttackMessage
     public bool criCalculated;
     public Vector2 knockBackDir;
     public float knockBackDegree;
-    public bool cancelAttack;
-    public bool isKnockBack;
 
     public bool CriCalculate(float criPoint,float criticalDamage) {
         int r = Random.Range(0,100);
@@ -228,13 +224,11 @@ public struct AttackMessage
     {
         this.knockBackDegree = knockBackDegree;
         this.knockBackDir = knockBackDir;
-        isKnockBack = true;
     }
     public void CalcKnockBack(FSMbase target, FSMbase sender, float knockBackDegree)
     {
         this.knockBackDegree = knockBackDegree;
         knockBackDir = (target.transform.position - sender.transform.position).normalized;
-        isKnockBack = true;
     }
 }
 /*

@@ -52,4 +52,5 @@ public enum InputKeys
     MB_R_click,
     SkillBtn,
     UltmateBtn,
+    WeaponSwapBtn,
 }

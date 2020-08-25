@@ -15,7 +15,7 @@ public class Lance
         mi = new LanceMouseInputStrategy();
         ds = new LanceDashStrategy();
         a = new LanceAttackStrategy(weaponBase);
-        s = new LanceSkillStrategy();
+        s = new LanceSkillStrategy(weaponBase);
         c = new LanceCCStrategy();
     }
 }
@@ -50,6 +50,7 @@ public class LanceDeadStrategy : DeadStrategy
     public void SetState(WeaponBase weaponBase)
     {
         //미구현
+        weaponBase.setState(PlayerState.dead);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -125,11 +126,36 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     AttackMessage m;
     float tempTime;//경과시간
     bool colliderEnable;//콜라이더 켜졌는지
-    public LanceSkillStrategy()
+    //이펙트용 변수
+    GameObject[] lanceEffects;
+    Pool[] lanceSkillEffectsPools;
+    Transform effcetParent;
+    Transform lanceTransform;
+    int lanceSkillEffectsinitialCount = 14;
+    int lanceSkillEffectsincrementCount = 7;
+
+    public LanceSkillStrategy(WeaponBase weaponBase)
     {
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
+
+        lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
+        if(lanceSkillEffectsPools == null)
+        {
+            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
+            lanceEffects = e.Effects;
+            effcetParent = e.effcetParent;
+            lanceSkillEffectsPools = new Pool[lanceEffects.Length];
+            for (int i = 0; i < lanceSkillEffectsPools.Length; i++)
+            {
+                lanceSkillEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                lanceSkillEffectsPools[i].poolPrefab = lanceEffects[i];
+                lanceSkillEffectsPools[i].initialCount = lanceSkillEffectsinitialCount;
+                lanceSkillEffectsPools[i].incrementCount = lanceSkillEffectsincrementCount;
+                lanceSkillEffectsPools[i].Initialize();
+            }
+        }
     }
 
     public override void SetCooltime()
@@ -175,6 +201,21 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         {//!TODO 한 공격에 한번만 맞게 할 것
                 AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
         }
+    }
+
+    public override void motionEvent(int value)
+    {
+        var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.position = lanceTransform.position;
+        t.transform.rotation = lanceTransform.rotation;
+        t.gameObject.SetActive(true);
+
+        //!TODO Effector에 자동 복원 추가 하고 지우기
+        t.GetComponent<SpriteRenderer>().color = new Color(0.443f, 0.443f, 0.443f, 1f);
+        t.transform.localScale = new Vector3(1, 1, 1);
+
+        float duration = 1;
+        t.GetComponent<Effector>().Alpha(duration, 0f).And().Scale(duration, 2f).Then().Disable().Play();
     }
 }
              
@@ -260,8 +301,9 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             {
                 AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, Damages[tempAtkCount-1]);
             }else if(tempAtkCount == 2)
-            {
-                AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1]);
+            {//돌진찌르기
+                AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1],false,true);
+                
             }
         }
     }

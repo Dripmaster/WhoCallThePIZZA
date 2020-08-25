@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3924143022341742001}
   - component: {fileID: 619030567}
   - component: {fileID: 7022920732341644933}
+  - component: {fileID: 1015431324}
   m_Layer: 8
   m_Name: stormpist
   m_TagString: Untagged
@@ -114,6 +115,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponBase: {fileID: 0}
+--- !u!114 &1015431324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3924143022341742003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb4b61dc95ccdc429cfe1f8f9426792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wType: 1
 --- !u!1 &3924143022818776072
 GameObject:
   m_ObjectHideFlags: 0

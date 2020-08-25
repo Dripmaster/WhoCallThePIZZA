@@ -491,6 +491,7 @@ public class WeaponBase : MonoBehaviour
             case PlayerState.dead:
                 break;
             case PlayerState.skill:
+                skillStrategy.motionEvent(value);
                 break;
             case PlayerState.dash:
                 break;
@@ -503,7 +504,7 @@ public class WeaponBase : MonoBehaviour
 
     private void Update()
     {
-        if (InputSystem.Instance.getKeyDown(InputKeys.MB_R_click))
+        if (InputSystem.Instance.getKeyDown(InputKeys.WeaponSwapBtn))
         {
             int num = currentWeapon;
             if (num == equipedWeapons.Length - 1)

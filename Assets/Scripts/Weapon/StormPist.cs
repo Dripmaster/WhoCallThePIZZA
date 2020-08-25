@@ -53,6 +53,7 @@ public class StormPistDeadStrategy : DeadStrategy
     public void SetState(WeaponBase weaponBase)
     {
         //미구현
+        weaponBase.setState(PlayerState.dead);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -400,6 +401,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
+
 
 }
 

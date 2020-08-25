@@ -291,6 +291,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         weaponBase.SetIdle();
         weaponBase.SetPlayerFree();
     }
+    
 }
 public class SampleDashStrategy : DashFunction, DashStrategy
 {
@@ -437,7 +438,6 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         }
         t.transform.rotation = Quaternion.FromToRotation(Vector2.right,(point- (Vector2)player.transform.position).normalized);
         t.gameObject.SetActive(true);
-        t.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
         float duration= 1;
         switch (effectLevel)
         {

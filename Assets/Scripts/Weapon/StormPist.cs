@@ -249,7 +249,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             //데미지
             for (int i = 0; i < currentSkillTargetCount; i++)
             {
-                AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<FSMbase>(), player, stormPistSkillDamage2);
+                AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<FSMbase>(), player, stormPistSkillDamage2, false, true);
             }
             weaponBase.AnimSpeed = 1;
         }
@@ -289,6 +289,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.EffectNum = 0;
         m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        m.CalcKnockBack(target, sender, 3);
 
         int r = UnityEngine.Random.Range(0, 100);
         if (r < 20)
@@ -340,6 +341,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        m.CalcKnockBack(target, sender, 3);
 
         //20퍼센트 확률로 감전
         int r = UnityEngine.Random.Range(0, 100);
@@ -358,7 +360,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         {//!TODO 한 공격에 한번만 맞게 할 것
             List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
             alreadyHitTarget.Add(target.GetComponent<Collider2D>());
-            AttackManager.GetInstance().HandleAttack(attackHandle, fsm,player,Damages[tempAtkCount]);
+            AttackManager.GetInstance().HandleAttack(attackHandle, fsm, player, Damages[tempAtkCount], false, true);
 
             for (int i = 0; i < attackConnectCount; i++)
             {
@@ -369,7 +371,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             }
             for (int i = 1; i < alreadyHitTarget.Count; i++)
             {
-                AttackManager.GetInstance().HandleAttack(attackHandle, alreadyHitTarget[i].GetComponent<FSMbase>(),player, Damages[tempAtkCount]);
+                AttackManager.GetInstance().HandleAttack(attackHandle, alreadyHitTarget[i].GetComponent<FSMbase>(),player, Damages[tempAtkCount], false, true);
             }
             attackedColliders.Add(target);
         }

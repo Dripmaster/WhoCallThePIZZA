@@ -314,7 +314,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     AttackMessage m;
     float[] Damages;
 
-    GameObject[]ironHookEffects;  // 프리펩 넣는 방법을 모름. 일단 넣을 프리펩은 2개로 예상중
+    GameObject[]ironHookEffects; 
     //float h_Thunder= 0.3f;
     int ironHookEffectsinitialCount = 10;
     int ironHookEffectsincrementCount = 5;
@@ -368,7 +368,14 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         {
             if (colliderType == 0)
             {
-                AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player,Damages[tempAtkCount] * 4);
+                if (tempAtkCount == 1)
+                {
+                    AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4, false, true);
+                }
+                else
+                {
+                    AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4);
+                }
             }
             else
             {
@@ -381,6 +388,10 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         m.EffectNum = 0;
         m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        if (tempAtkCount == 1)
+        {
+            m.CalcKnockBack(target, sender, 3);
+        }
         if(m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
             sender.status.getCurrentStat(STAT.CriticalDamage))){
             target.status.AddBuff(new Bleeding(5,3,target));

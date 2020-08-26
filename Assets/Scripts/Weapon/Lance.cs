@@ -25,7 +25,10 @@ public class LanceIdleStrategy : IdleStrategy
     public void SetState(WeaponBase weaponBase)
     {
         if (weaponBase.CanAttackCancel)
+        {
             weaponBase.setState((int)PlayerState.idle);
+            weaponBase.setRotate(0);
+        }
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -133,13 +136,14 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     Transform lanceTransform;
     int lanceSkillEffectsinitialCount = 14;
     int lanceSkillEffectsincrementCount = 7;
-
+    float flip;
+    WeaponBase weapon;
     public LanceSkillStrategy(WeaponBase weaponBase)
     {
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
-
+        weapon = weaponBase;
         lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
         if(lanceSkillEffectsPools == null)
         {
@@ -167,7 +171,21 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.currentMoveCondition = moveSkillcondition;
-        weaponBase.setState(PlayerState.skill);
+        weaponBase.setState(PlayerState.skill); 
+        
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        if (weaponBase.SP_FlipX())
+        {
+            weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            flip = 180;
+        }
+        else
+        {
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+            flip = 0;
+
+        }
         weaponBase.CanRotateView = false;
 
         weaponBase.SetColliderEnable(true);
@@ -182,6 +200,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         {
             tempTime = 0;
             colliderEnable = !colliderEnable;
+            attackedColliders.Clear();
             weaponBase.SetColliderEnable(colliderEnable);
         }
 
@@ -196,27 +215,39 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
+        if (attackedColliders.Contains(target))
+            return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
+            attackedColliders.Add(target);
                 AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
         }
     }
 
     public override void motionEvent(int value)
     {
+        if (value == 0)
+            E_LanceStings();
+    }
+    void E_LanceStings()
+    {
         var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
         t.transform.position = lanceTransform.position;
         t.transform.rotation = lanceTransform.rotation;
+        t.transform.Rotate(0, 0, flip);
+        t.transform.localScale = lanceTransform.localScale;
         t.gameObject.SetActive(true);
-
-        //!TODO Effector에 자동 복원 추가 하고 지우기
-        t.GetComponent<SpriteRenderer>().color = new Color(0.443f, 0.443f, 0.443f, 1f);
-        t.transform.localScale = new Vector3(1, 1, 1);
 
         float duration = 1;
         t.GetComponent<Effector>().Alpha(duration, 0f).And().Scale(duration, 2f).Then().Disable().Play();
+
     }
+    public override void StateEnd()
+    {
+        weapon.SetColliderEnable(false);
+    }
+
 }
              
              
@@ -245,6 +276,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     float chargeLength;
     float pierceTime;
 
+    WeaponBase weapon;
+
     public void preCalculate()
     {
         chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
@@ -259,6 +292,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     public LanceAttackStrategy(WeaponBase weaponBase) : base(3)
     {
+        weapon = weaponBase;
         tempAtkCount = 1;
         m.EffectNum = 0;
         m.Cri_EffectNum = 2;
@@ -294,6 +328,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
+        if (attackedColliders.Contains(target))
+            return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
@@ -305,6 +341,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1],false,true);
                 
             }
+            attackedColliders.Add(target);
         }
     }
 
@@ -407,6 +444,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         weaponBase.CanRotateView = false;
         weaponBase.nowAttack = true;
         weaponBase.CanAttackCancel = false;
+        attackedColliders.Clear();
         weaponBase.SetColliderEnable(true);
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
         dashCondition = false;
@@ -425,6 +463,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     public override void StateEnd()
     {
         player.IgnoreEnemyPlayerCollison(false);
+        weapon.SetColliderEnable(false);
     }
 }
              

@@ -15,7 +15,7 @@ public class StormPist
         mi = new SampleMouseInputStrategy();
         ds = new StormPistDashStrategy();
         a = new StormPistAttackStrategy(weaponBase);
-        s = new StormPistSkillStrategy();
+        s = new StormPistSkillStrategy(weaponBase);
         c = new StormPistCCStrategy();
     }
 }
@@ -81,7 +81,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     int currentSkillTargetCount;
     AttackMessage m;
 
-    GameObject[] stormPistHitEffects;  // 프리펩 넣는 방법을 모름. 일단 넣을 프리펩은 2개로 예상중
+    GameObject[] stormPistHitEffects;  // 
     //float h_Thunder= 0.3f;
     int stormPistHitEffectinitialCount = 5;
     int stormPistHitEffectincrementCount = 1;
@@ -92,10 +92,26 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     float stormPistSkillDamage2 = 0.5f;//충격파
     bool had_Thunder;
 
-    public StormPistSkillStrategy() {
+    public StormPistSkillStrategy(WeaponBase weaponBase) {
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Cannot_Move;
-        m = new AttackMessage();
+        m = new AttackMessage(); 
+        
+        if (stormPistHitEffectPools == null)
+        {
+            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
+            stormPistHitEffects = e.Effects;
+            effcetParent = e.effcetParent;
+            stormPistHitEffectPools = new Pool[stormPistHitEffects.Length];
+            for (int i = 0; i < stormPistHitEffectPools.Length; i++)
+            {
+                stormPistHitEffectPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                stormPistHitEffectPools[i].poolPrefab = stormPistHitEffects[i];
+                stormPistHitEffectPools[i].initialCount = stormPistHitEffectinitialCount;
+                stormPistHitEffectPools[i].incrementCount = stormPistHitEffectincrementCount;
+                stormPistHitEffectPools[i].Initialize();
+            }
+        }
     }
 
     public override void SetCooltime()
@@ -146,24 +162,9 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         weaponBase.AnimSpeed = 1 / all_t;
         had_Thunder = false;
         player.IgnoreEnemyPlayerCollison(true);
-        if (stormPistHitEffectPools == null)
-        {
-            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
-            stormPistHitEffects = e.Effects;
-            effcetParent = e.effcetParent;
-            stormPistHitEffectPools = new Pool[stormPistHitEffects.Length];
-            for (int i = 0; i < stormPistHitEffectPools.Length; i++)
-            {
-                stormPistHitEffectPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
-                stormPistHitEffectPools[i].poolPrefab = stormPistHitEffects[i];
-                stormPistHitEffectPools[i].initialCount = stormPistHitEffectinitialCount;
-                stormPistHitEffectPools[i].incrementCount = stormPistHitEffectincrementCount;
-                stormPistHitEffectPools[i].Initialize();
-            }
-        }
+        
     //!TODO
     //날아가는동안 충돌판정 변경 및 지형지물 계산해야함(벽에다가 카직스 e 잘못쓰면)
-    //마우스까지가 아닌 최대 거리 있어서 마우스 방향 최대거리로(안쪽이면 그냥 안쪽)
 
 }
     public void Update(WeaponBase weaponBase)
@@ -280,8 +281,6 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.Cri_EffectNum = 1;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
-        //감전
-        Debug.Log("낙뢰 감전");
         target.status.AddBuff(new Electrified(1, target));
         return m;
     }
@@ -291,11 +290,9 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
-        // 20퍼센트 확률로 감전
         int r = UnityEngine.Random.Range(0, 100);
         if (r < 20)
         {
-            Debug.Log("착지 감전");
             target.status.AddBuff(new Electrified(1, target));
         }
         return m;
@@ -324,8 +321,10 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     int attackConnectCount=3;//스태틱 몇명
     float[] Damages;
     AttackMessage m;
+    WeaponBase weapon;
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(6)
     {
+        weapon = weaponBase;
         m.EffectNum = 0;
         m.Cri_EffectNum = 2;
 
@@ -352,6 +351,8 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
+        if (attackedColliders.Contains(target))
+            return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
@@ -370,6 +371,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             {
                 AttackManager.GetInstance().HandleAttack(attackHandle, alreadyHitTarget[i].GetComponent<FSMbase>(),player, Damages[tempAtkCount]);
             }
+            attackedColliders.Add(target);
         }
     }
 
@@ -401,7 +403,10 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
-
+    public override void StateEnd()
+    {
+        weapon.SetColliderEnable(false);
+    }
 
 }
 

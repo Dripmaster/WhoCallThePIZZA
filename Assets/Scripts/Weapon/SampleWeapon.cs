@@ -178,6 +178,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         if (target.GetComponent<FSMbase>() != null)
         {
             collisionFlag = true;
+            headCollider.enabled = false;
             targetPos = target.transform.position;
             moveDir = targetPos - (Vector2)weaponBase.transform.position;
             moveDir.Normalize();
@@ -291,7 +292,11 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         weaponBase.SetIdle();
         weaponBase.SetPlayerFree();
     }
-    
+    public override void StateEnd()
+    {
+        headCollider.enabled = false;
+    }
+
 }
 public class SampleDashStrategy : DashFunction, DashStrategy
 {
@@ -438,8 +443,6 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         }
         t.transform.rotation = Quaternion.FromToRotation(Vector2.right,(point- (Vector2)player.transform.position).normalized);
         t.gameObject.SetActive(true);
-        //!TODO Effector에 자동 복원 추가 하고 지우기
-        t.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
         float duration= 1;
         switch (effectLevel)
         {

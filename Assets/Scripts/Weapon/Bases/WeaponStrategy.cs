@@ -104,9 +104,13 @@ public abstract class SkillValues
     protected int maxSkillCombo;
     bool isCooldown = false;
     protected PlayerFSM player;
+
+    protected List<Collider2D> attackedColliders;
+
     public SkillValues() {
         SetCooltime();
         player = WeaponBase.instance.player;
+        attackedColliders = new List<Collider2D>();
     }
 
     abstract public void SetCooltime();
@@ -202,6 +206,9 @@ public abstract class AttackValues {
     protected float coolStartTime;
     bool isCooldown = false;
     protected PlayerFSM player;
+
+    protected List<Collider2D> attackedColliders;
+
     public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
         ATK_COMBO_COUNT = ATK_COMBO_count;
         ATK_CANCEL_PROGRESS = ATK_CANCEL_progress;
@@ -211,6 +218,7 @@ public abstract class AttackValues {
         coolTimes = new float[ATK_COMBO_count];
         SetCoolTimes();
         player = WeaponBase.instance.player;
+        attackedColliders = new List<Collider2D>();
     }
     abstract public void SetCoolTimes();
     public void CountCombo(WeaponBase weaponBase)
@@ -253,6 +261,7 @@ public abstract class AttackValues {
             if (progress >= ATK_COMMAND_PROGRESS_START)
             {
                 weaponBase.nowAttack = true;
+                attackedColliders.Clear();
                 weaponBase.SetColliderEnable(true);
             }
         }
@@ -306,10 +315,19 @@ public abstract class AttackValues {
             return;
         if (coolTimes == null)
             return;
-        totalCoolTime = coolTimes[tempAtkCount];
-        remainCoolTime = totalCoolTime;
-        coolStartTime = Time.realtimeSinceStartup;
-        isCooldown = true;
+        try
+        {
+
+            totalCoolTime = coolTimes[tempAtkCount];
+            remainCoolTime = totalCoolTime;
+            coolStartTime = Time.realtimeSinceStartup;
+            isCooldown = true;
+        }
+        catch (Exception)
+        {
+
+            
+        }
     }
  
     public void GetCoolTime(out float remain, out float total)

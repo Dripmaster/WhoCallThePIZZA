@@ -57,7 +57,6 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         Vector3 originalScale = transform.localScale;
-        original_Scale = originalScale;
         Vector3 targetScale = new Vector3(target.x,target.y,originalScale.z);
         while(eTime <= duration)
         {
@@ -86,7 +85,6 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         Vector3 originalPos = transform.localPosition;
-        original_Pos = originalPos;
         Vector3 targetPos = originalPos + new Vector3(offset.x,offset.y,0);
         while(eTime <= duration)
         {
@@ -116,7 +114,6 @@ public class Effector : MonoBehaviour
         float eTime = 0f;
         Color c = spriteRenderer.color;
         float originalAlpha = c.a;
-        original_Alpha = originalAlpha;
         while(eTime <= duration)
         {
             c.a = Mathf.Lerp(originalAlpha, target, Curve(eTime/duration));
@@ -154,7 +151,6 @@ public class Effector : MonoBehaviour
     {
         float eTime = 0f;
         float originalRot = transform.eulerAngles.z;
-        original_Roate = originalRot;
         while (eTime <= duration)
         {
             transform.rotation = Quaternion.Euler(0,0,Mathf.Lerp(originalRot, target, Curve(eTime/duration)));
@@ -184,7 +180,6 @@ public class Effector : MonoBehaviour
         float eTime = 0f;
         Color c = spriteRenderer.color;
         Color originalColor = c;
-        original_Color = originalColor;
         while (eTime <= duration)
         {
             c = Color.Lerp(originalColor, target, Curve(eTime/duration));
@@ -213,7 +208,9 @@ public class Effector : MonoBehaviour
             gameObject.SetActive(false);
         else
             Destroy(gameObject);
+        effectList.Clear();
         isDoneSetting = false;
+        resetProperty();
     }
     #endregion
  
@@ -266,6 +263,11 @@ public class Effector : MonoBehaviour
    
     #endif
         mainCoroutine = MainCoroutine();
+        original_Pos = transform.position;
+        original_Scale = transform.localScale;
+        original_Roate = transform.rotation.eulerAngles.z;
+        original_Color = spriteRenderer.color;
+        original_Alpha = original_Color.a;
         StartCoroutine(mainCoroutine);
         isDoneSetting = true;      
     }
@@ -288,17 +290,15 @@ public class Effector : MonoBehaviour
             }
             index++;
         }
-        //YM 추가
-        effectList.Clear();
-        isDoneSetting = false;
-
+    }
+    private void resetProperty()
+    {
         transform.position = original_Pos;
         transform.localScale = original_Scale;
-        transform.rotation = transform.rotation = Quaternion.Euler(0, 0,original_Roate);
+        transform.rotation = transform.rotation = Quaternion.Euler(0, 0, original_Roate);
         original_Color.a = original_Alpha;
         spriteRenderer.color = original_Color;
     }
-
     static float increCurve(float t)
     {
         return t;

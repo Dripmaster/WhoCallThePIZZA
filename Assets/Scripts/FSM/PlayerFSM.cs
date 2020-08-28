@@ -121,16 +121,7 @@ public class PlayerFSM : FSMbase
             return false;
         }
     }
-    public override void TakeAttack(float dmg, bool cancelAttack = false)
-    {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
-        //!TODO : 
-        status.ChangeStat(STAT.hp, -dmg);
-        if (status.getCurrentStat(STAT.hp) <= 0)
-        {
-            setState((int)PlayerState.dead);
-            Weapon.SetDead();
-        }
-    }
+   
     public bool doMove(Vector2 moveDir) {
         moveDir.Normalize();
         if (moveDir != Vector2.zero)
@@ -307,9 +298,38 @@ public class PlayerFSM : FSMbase
             yield return null;
         } while (!newState);
     }
-    public override void TakeCC()
+    IEnumerator hitted()
+    {
+        do
+        {
+            if (animEnd && knockBackDistance <= 0 && !CCreamin())
+            {
+                CCfree();
+            }
+            yield return null;
+        } while (!newState);
+    }
+    public override void TakeAttack(float dmg, bool cancelAttack = false)
+    {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
+        //!TODO : 
+        status.ChangeStat(STAT.hp, -dmg);
+        if (status.getCurrentStat(STAT.hp) <= 0)
+        {
+            setState((int)PlayerState.dead);
+            Weapon.SetDead();
+        }
+        else
+        {
+            /* 이렇게하면 플레이어도 공격 캔슬됨ㅋ
+            setState((int)PlayerState.hitted);
+            Weapon.SetHitted();
+            _animator.SetTrigger("OneShot");
+            */
+        }
+    }
+    public override void TakeCC(int CCnum)
     {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
-        setState((int)PlayerState.CC);
+        setState((int)PlayerState.hitted,CCnum);
     }
     public override void CCfree()
     {
@@ -324,29 +344,32 @@ public class PlayerFSM : FSMbase
             Weapon.SetIdle();
         }
     }
-    IEnumerator CC()
-    {
-        Weapon.SetCC();
-        do
-        {
-            if (!CCreamin())//CC상태 쭉 추가(속박 등 나중엔 배열로)
-            {
-                CCfree();
-            }
-            yield return null;
-        } while (!newState);
-    }
-    public override void TakeKnockBack(float degree, Vector2 knockBackDir)
+    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
     {
         knockDir = knockBackDir;
-        knockDegree = degree;
+        knockBackDistance = distance;
+        knockBackVelocity = velocity;
         IgnoreEnemyPlayerCollison(true);
+
+        
     }
-    public void KnockBackEnd()
+    public override void KnockBackEnd()
     {
         knockDir = Vector2.zero;
-        knockDegree = 0;
+        knockBackDistance = 0;
+        knockBackVelocity = 0;
         IgnoreEnemyPlayerCollison(false);
+        
+        if (MoveInput())
+        {
+            setState((int)PlayerState.move);
+            Weapon.SetMove();
+        }
+        else
+        {
+            setState((int)PlayerState.idle);
+            Weapon.SetIdle();
+        }
     }
     public override void SetPosition(Vector2 movePos)
     {

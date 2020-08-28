@@ -39,7 +39,7 @@ public interface DashStrategy
      void SetState(WeaponBase weaponBase);
 }
 
-public interface CCStrategy
+public interface HittedStrategy
 {
     void Update(WeaponBase weaponBase);
     void SetState(WeaponBase weaponBase);
@@ -269,6 +269,7 @@ public abstract class AttackValues {
             if (progress >= ATK_COMMAND_PROGRESS_END)
             {
                 weaponBase.nowAttack = false;
+                weaponBase.SetColliderEnable(false);
             }
         }
     }

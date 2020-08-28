@@ -6,7 +6,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 public class SampleWeapon {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out CCStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
     { 
         i = new SampleIdleStrategy();
         m = new SampleMoveStrategy();
@@ -15,7 +15,7 @@ public class SampleWeapon {
         ds= new SampleDashStrategy();
         a = new SampleAttackStrategy(weaponBase);
         s = new SampleSkillStrategy();
-        c = new SampleCCStrategy();
+        c = new SampleHittedStrategy();
     }
 }
 public class SampleIdleStrategy : IdleStrategy
@@ -145,6 +145,8 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 }
 public class SampleSkillStrategy : SkillValues, SkillStrategy
 {
+    //!TODO
+    //기절 안되었을때 따라가기
     Transform headTransform;
     BoxCollider2D headCollider;
     List<Transform> headChain;
@@ -157,9 +159,13 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     Vector2 moveDir;
     Vector2 tempPos;
     Vector2 startPos;
-    float distance = 1.7f;
-    Pool pool;
+    float distance = 2f;
+    static Pool pool;
     GameObject[] chains;
+
+    AttackMessage m;
+    Buff targetStuned;
+    
 
     int chainCount = 100;
     public SampleSkillStrategy()
@@ -172,10 +178,26 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     public override void SetCooltime() {
         totalCoolTime = 3;
     }
+    AttackMessage TouchHandle(FSMbase target, FSMbase sender, float attackPoint)
+    {
+        m.EffectNum = 0;
+        m.Cri_EffectNum = 0;
+        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+
+        if (m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
+            sender.status.getCurrentStat(STAT.CriticalDamage)))
+        {
+            target.status.AddBuff(new Bleeding(5, 3, target));
+        }
+        targetStuned = new Buff(3, BUFF.Stuned, target, true, true);
+        target.status.AddBuff(targetStuned);
+        return m;
+    }
 
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        if (target.GetComponent<FSMbase>() != null)
+        FSMbase t = target.GetComponent<FSMbase>();
+        if ( t!= null)
         {
             collisionFlag = true;
             headCollider.enabled = false;
@@ -185,6 +207,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
             moveDir *= v2;
             tempPos = headChainP.transform.position;
             startPos = weaponBase.player.transform.position;
+            AttackManager.Instance.HandleAttack(TouchHandle, t, player, 1);
             for (int i = 0; i < chains.Length; i++)
             {
                 chains[i].SetActive(false);
@@ -291,6 +314,8 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         }
         weaponBase.SetIdle();
         weaponBase.SetPlayerFree();
+        if(targetStuned!=null)
+        targetStuned.isOn = false;
     }
     public override void StateEnd()
     {
@@ -310,7 +335,7 @@ public class SampleDashStrategy : DashFunction, DashStrategy
     }
 }
 public class SampleAttackStrategy : AttackValues, AttackStrategy
-{//!TODO 공격중 이속50% 낮추기->웨폰베이스에 변수 만들어서 ㄱ
+{
     AttackMessage m;
     float[] Damages;
 
@@ -318,7 +343,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     //float h_Thunder= 0.3f;
     int ironHookEffectsinitialCount = 10;
     int ironHookEffectsincrementCount = 5;
-    Pool[] ironHookEffectsPools;
+    static Pool[] ironHookEffectsPools;
     Transform effcetParent;
 
     Transform chainHead;
@@ -332,8 +357,9 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         dashCondition = true; 
         Damages = new float[] {
             0.3f,
-            0.35f }; 
-        m = new AttackMessage();
+            0.35f };
+
+        m.Cri_EffectNum = 2;
         if (ironHookEffectsPools == null)
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
@@ -360,14 +386,16 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        //!TODO fsm만이 아니라 그냥 오브젝트들도 다 
-        //!TODO 한 공격에 여러체인 맞는거 수정할 것
-        //!TODO 한 공격에 한번만 맞게 할 것
+        //!TODO fsm만이 아니라 그냥 오브젝트들도 다 되게 할 것
+        if (attackedColliders.Contains(target))
+            return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {
+            attackedColliders.Add(target);
             if (colliderType == 0)
             {
+                m.EffectNum = 1;
                 if (tempAtkCount == 1)
                 {
                     AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4, false, true);
@@ -379,18 +407,17 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             }
             else
             {
+                m.EffectNum = 0;
                 AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player, Damages[tempAtkCount]);
             }
         }
     }
     AttackMessage AttackHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         if (tempAtkCount == 1)
         {
-            m.CalcKnockBack(target, sender, 3);
+            m.CalcKnockBack(target, sender, 2,1);
         }
         if(m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
             sender.status.getCurrentStat(STAT.CriticalDamage))){
@@ -474,12 +501,12 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     }
 }
 
-public class SampleCCStrategy : CCStrategy
+public class SampleHittedStrategy : HittedStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;
-        weaponBase.setState(PlayerState.CC);
+        weaponBase.setState(PlayerState.hitted);
     }
     public void Update(WeaponBase weaponBase)
     {

@@ -33,7 +33,7 @@ public class WeaponBase : MonoBehaviour
     DeadStrategy deadStrategy;
     MouseInputStrategy mouseInputStrategy;
     AttackStrategy attackStrategy;
-    CCStrategy cCStrategy;
+    HittedStrategy hittedstrategy;
 
     public PlayerFSM player;
     public static WeaponBase instance;
@@ -109,15 +109,15 @@ public class WeaponBase : MonoBehaviour
         switch (weaponType)
         {
             case WeaponType.sampleWeapon:
-                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
+                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 //스트래티지들 싹다 세팅
                 //애니메이션 컨트롤러 변경
                 break;
             case WeaponType.StormPist:
-                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
+                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
             case WeaponType.Lance:
-                Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out cCStrategy, out skillStrategy, this);
+                Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
             default:
                 break;
@@ -202,12 +202,12 @@ public class WeaponBase : MonoBehaviour
             player.setState((int)PlayerState.attack);
         }
     }
-    public void SetCC(bool playerSet = false)
+    public void SetHitted(bool playerSet = false)
     {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
-        cCStrategy.SetState(this);
+        hittedstrategy.SetState(this);
         if (playerSet)
         {
-            player.setState((int)PlayerState.CC);
+            player.setState((int)PlayerState.hitted);
         }
     }
     public void MouseInput() {
@@ -390,11 +390,11 @@ public class WeaponBase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
-    IEnumerator CC()
+    IEnumerator hitted()
     {
         do
         {
-            cCStrategy.Update(this);
+            hittedstrategy.Update(this);
             //MouseInput();
             yield return null;
         } while (!newState);
@@ -409,7 +409,6 @@ public class WeaponBase : MonoBehaviour
         {
             return;
         }
-
         attackStrategy.onWeaponTouch(colliderType,target);
     }
     public void setViewPoint() {
@@ -495,7 +494,7 @@ public class WeaponBase : MonoBehaviour
                 break;
             case PlayerState.dash:
                 break;
-            case PlayerState.CC:
+            case PlayerState.hitted:
                 break;
             default:
                 break;
@@ -504,14 +503,18 @@ public class WeaponBase : MonoBehaviour
 
     private void Update()
     {
+        
         if (InputSystem.Instance.getKeyDown(InputKeys.WeaponSwapBtn))
         {
-            int num = currentWeapon;
-            if (num == equipedWeapons.Length - 1)
+            if (objectState == PlayerState.idle || objectState == PlayerState.move)
             {
-                num = -1;
+                int num = currentWeapon;
+                if (num == equipedWeapons.Length - 1)
+                {
+                    num = -1;
+                }
+                setWeapon(num + 1);
             }
-            setWeapon(num + 1);
         }
     }
 }

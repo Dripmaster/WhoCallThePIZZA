@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Lance
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out CCStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
     {
         i = new LanceIdleStrategy();
         m = new LanceMoveStrategy();
@@ -16,7 +16,7 @@ public class Lance
         ds = new LanceDashStrategy();
         a = new LanceAttackStrategy(weaponBase);
         s = new LanceSkillStrategy(weaponBase);
-        c = new LanceCCStrategy();
+        c = new LanceHittedStrategy();
     }
 }
 
@@ -131,7 +131,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     bool colliderEnable;//콜라이더 켜졌는지
     //이펙트용 변수
     GameObject[] lanceEffects;
-    Pool[] lanceSkillEffectsPools;
+    static Pool[] lanceSkillEffectsPools;
     Transform effcetParent;
     Transform lanceTransform;
     int lanceSkillEffectsinitialCount = 14;
@@ -311,19 +311,27 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage rushHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
+        //!TODO
+        //돌진 직각으로 넉백 시켜야하는데 안된다 나중에 디테일 작업함;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
         target.status.AddBuff(new Pierced(pierceTime, target));
 
         Vector2 dir = (target.transform.position - sender.transform.position).normalized;
-        Vector3 v3Original = dir; 
-        //!TODO 그냥 90도 회전값인데 좀 디테일하게 -90도도 적용 해야함...
-        Quaternion qRotate = Quaternion.AngleAxis(90.0f, Vector3.forward);
+        Vector3 v3Original = chargeDir;
+        float dirDot = Vector2.Dot(chargeDir, dir);
+        Debug.Log(dir);
+        Quaternion qRotate;
+        if (dirDot>0)
+        qRotate = Quaternion.AngleAxis(-90.0f, Vector3.forward);
+        else
+        qRotate = Quaternion.AngleAxis(90.0f, Vector3.forward);
+
         Vector3 v3Dest = qRotate * v3Original;
         dir = v3Dest;
         dir.Normalize(); 
 
-        m.CalcKnockBack(dir, 3);
+        m.CalcKnockBack(dir, 3,3);
         return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -467,12 +475,12 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
 }
              
-public class LanceCCStrategy : CCStrategy
+public class LanceHittedStrategy : HittedStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;
-        weaponBase.setState(PlayerState.CC);
+        weaponBase.setState(PlayerState.hitted);
     }
     public void Update(WeaponBase weaponBase)
     {

@@ -25,8 +25,11 @@ public abstract class FSMbase : MonoBehaviour
     public StatusBase status;
     CircleCollider2D[] _colliders;
 
-    protected float knockDegree;
+    protected float knockBackVelocity;
+    protected float knockBackDistance;
     protected Vector2 knockDir;
+    protected int hittedNextState;
+    public  bool animEnd;
     protected float AnimSpeed {
         get {
             return animSpeed;
@@ -92,10 +95,15 @@ public abstract class FSMbase : MonoBehaviour
     {
         _animator.SetInteger("ComboCount", c);
     }
+    public void SetAnimEnd()
+    {
+        animEnd = true;
+    }
     IEnumerator FSMmain() {
         while (true)
         {
             newState = false;
+            animEnd = false;
             yield return StartCoroutine(Enum.GetName(stateType, objectState));
         }
     }
@@ -112,31 +120,9 @@ public abstract class FSMbase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
-    IEnumerator CC()
-    {
-        do
-        {
-            if (!CCreamin())//CC상태 쭉 추가(속박 등 나중엔 배열로)
-            {
-                CCfree();
-            }
-            yield return null;
-        } while (!newState);
-    }
-    IEnumerator hitted()
-    {
-        do
-        {
-            if(knockDegree<=0)
-            {
-                CCfree();
-            }
-            yield return null;
-        } while (!newState);
-    }
+    
     IEnumerator dead()
     {
-        _sr.color = new Color(0.2f, 0.2f, 0.2f);
         foreach (var item in _colliders)
         {
             item.enabled = false;
@@ -147,13 +133,18 @@ public abstract class FSMbase : MonoBehaviour
         } while (!newState);
     }
     public abstract void TakeAttack(float dmg, bool cancelAttack);
-    public abstract void TakeKnockBack(float degree, Vector2 knockBackDir);
-    public abstract void TakeCC();
+    public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+    public abstract void TakeCC(int CCnum = 0);
     public abstract void CCfree();
+    public abstract void KnockBackEnd();
 
     public bool CCreamin()
     {
         if (status.IsBuff(BUFF.Electrified))//CC상태 쭉 추가(속박 등 나중엔 배열로)
+        {
+            return true;
+        }
+        if (status.IsBuff(BUFF.Stuned))//CC상태 쭉 추가(속박 등 나중엔 배열로)
         {
             return true;
         }
@@ -183,8 +174,24 @@ public abstract class FSMbase : MonoBehaviour
     {
         return _colliders[1];
     }
+    public CircleCollider2D getTerrainCollider()
+    {
+        return _colliders[2];
+    }
     public CircleCollider2D getCollider()
     {
         return _colliders[0];
+    }
+    public bool getAnimEnd(float targetTime = 0.99f)
+    {
+        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= targetTime)
+        {
+            return true;
+        }
+        return false;
+    }
+    public float getAnimProgress()
+    {
+        return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
 }

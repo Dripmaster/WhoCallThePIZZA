@@ -129,7 +129,6 @@ public class AttackManager : MonoBehaviour
                 }
             }
         }
-
         return colliders.ToArray();
     }
     /*HandleDamage
@@ -159,7 +158,7 @@ public class AttackManager : MonoBehaviour
     public void SimpleDamage(float Dmg, FSMbase target) {
         //TODO : cri계산??
         target.TakeAttack(Dmg,false);
-
+        defaultEffect(target,0);
     }
     public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
@@ -170,7 +169,7 @@ public class AttackManager : MonoBehaviour
         target.TakeAttack(m.FinalDamage,cancelAttack);
         if (isKnockBack)
         {
-            target.TakeKnockBack(m.knockBackDegree, m.knockBackDir);
+            target.TakeKnockBack(m.knockBackDistance,m.knockBackVelocity, m.knockBackDir);
         }
         
         defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
@@ -180,7 +179,7 @@ public class AttackManager : MonoBehaviour
         var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
         e.transform.position = target.transform.position;
         e.gameObject.SetActive(true);
-        e.GetComponent<Effector>().Alpha(0.5f, 0).And().Disable(0.5f).Play();
+        e.GetComponent<Effector>().Disable(0.5f).Play();
     }
 }
 public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);
@@ -192,7 +191,8 @@ public struct AttackMessage
     public bool isCritical;
     public bool criCalculated;
     public Vector2 knockBackDir;
-    public float knockBackDegree;
+    public float knockBackVelocity;
+    public float knockBackDistance;
 
     public bool CriCalculate(float criPoint,float criticalDamage) {
         int r = Random.Range(0,100);
@@ -219,15 +219,21 @@ public struct AttackMessage
         {
             FinalDamage -= FinalDamage*target.status.getCurrentStat(STAT.DefensePoint);
         }
+        else
+        {
+            FinalDamage *=1.2f;
+        }
     }
-    public void CalcKnockBack(Vector2 knockBackDir,float knockBackDegree)
+    public void CalcKnockBack(Vector2 knockBackDir,float knockBackVelocity,float knockBackDistance)
     {
-        this.knockBackDegree = knockBackDegree;
+        this.knockBackVelocity = knockBackVelocity;
+        this.knockBackDistance = knockBackDistance;
         this.knockBackDir = knockBackDir;
     }
-    public void CalcKnockBack(FSMbase target, FSMbase sender, float knockBackDegree)
+    public void CalcKnockBack(FSMbase target, FSMbase sender, float knockBackVelocity, float knockBackDistance)
     {
-        this.knockBackDegree = knockBackDegree;
+        this.knockBackVelocity = knockBackVelocity;
+        this.knockBackDistance = knockBackDistance;
         knockBackDir = (target.transform.position - sender.transform.position).normalized;
     }
 }

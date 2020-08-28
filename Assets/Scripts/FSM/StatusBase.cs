@@ -65,7 +65,7 @@ public class StatusBase
             {
                 buffs[i].Update();
             }
-            else
+            else if(!buffs[i].isOn)
             {
                 EndBuff(buffs[i]);
                 buffs.Remove(buffs[i]);
@@ -114,6 +114,7 @@ public enum BUFF//아이콘, 시각표시 이펙트용 구분
     Cloak,
     Bleeding,
     SuperArmor,
+    Stuned,
 
 }
 public class Buff {//상속해서 사용, 필요없으면 안해도됨
@@ -123,13 +124,34 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
     //바꿀 스탯이 많으면 상속해서 변수 여러개 만들기
     public float totalTime;//지속시간(전체)
     public float tempTime;//시작시간
-    protected FSMbase target; 
+    public bool isOn;//시간과 관계없는 버프디버프인지(Off시 false)
+    protected FSMbase target;
+
+    public Buff()
+    {
+    }
+    public Buff(float time, BUFF buff,FSMbase target,bool isCC = false,bool isOn = false)
+    {
+        buffName = buff;
+
+        this.isOn = isOn;
+        if (!isOn)
+            totalTime = time;
+        else
+            totalTime = 0;
+        if (isCC)
+            target.TakeCC();
+        SetTarget(target);
+    }
     public void SetTarget(FSMbase target)
     {
         this.target = target;
     }
     public Effector showEffect(GameObject o)
     {
+        //!TODO
+        //각각에서 호출 하지말고 bool로 받아서 호출된다거나..
+        //파일명들을 문자열 배열로 캐싱..
         var e =GameObject.Instantiate(o, target.transform.parent).GetComponent<Effector>();
         e.transform.position = target.transform.position;
         return e;

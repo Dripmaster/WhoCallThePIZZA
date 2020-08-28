@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class StormPist
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out CCStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
     {
         i = new StormPistIdleStrategy();
         m = new StormPistMoveStrategy();
@@ -16,7 +16,7 @@ public class StormPist
         ds = new StormPistDashStrategy();
         a = new StormPistAttackStrategy(weaponBase);
         s = new StormPistSkillStrategy(weaponBase);
-        c = new StormPistCCStrategy();
+        c = new StormPistHittedStrategy();
     }
 }
 
@@ -85,7 +85,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     //float h_Thunder= 0.3f;
     int stormPistHitEffectinitialCount = 5;
     int stormPistHitEffectincrementCount = 1;
-    Pool[] stormPistHitEffectPools;
+    static Pool[] stormPistHitEffectPools;
     Transform effcetParent;
 
     float stormPistSkillDamage1 = 1;//번개
@@ -289,7 +289,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.EffectNum = 0;
         m.Cri_EffectNum = 0;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-        m.CalcKnockBack(target, sender, 3);
+        m.CalcKnockBack(target, sender, 2,2);
 
         int r = UnityEngine.Random.Range(0, 100);
         if (r < 20)
@@ -341,7 +341,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-        m.CalcKnockBack(target, sender, 3);
+        m.CalcKnockBack(target, sender, 2,1);
 
         //20퍼센트 확률로 감전
         int r = UnityEngine.Random.Range(0, 100);
@@ -412,12 +412,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
 }
 
-public class StormPistCCStrategy : CCStrategy
+public class StormPistHittedStrategy : HittedStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;
-        weaponBase.setState(PlayerState.CC);
+        weaponBase.setState(PlayerState.hitted);
     }
     public void Update(WeaponBase weaponBase)
     {

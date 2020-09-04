@@ -29,9 +29,9 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.SP_FlipY();
+        weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class StormPistMoveStrategy : MoveFunction,MoveStrategy
@@ -42,9 +42,9 @@ public class StormPistMoveStrategy : MoveFunction,MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.SP_FlipY();
+        weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class StormPistDeadStrategy : DeadStrategy
@@ -69,6 +69,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     float v = 7f;//속도
     float vy = 5f;//y가짜 포물선 속도
+    float vyCalculated;//y가짜 포물선 속도를 이동거리에 반비례하게 적용
     float h;
     float t;//경과시간
     float all_t;//전체 이동 시간
@@ -143,23 +144,23 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         h = 0;
         t = 0;
         all_t = l/lerpPos.magnitude;
-        
+        vyCalculated = vy / all_t;
     }
 
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
-        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            weaponBase.setRotate(180);
+        if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 5)// (0, 1, 7,6)  right
+            weaponBase.setRotate(0);
         else
             weaponBase.setRotate(0);
 
-        weaponBase.setState(PlayerState.skill);
-        weaponBase.CanRotateView = false;
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         startPos = player.transform.position;
         PreCalculate();
         weaponBase.AnimSpeed = 1 / all_t;
+        weaponBase.setState(PlayerState.skill);
+        weaponBase.CanRotateView = false;
         had_Thunder = false;
         player.IgnoreEnemyPlayerCollison(true);
         
@@ -172,20 +173,38 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
        
         t += Time.deltaTime;
 
-        if (t <= all_t * 0.4f) {
-            h = t*vy;
+        float x = lerpPos.x;
+        float y = lerpPos.y+h;
+
+        if (t <= all_t * 0.2f) {
+            h =vyCalculated;
         }
-        else if(t < all_t * 0.7f)
+        else if(t <= all_t * 0.8f)
         {
+            
+            if (t <= all_t * 0.25f)
+            {
+                h = Mathf.Lerp(h, 0, Time.deltaTime * 10);
+            }else if (t >= all_t * 0.75f)
+            {
+                h = Mathf.Lerp(h, -vyCalculated, Time.deltaTime * 10);
+            }
+            else
+            {
+                h = 0;
+            }
         }
         else if(t <= all_t)
         {
-            h = (all_t-t)*vy;
+            h = -vyCalculated;
         }
+        else
+        {
+            h = 0;
+        }
+        
 
 
-        float x = startPos.x+lerpPos.x* t;
-        float y = startPos.y+lerpPos.y* t+h;
 
         Vector2 movePos = new Vector2(x, y);
         if (had_Thunder == false&&
@@ -219,7 +238,6 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         }
         if(t >= all_t)
         {
-            movePos = targetPos;
             weaponBase.CanRotateView = true;
             weaponBase.CanAttackCancel = true;
             weaponBase.SetIdle();
@@ -253,8 +271,11 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             }
             weaponBase.AnimSpeed = 1;
         }
+        else
+        {
+            weaponBase.player.AddPosition(movePos);
+        }
 
-        weaponBase.player.SetPosition(movePos);
     }
 
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -389,18 +410,21 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        weaponBase.SP_FlipY();
+        weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection );
         CountCombo(weaponBase);
 
         weaponBase.CanRotateView = false;
     }
+    float stepSpeed = 6;//공격 시 한발짝 이동 속도
+    float stepProgress = 0.25f;//공격 시 한발짝 이동 시간
     public void Update(WeaponBase weaponBase)
     {
+        if(weapon.getAnimProgress()<=stepProgress)
+            player.moveFoward(stepSpeed);
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;

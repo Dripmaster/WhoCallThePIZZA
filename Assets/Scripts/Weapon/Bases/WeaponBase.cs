@@ -44,6 +44,8 @@ public class WeaponBase : MonoBehaviour
     float tempScaleX;
     float tempScaleY;
     Collider2D[] colliders;
+    Vector2 vLerpTarget;
+
 
     public float weakedSpeed;
 
@@ -87,6 +89,7 @@ public class WeaponBase : MonoBehaviour
     }
 
     public float WeaponViewDirection;
+    public float MouseViewDegree;
     protected void Awake()
     {
     }
@@ -142,6 +145,7 @@ public class WeaponBase : MonoBehaviour
 
         _animator = transform.GetChild(0).GetComponentInChildren<Animator>();
         Rotator = transform.GetChild(0);
+        vLerpTarget = Rotator.localPosition;
         tempX = Rotator.transform.localPosition.x;
         tempScaleX = Rotator.transform.localScale.x;
         tempScaleY = Rotator.transform.localScale.y;
@@ -267,6 +271,8 @@ public class WeaponBase : MonoBehaviour
         //attackComboCount = 0;
     }
     public void setRotate(float value) {
+        if (Rotator.localScale.x * tempScaleX < 0)
+            value = -value;
         Rotator.rotation = Quaternion.Euler(0, 0, value);
     }
     public void setFlipScaleX(float value)//플립
@@ -274,7 +280,6 @@ public class WeaponBase : MonoBehaviour
         if (tempScaleX !=value)
         {
             tempScaleX = value;
-            Rotator.transform.localScale = new Vector3(tempScaleX, Rotator.transform.localScale.y);
         }
     }
     public void setFlipScaleY(float value)//플립
@@ -282,38 +287,37 @@ public class WeaponBase : MonoBehaviour
         if (tempScaleY != value)
         {
             tempScaleY = value;
-            Rotator.transform.localScale = new Vector3(Rotator.transform.localScale.x, tempScaleY);
         }
     }
-    public bool SP_FlipX()  // StormPist용 flip
+    public bool SP_FlipX() 
     {
-        bool flip = false;
-        if (ViewDirection < 2 || ViewDirection > 6)
-        {// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            setFlipScaleX(-1); // -1 : 좌우 뒤집기
-            flip = true;
+        bool flip = true;
+        if (ViewDirection < 2 || ViewDirection > 5)
+        {// (0, 1, 7, 6)  Right
+            setFlipScaleX(1);
+            flip = false;
         }
         else
-            setFlipScaleX(1); // 원래 대로
+            setFlipScaleX(-1);
         return flip;
     }
-
-    public void SP_FlipY()  // StormPist용 flip
+    public void SP_FlipY()  
     {
-        if (ViewDirection < 2 || ViewDirection > 6)// (0, 1, 7)  Left      2, 6 은 원하는데로 설정
-            setFlipScaleY(-1); // -1 : 위아래 뒤집기
+        if (ViewDirection < 2 || ViewDirection > 5)
+            // (0, 1, 7,6)  Right
+            setFlipScaleY(1);
         else
-            setFlipScaleY(1); // 원래 대로
+            setFlipScaleY(-1);
     }
     public void setFlip(bool value)//한손무기 위치플립
     {
         flipValue = value;
         if (flipValue)
         {
-            Rotator.transform.localPosition = new Vector3(tempX * -1, Rotator.transform.localPosition.y);
+            vLerpTarget = new Vector3(tempX * -1, Rotator.localPosition.y);
         }
         else {
-            Rotator.transform.localPosition = new Vector3(tempX, Rotator.transform.localPosition.y);
+            vLerpTarget = new Vector3(tempX, Rotator.localPosition.y);
         }
     }
     IEnumerator FSMmain()
@@ -499,6 +503,30 @@ public class WeaponBase : MonoBehaviour
             default:
                 break;
         }
+    }
+    private void FixedUpdate()
+    {
+        if ((vLerpTarget - (Vector2)Rotator.localPosition).sqrMagnitude >= 0.0001f)
+        {
+            Rotator.localPosition =
+                Vector2.Lerp(Rotator.localPosition, vLerpTarget,
+                Time.deltaTime*5);
+
+            if (Rotator.localScale.x != tempScaleX&&vLerpTarget.x * Rotator.localPosition.x >= 0)
+            {
+                Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
+            }
+        }
+        else
+        {
+            Rotator.localPosition = vLerpTarget;
+            if (Rotator.localScale.x != tempScaleX)
+            {
+                Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
+            }
+        }
+
+        
     }
 
     private void Update()

@@ -28,20 +28,16 @@ public class SampleIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
-        switch (weaponBase.ViewDirection)
+        if (!weaponBase.SP_FlipX())
         {
-            case 0:
-            case 1:
-            case 7:
-                weaponBase.setFlip(true);
-                break;
-            case 2:
-            case 6:
-            case 3:
-            case 4:
-            case 5:weaponBase.setFlip(false);
-                break;
+            weaponBase.setFlip(false);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection+180);
+        }
+        else
+        {
+            weaponBase.setFlip(true);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+
         }
     }
 }
@@ -55,21 +51,16 @@ public class SampleMoveStrategy : MoveFunction,MoveStrategy
     
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
-        switch (weaponBase.ViewDirection)
+        if (!weaponBase.SP_FlipX())
         {
-            case 0:
-            case 1:
-            case 7:
-                weaponBase.setFlip(true);
-                break;
-            case 2:
-            case 6:
-            case 3:
-            case 4:
-            case 5:
-                weaponBase.setFlip(false);
-                break;
+            weaponBase.setFlip(false);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+        }
+        else
+        {
+            weaponBase.setFlip(true);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+
         }
     }
 }
@@ -170,7 +161,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     int chainCount = 100;
     public SampleSkillStrategy()
     {
-        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+        moveSkillcondition = MoveWhileAttack.Move_Attack;
         headChain = new List<Transform>();
         chains = GameObject.FindGameObjectsWithTag("chain");
         dashCondition = false;
@@ -207,6 +198,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
             moveDir *= v2;
             tempPos = headChainP.transform.position;
             startPos = weaponBase.player.transform.position;
+            weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
             AttackManager.Instance.HandleAttack(TouchHandle, t, player, 1);
             for (int i = 0; i < chains.Length; i++)
             {
@@ -231,26 +223,20 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         {
             pool = weaponBase.GetComponentInChildren<Pool>();
         }
-        weaponBase.setRotate(weaponBase.WeaponViewDirection+150);
-        switch (weaponBase.ViewDirection)
+        if (!weaponBase.SP_FlipX())
         {
-            case 0:
-            case 1:
-            case 7:
-                weaponBase.setFlip(true);
-                break;
-            case 2:
-            case 6:
-            case 3:
-            case 4:
-            case 5:
-                weaponBase.setFlip(false);
-                break;
+            weaponBase.setFlip(false);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection-30);
+        }
+        else
+        {
+            weaponBase.setFlip(true);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 30);
         }
         weaponBase.transform.Find("ironhookParent/ironhook").transform.localScale = new Vector3(1,1,1);
         weaponBase.GetAnimatior().enabled = false;
         collisionFlag = false;
-        weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
+        weaponBase.currentMoveCondition = getSkillMoveCondition();
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
         headChain.Add(headTransform);
@@ -279,7 +265,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         }
         else
         {
-            weaponBase.player.AddPosition(moveDir * Time.deltaTime);
+            weaponBase.player.AddPosition(moveDir);
             headChainP.transform.position = tempPos;
 
             int a = (int)((targetPos - (Vector2)weaponBase.player.transform.position).sqrMagnitude/0.16f*0.16f);
@@ -350,6 +336,8 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     int effectLevel = 0;
 
     float distance = 1.7f;
+
+    bool flipX = false;
 
     public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
     {
@@ -428,21 +416,17 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.setRotate(weaponBase.WeaponViewDirection-45);
-        switch (weaponBase.ViewDirection)
+        if (!weaponBase.SP_FlipX())
         {
-            case 0:
-            case 1:
-            case 7:
-                weaponBase.setFlip(true);
-                break;
-            case 2:
-            case 6:
-            case 3:
-            case 4:
-            case 5:
-                weaponBase.setFlip(false);
-                break;
+            weaponBase.setFlip(false);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection+90+45);
+            flipX = true;
+        }
+        else
+        {
+            weaponBase.setFlip(true);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection -90-45);
+            flipX = false;
         }
 
         CountCombo(weaponBase);
@@ -472,13 +456,18 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         point += (Vector2)player.transform.position;
         var t = ironHookEffectsPools[0].GetObjectDisabled(effcetParent);
         t.transform.position = point;
+        int flipSlash = 1;
+        if (flipX)
+            flipSlash = -1;
         if (tempAtkCount == 0)
-            t.transform.localScale = new Vector2(1, -1);
+        {
+            t.transform.localScale = new Vector2(1, -1*flipSlash);
+        }
         else
         {
-            t.transform.localScale = new Vector2(1, 1);
-
+            t.transform.localScale = new Vector2(1, 1* flipSlash);
         }
+        
         t.transform.rotation = Quaternion.FromToRotation(Vector2.right,(point- (Vector2)player.transform.position).normalized);
         t.gameObject.SetActive(true);
         float duration= 1;

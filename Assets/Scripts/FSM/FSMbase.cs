@@ -150,21 +150,6 @@ public abstract class FSMbase : MonoBehaviour
         }
         return false;
     }
-    public virtual void AddPosition(Vector2 movePos)
-    {
-        //TODO : fixedUpdate에서 이동하도록 해야함
-        transform.position += (Vector3)movePos;
-
-        //_rigidbody2D.MovePosition(movePos);
-    }
-    public virtual void SetPosition(Vector2 movePos)
-    {
-        //TODO : fixedUpdate에서 이동하도록 해야함
-        transform.position = movePos;
-
-        //_rigidbody2D.MovePosition(movePos);
-    }
-
     public void IgnoreEnemyPlayerCollison(bool value)//플레이어와 적의 충돌 무시
     {//도약, 돌진, 넉백 시 호출
         Physics2D.IgnoreLayerCollision(14, 9, value);

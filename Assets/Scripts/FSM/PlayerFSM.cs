@@ -9,6 +9,9 @@ public class PlayerFSM : FSMbase
     public float dashSpeed;
     public int DashFrameCount;
     Vector2 moveDir;
+    Vector2 forcedDir;
+    Vector2 viewDir;
+
     public int dashFrameCount;
     WeaponBase Weapon;
     Camera mainCamera;
@@ -46,28 +49,37 @@ public class PlayerFSM : FSMbase
     }
     public void SetViewPoint() {
 
-
+        if (Weapon == null)
+            return;
         if (!Weapon.CanRotateView)
             return;
-       Vector2 viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+       viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
-        ViewDirection = (Mathf.RoundToInt((Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180) * -1) + 24) / 45;
-        Weapon.WeaponViewDirection = (Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f - 180);
+        Quaternion r = Quaternion.FromToRotation(Vector2.right, viewDir);
+        ViewDirection = (int)r.eulerAngles.z / 45;
+        Weapon.WeaponViewDirection = (Mathf.Atan2(viewDir.y, viewDir.x) / Mathf.PI * 180f);
         Weapon.ViewDirection = ViewDirection;
-
+        Weapon.MouseViewDegree = r.eulerAngles.z;
         switch (ViewDirection)
         {
             case 0:
             case 1:
             case 7:
-                _sr.flipX = true;
+            case 6:
+                _sr.flipX = false;
+                
                 break;
             case 2:
-            case 6:
             case 3:
             case 4:
             case 5:
-                _sr.flipX = false;
+                float w = 180-Weapon.WeaponViewDirection;
+                if (w >= 270)
+                {
+                    w -= 360;
+                }
+                Weapon.WeaponViewDirection = -w;
+                _sr.flipX = true;
                 break;
         }/*
         if (viewDir.x < 0)
@@ -181,6 +193,11 @@ public class PlayerFSM : FSMbase
             {
                 doDash(moveDir);
             }
+        }
+        if(forcedDir != Vector2.zero)
+        {
+                _rigidbody2D.MovePosition((Vector2)transform.position + forcedDir * Time.deltaTime);
+            forcedDir = Vector2.zero;
         }
     }
     IEnumerator idle()
@@ -371,18 +388,12 @@ public class PlayerFSM : FSMbase
             Weapon.SetIdle();
         }
     }
-    public override void SetPosition(Vector2 movePos)
+    public void AddPosition(Vector2 movePos)
     {
-        //TODO : fixedUpdate에서 이동하도록 해야함
-        transform.position = movePos;
-
-        //_rigidbody2D.MovePosition(movePos);
+        forcedDir = movePos;
     }
-    public override void AddPosition(Vector2 movePos)
+    public void moveFoward(float speed)
     {
-        //TODO : fixedUpdate에서 이동하도록 해야함
-        transform.position += (Vector3)movePos;
-
-        //_rigidbody2D.MovePosition(movePos);
+        AddPosition( viewDir*speed);
     }
 }

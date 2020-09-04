@@ -33,6 +33,11 @@ public class LanceIdleStrategy : IdleStrategy
     public void Update(WeaponBase weaponBase)
     {
         weaponBase.setFlip( weaponBase.SP_FlipX());
+
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
+        weaponBase.setRotate(weaponBase.WeaponViewDirection*0.5f);
     }
 }
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
@@ -45,6 +50,10 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
     {
         weaponBase.setFlip(weaponBase.SP_FlipX());
 
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
+        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
     }
 }
 public class LanceDeadStrategy : DeadStrategy
@@ -182,7 +191,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         }
         else
         {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection);
             flip = 0;
 
         }
@@ -204,8 +213,15 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
             weaponBase.SetColliderEnable(colliderEnable);
         }
 
+        if (weapon.getAnimProgress() <= stepProgressEnd && weapon.getAnimProgress() >= stepProgress)
+            player.moveFoward(stepSpeed);
+
         HandleSkillEND(weaponBase);
     }
+
+    float stepProgress = 0.75f;
+    float stepProgressEnd = 0.95f;
+    float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.EffectNum = 2;
@@ -271,10 +287,13 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     AttackMessage m;
     bool firstTime = true;
 
-    Vector2 chargeDir;
-    float chargeSpeed;
-    float chargeLength;
-    float pierceTime;
+    Vector2 chargeDir; // 돌진 방향
+    float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
+    float animTimeAll; // 전체 애니 재생시간(계산 후)
+    float animTimeRush; // 전체에서 돌진부분 재생시간(계산 후)
+    float chargeSpeed = 10f; //돌진속도
+    float chargeLength;// 돌진 거리
+    float pierceTime; // 방어구 파괴 시간
 
     WeaponBase weapon;
 
@@ -285,12 +304,15 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         if(tempTime>=2)
             tempTime = 2;
         chargeLength = tempTime*1.5f + 3;
-        chargeSpeed = chargeLength*1.33f;
         if (tempTime >= 1)
             pierceTime = (tempTime-1)*2+3;
         tempTime = 0;
+        float t = chargeLength / chargeSpeed;
+        animTimeRush = t * devideRatio;
+        animTimeAll = t * (1-devideRatio) + animTimeRush;
+        weapon.AnimSpeed = 1 / animTimeAll;
     }
-    public LanceAttackStrategy(WeaponBase weaponBase) : base(3)
+    public LanceAttackStrategy(WeaponBase weaponBase) : base(3,0.8f)
     {
         weapon = weaponBase;
         tempAtkCount = 1;
@@ -313,25 +335,35 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         //!TODO
         //돌진 직각으로 넉백 시켜야하는데 안된다 나중에 디테일 작업함;
-        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint ;
 
         target.status.AddBuff(new Pierced(pierceTime, target));
 
         Vector2 dir = (target.transform.position - sender.transform.position).normalized;
         Vector3 v3Original = chargeDir;
-        float dirDot = Vector2.Dot(chargeDir, dir);
-        Debug.Log(dir);
-        Quaternion qRotate;
-        if (dirDot>0)
-        qRotate = Quaternion.AngleAxis(-90.0f, Vector3.forward);
+        Quaternion firstRotation = Quaternion.FromToRotation(v3Original, dir);
+        float dirDot = firstRotation.eulerAngles.z;
+        Vector3 v3Dest;
+        Quaternion qUpDir;
+        float reflectionValue = 0;
+        if (dirDot >= 0 && dirDot<180) {
+            qUpDir = Quaternion.Euler(0, 0, 90);
+            
+        }
         else
-        qRotate = Quaternion.AngleAxis(90.0f, Vector3.forward);
+        {
+            qUpDir = Quaternion.Euler(0, 0, -90);
+            reflectionValue = 180;
+        }
 
-        Vector3 v3Dest = qRotate * v3Original;
-        dir = v3Dest;
-        dir.Normalize(); 
+        v3Original = qUpDir * v3Original;
+        float secondRotation = Quaternion.FromToRotation(dir, v3Original).eulerAngles.z * 0.5f;
+        
+        v3Dest = Quaternion.Euler(0, 0, dirDot + secondRotation + reflectionValue) * chargeDir;
 
-        m.CalcKnockBack(dir, 3,3);
+        v3Dest.Normalize();
+       
+        m.CalcKnockBack(v3Dest, 3,3);
         return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
@@ -356,8 +388,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     public override void SetCoolTimes()
     {
         coolTimes[0] = 0;
-        coolTimes[1] = 0.5f;
-        coolTimes[2] = 0.5f;
+        coolTimes[1] = 0.1f;
+        coolTimes[2] = 0.1f;
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -382,51 +414,63 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if(tempAtkCount == 0)//차징
+        if (tempAtkCount == 0)//차징
         {
             tempTime += Time.deltaTime;
-            if (effectLevel==1&&tempTime >= 2f)
+            if (effectLevel == 1 && tempTime >= 2f)
             {
                 //불붙여
                 //발광이펙트
                 effectLevel++;
             }
-            else if (effectLevel == 0&&tempTime >= 1f)
+            else if (effectLevel == 0 && tempTime >= 1f)
             {
                 //발광이펙트
                 effectLevel++;
             }
             weaponBase.CanRotateView = true;
             weaponBase.setViewPoint();
-            if (weaponBase.SP_FlipX())
-            {
-                weaponBase.setRotate(weaponBase.WeaponViewDirection);
-            }
-            else
-            {
-                weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-
-            }
+            weaponBase.SP_FlipX();
+            weaponBase.setRotate(weaponBase.WeaponViewDirection);
         }
         else
         {
-            if(tempAtkCount == 2)
+            if (tempAtkCount == 2)
             {
                 tempTime += Time.deltaTime;
-                if (tempTime < 0.75f)
+                if (tempTime < animTimeRush)
                 {
-                    player.AddPosition(chargeDir * chargeSpeed * Time.deltaTime);
+                    if (tempTime >= animTimeRush * 0.7f)
+                    {
+                        tempSpeed = Mathf.Lerp(tempSpeed,0 , Time.deltaTime*10);
+                    }
+                    player.AddPosition(chargeDir * tempSpeed);
+
                 }
                 else
                 {
                     weaponBase.nowAttack = false;
                 }
             }
-            HandleAttackEND(weaponBase,endAttack);
+
+            if (tempAtkCount == 1)
+            {
+                if (weapon.getAnimProgress() <= stepProgress)
+                    player.moveFoward(stepSpeed);
+            }
+            
+            HandleAttackCancel(weaponBase);
+            HandleAttackEND(weaponBase, endAttack);
         }
     }
+
+
+    float tempSpeed;
+    float stepProgress = 0.25f;
+    float stepSpeed = 6f;
     void endAttack(WeaponBase weaponBase)
     {
+        weapon.AnimSpeed = 1;
         weaponBase.CanRotateView = true;
         weaponBase.CanAttackCancel = true;
         weaponBase.setRotate(0);
@@ -444,9 +488,10 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         }
         else
         {//돌진찌르기
+            preCalculate();
             DoAttack(weaponBase, 2);
             tempAtkCount = 2;
-            preCalculate();
+            tempSpeed = chargeSpeed;
             player.IgnoreEnemyPlayerCollison(true);
         }
         weaponBase.CanRotateView = false;

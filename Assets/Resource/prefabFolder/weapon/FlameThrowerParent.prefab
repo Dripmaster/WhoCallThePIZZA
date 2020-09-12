@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1292021370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1292021371}
+  m_Layer: 8
+  m_Name: FlamePosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1292021371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292021370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.75, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5325898337763366322}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5325898337763366321
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,7 +61,7 @@ Transform:
   m_Children:
   - {fileID: 5325898338852059317}
   - {fileID: 4981829061473574077}
-  - {fileID: 2215362189109889867}
+  - {fileID: 1292021371}
   m_Father: {fileID: 5325898338514357605}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -126,7 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effcetParent: {fileID: 0}
-  Effects: []
+  Effects:
+  - {fileID: 1778761607196781619, guid: e84083c05f9613547b0020a607e04ace, type: 3}
+  - {fileID: 1299520064525074437, guid: a7797b433b772f64ebc6a3b95a5f547e, type: 3}
 --- !u!1 &5325898338852059316
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +170,7 @@ GameObject:
   - component: {fileID: 5325898338852059317}
   - component: {fileID: 5325898338852059319}
   - component: {fileID: 5325898338852059318}
+  - component: {fileID: 6174692652703130473}
   m_Layer: 8
   m_Name: FlameThrowerMuzzle
   m_TagString: Untagged
@@ -153,7 +186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5325898338852059316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35, y: 0, z: 0}
+  m_LocalPosition: {x: 0.45, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5325898337763366322}
@@ -222,7 +255,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94fa35466bd05aa4eb444425fb85b85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColliderType: 2
+  myColliderType: 0
+--- !u!61 &6174692652703130473
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325898338852059316}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 2, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.625, y: 0.3125}
+    newSize: {x: 0.39, y: 0.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.5, y: 0.3125}
+  m_EdgeRadius: 0
 --- !u!1 &6193429221771587102
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +293,7 @@ GameObject:
   - component: {fileID: 4981829061473574077}
   - component: {fileID: 4196319996891415370}
   - component: {fileID: 573066739222817054}
+  - component: {fileID: 3253719284970675196}
   m_Layer: 8
   m_Name: FlameThrowerCell
   m_TagString: Untagged
@@ -318,75 +378,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94fa35466bd05aa4eb444425fb85b85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColliderType: 2
---- !u!1 &6987898278087411341
-GameObject:
+  myColliderType: 1
+--- !u!58 &3253719284970675196
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2215362189109889867}
-  - component: {fileID: 6517649573045350572}
-  - component: {fileID: 6479841036871380274}
-  m_Layer: 8
-  m_Name: FlameArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &2215362189109889867
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6987898278087411341}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.83, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5325898337763366322}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6517649573045350572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6987898278087411341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94fa35466bd05aa4eb444425fb85b85f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myColliderType: 0
---- !u!61 &6479841036871380274
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6987898278087411341}
+  m_GameObject: {fileID: 6193429221771587102}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.625, y: 0.3125}
-    newSize: {x: 0.39, y: 0.15}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0.25, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5}
-  m_EdgeRadius: 0
+  m_Radius: 1.5

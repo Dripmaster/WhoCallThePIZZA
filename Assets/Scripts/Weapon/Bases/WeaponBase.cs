@@ -123,7 +123,7 @@ public class WeaponBase : MonoBehaviour
                 Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
             case WeaponType.FlameThrower:
-                Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
+                FlameThrower.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
             default:
                 break;

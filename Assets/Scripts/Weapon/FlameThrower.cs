@@ -76,6 +76,7 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
         /////기본 공격
         if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.MB_L_click))
         {
+            weaponBase.attackComboCount = 0;
             if (!weaponBase.IsAttackCoolTimeRemain() && weaponBase.CanAttackCancel)
             {
                 if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
@@ -98,22 +99,22 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
                 }
             }
         }
-        if (weaponBase.attackComboCount == 0 && InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
+
+        if (InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
         {
-            weaponBase.SetAttack(true);
+            weaponBase.attackComboCount = 1;
         }
-        else if (InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
-        {
-            //weaponBase.attackComboCount = 0;
-        }
+
         ////스킬
         if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.SkillBtn))
         {
             if (!weaponBase.IsSkillCoolTimeRemain() && weaponBase.CanAttackCancel)
             {
                 weaponBase.CanAttackCancel = false;
+                weaponBase.SetSkill(true); // 이거 맞나
+
                 //!TODO skill도 따로 확인할 것
-                if (weaponBase.getMoveSkillCondition() == MoveWhileAttack.Move_Attack)
+                /*if (weaponBase.getMoveSkillCondition() == MoveWhileAttack.Move_Attack)
                 {
                     if (weaponBase.getPlayerState() != PlayerState.move)
                     {
@@ -127,7 +128,7 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
                 else
                 {
                     weaponBase.SetSkill(true);
-                }
+                }*/
             }
         }
 
@@ -139,41 +140,36 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
     float tempTime;//경과시간
     bool colliderEnable;//콜라이더 켜졌는지
     //이펙트용 변수
-    GameObject[] lanceEffects;
-    static Pool[] lanceSkillEffectsPools;
+    GameObject[] FT_SkillEffects;
+    static Pool FT_SkillEffectsPool;
     Transform effcetParent;
-    Transform lanceTransform;
-    int lanceSkillEffectsinitialCount = 14;
-    int lanceSkillEffectsincrementCount = 7;
-    float flip;
+    int FT_SkillEffectsinitialCount = 2;
+    int FT_SkillEffectsincrementCount = 1;
     WeaponBase weapon;
     public FlameThrowerSkillStrategy(WeaponBase weaponBase)
     {
         dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Move_Attack;
+        moveSkillcondition = MoveWhileAttack.Cannot_Move;
         m = new AttackMessage();
         weapon = weaponBase;
-        lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
-        if (lanceSkillEffectsPools == null)
+        if (FT_SkillEffectsPool == null)
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
-            lanceEffects = e.Effects;
+            FT_SkillEffects = e.Effects;
             effcetParent = e.effcetParent;
-            lanceSkillEffectsPools = new Pool[lanceEffects.Length];
-            for (int i = 0; i < lanceSkillEffectsPools.Length; i++)
-            {
-                lanceSkillEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
-                lanceSkillEffectsPools[i].poolPrefab = lanceEffects[i];
-                lanceSkillEffectsPools[i].initialCount = lanceSkillEffectsinitialCount;
-                lanceSkillEffectsPools[i].incrementCount = lanceSkillEffectsincrementCount;
-                lanceSkillEffectsPools[i].Initialize();
-            }
+
+            FT_SkillEffectsPool = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+            FT_SkillEffectsPool.poolPrefab = FT_SkillEffects[0];
+            FT_SkillEffectsPool.initialCount = FT_SkillEffectsinitialCount;
+            FT_SkillEffectsPool.incrementCount = FT_SkillEffectsincrementCount;
+            FT_SkillEffectsPool.Initialize();
+            
         }
     }
 
     public override void SetCooltime()
     {
-        totalCoolTime = 4;
+        totalCoolTime = 6;
     }
 
 
@@ -184,17 +180,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        if (weaponBase.SP_FlipX())
-        {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
-            flip = 180;
-        }
-        else
-        {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
-            flip = 0;
-
-        }
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
         weaponBase.CanRotateView = false;
 
         weaponBase.SetColliderEnable(true);
@@ -204,25 +190,12 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        tempTime += Time.deltaTime;
-        if (tempTime >= 0.083f)
-        {
-            tempTime = 0;
-            colliderEnable = !colliderEnable;
-            attackedColliders.Clear();
-            weaponBase.SetColliderEnable(colliderEnable);
-        }
-
-        if (weapon.getAnimProgress() <= stepProgressEnd && weapon.getAnimProgress() >= stepProgress)
-            player.moveFoward(stepSpeed);
+        //랜스처럼 일정시간 되면 콜라이더 꺼야함?
 
         HandleSkillEND(weaponBase);
     }
 
-    float stepProgress = 0.75f;
-    float stepProgressEnd = 0.95f;
-    float stepSpeed = 6f;
-    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage explosionHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.EffectNum = 2;
         m.Cri_EffectNum = 2;
@@ -231,32 +204,29 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        if (attackedColliders.Contains(target))
+        if (colliderType == 0)
             return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
-            AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
+            AttackManager.GetInstance().HandleAttack(explosionHandle, fsm, player, 8f);
         }
     }
 
     public override void motionEvent(int value)
     {
         if (value == 0)
-            E_LanceStings();
+            E_FTCellExplosion();
     }
-    void E_LanceStings()
+    void E_FTCellExplosion()
     {
-        var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
-        t.transform.position = lanceTransform.position;
-        t.transform.rotation = lanceTransform.rotation;
-        t.transform.Rotate(0, 0, flip);
-        t.transform.localScale = lanceTransform.localScale;
+        var t = FT_SkillEffectsPool.GetObjectDisabled(effcetParent);
+        t.transform.position = weapon.transform.position;   //생성자(맞나?)에서 따오는거랑 차이점 있음?
         t.gameObject.SetActive(true);
 
         float duration = 1;
-        t.GetComponent<Effector>().Alpha(duration, 0f).And().Scale(duration, 2f).Then().Disable().Play();
+        t.GetComponent<Effector>().Scale(duration, 3f).Then().Alpha(duration, 0f).Then().Disable().Play();
 
     }
     public override void StateEnd()
@@ -281,243 +251,147 @@ public class FlameThrowerDashStrategy : DashFunction, DashStrategy
 }
 public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
 {
-    float tempTime;//경과시간
-    int effectLevel;//이펙트 단계
-    float[] Damages;
+    Transform flameTransform;
     AttackMessage m;
-    bool firstTime = true;
+    float tempTime;   
+    float burnTime; // 화상 시간
+    float burnDmg;
+    Vector2 flameDir;
+    float dirChangeTime = 1f;
 
-    Vector2 chargeDir; // 돌진 방향
-    float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
-    float animTimeAll; // 전체 애니 재생시간(계산 후)
-    float animTimeRush; // 전체에서 돌진부분 재생시간(계산 후)
-    float chargeSpeed = 10f; //돌진속도
-    float chargeLength;// 돌진 거리
-    float pierceTime; // 방어구 파괴 시간
+    //이펙트용 변수
+    GameObject[] FT_AttackEffects;
+    static Pool FT_AttackEffectsPool;
+    Transform effcetParent;
+    int FT_AttackEffectsinitialCount = 60;
+    int FT_AttackEffectsincrementCount = 30;
+
+
 
     WeaponBase weapon;
 
-    public void preCalculate()
-    {
-        chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
-        chargeDir.Normalize();
-        if (tempTime >= 2)
-            tempTime = 2;
-        chargeLength = tempTime * 1.5f + 3;
-        if (tempTime >= 1)
-            pierceTime = (tempTime - 1) * 2 + 3;
-        tempTime = 0;
-        float t = chargeLength / chargeSpeed;
-        animTimeRush = t * devideRatio;
-        animTimeAll = t * (1 - devideRatio) + animTimeRush;
-        weapon.AnimSpeed = 1 / animTimeAll;
-    }
     public FlameThrowerAttackStrategy(WeaponBase weaponBase) : base(3, 0.8f)
     {
+        burnTime = 1f;
+        burnDmg = 5f;
+        dashCondition = true;
+        m = new AttackMessage();
         weapon = weaponBase;
-        tempAtkCount = 1;
+        flameTransform = weaponBase.transform.Find("FlameThrowerParent/FlameThrower/FlamePosition");
+        if (FT_AttackEffectsPool == null)
+        {
+            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
+            FT_AttackEffects = e.Effects;
+            effcetParent = e.effcetParent;
+
+            FT_AttackEffectsPool = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+            FT_AttackEffectsPool.poolPrefab = FT_AttackEffects[1];
+            FT_AttackEffectsPool.initialCount = FT_AttackEffectsinitialCount;
+            FT_AttackEffectsPool.incrementCount = FT_AttackEffectsincrementCount;
+            FT_AttackEffectsPool.Initialize();
+
+        }
+
+        tempAtkCount = 0;
         m.EffectNum = 0;
         m.Cri_EffectNum = 2;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;
         dashCondition = true;
-        Damages = new float[] {
-            1,
-            2f };
     }
-    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
+
+    AttackMessage flameHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
-        return m;
-    }
-    AttackMessage rushHandle(FSMbase target, FSMbase sender, float attackPoint)
-    {
-        //!TODO
-        //돌진 직각으로 넉백 시켜야하는데 안된다 나중에 디테일 작업함;
-        m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-
-        target.status.AddBuff(new Pierced(pierceTime, target));
-
-        Vector2 dir = (target.transform.position - sender.transform.position).normalized;
-        Vector3 v3Original = chargeDir;
-        Quaternion firstRotation = Quaternion.FromToRotation(v3Original, dir);
-        float dirDot = firstRotation.eulerAngles.z;
-        Vector3 v3Dest;
-        Quaternion qUpDir;
-        float reflectionValue = 0;
-        if (dirDot >= 0 && dirDot < 180)
-        {
-            qUpDir = Quaternion.Euler(0, 0, 90);
-
-        }
-        else
-        {
-            qUpDir = Quaternion.Euler(0, 0, -90);
-            reflectionValue = 180;
-        }
-
-        v3Original = qUpDir * v3Original;
-        float secondRotation = Quaternion.FromToRotation(dir, v3Original).eulerAngles.z * 0.5f;
-
-        v3Dest = Quaternion.Euler(0, 0, dirDot + secondRotation + reflectionValue) * chargeDir;
-
-        v3Dest.Normalize();
-
-        m.CalcKnockBack(v3Dest, 3, 3);
+        target.status.AddBuff(new Burn(burnTime, burnDmg, target));
         return m;
     }
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        if (attackedColliders.Contains(target))
+        if (colliderType == 1)
             return;
         var fsm = target.GetComponent<FSMbase>();
         if (fsm != null)
-        {//!TODO 한 공격에 한번만 맞게 할 것
-            if (tempAtkCount == 1)//그냥찌르기
-            {
-                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, Damages[tempAtkCount - 1]);
-            }
-            else if (tempAtkCount == 2)
-            {//돌진찌르기
-                AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1], false, true);
-
-            }
+        {
+            
+            AttackManager.GetInstance().HandleAttack(flameHandle, fsm, player, 1.3f);
+            
             attackedColliders.Add(target);
         }
+    }
+    public override void motionEvent(int value)
+    {
+        for(int i=0; i < 10; i++)
+            E_FTFlame(value);  
+    }
+    void E_FTFlame(int position)  //직선에 가까운것에서 곡선까지 4개로 쪼개는방법
+    {
+        var t = FT_AttackEffectsPool.GetObjectDisabled(effcetParent);
+        t.transform.position = flameTransform.position + new Vector3(0, position * 0.5f, 0);
+        float r = UnityEngine.Random.Range(0, 30);
+        t.transform.rotation = Quaternion.Euler(flameTransform.rotation.x, flameTransform.rotation.y, flameTransform.rotation.z + r);
+        t.gameObject.SetActive(true);
+        Quaternion R_quaternion = Quaternion.Euler(0, 0, r);
+        Vector3 finalDir = flameDir;
+        finalDir = R_quaternion * finalDir;
+
+        float duration = 2;
+        t.GetComponent<Effector>().Move(duration, finalDir * 3f).Then().Disable().Play();
+        //한 함수에 4개의 t.GetComponent<Effector>().를 만들고 랜덤으로 재생
     }
 
     public override void SetCoolTimes()
     {
-        coolTimes[0] = 0;
-        coolTimes[1] = 0.1f;
-        coolTimes[2] = 0.1f;
+        totalCoolTime = 0.33f;
     }
 
     public void SetState(WeaponBase weaponBase)
     {
-        if (firstTime)
-        {
-            ChargeStart(weaponBase);
-            firstTime = false;
-            return;
-        }
+        weaponBase.currentMoveCondition = attackMoveCondition;
+        weaponBase.SetColliderEnable(true);
+        tempTime = 0;
+        weaponBase.weakedSpeed = 0.7f;
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
         tempAtkCount = weaponBase.attackComboCount;
-        switch (tempAtkCount)
-        {
-            case 0:
-                ChargeEnd(weaponBase);
-                break;
-            default:
-                ChargeStart(weaponBase);
-                break;
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+        flameDir.Normalize();
 
-        }
+        weaponBase.CanRotateView = false;
+        if (weaponBase.objectState != PlayerState.attack)
+            weaponBase.setState(PlayerState.attack);
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (tempAtkCount == 0)//차징
+        if (tempAtkCount == 0)
         {
+            tempAtkCount = weaponBase.attackComboCount;
             tempTime += Time.deltaTime;
-            if (effectLevel == 1 && tempTime >= 2f)
-            {
-                //불붙여
-                //발광이펙트
-                effectLevel++;
+            if (tempTime >= dirChangeTime)
+            {//TODO : 방향전환이 1칸이내의 근접한 방향으로 바뀌게 바꿔야함
+                tempTime = 0;
+                weaponBase.CanRotateView = true;
+                weaponBase.setViewPoint();
+                weaponBase.SP_FlipX();
+                weaponBase.setRotate(weaponBase.WeaponViewDirection);
+                flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+                flameDir.Normalize();
+
+                weaponBase.CanRotateView = false;
             }
-            else if (effectLevel == 0 && tempTime >= 1f)
-            {
-                //발광이펙트
-                effectLevel++;
-            }
-            weaponBase.CanRotateView = true;
-            weaponBase.setViewPoint();
-            weaponBase.SP_FlipX();
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
         }
         else
         {
-            if (tempAtkCount == 2)
-            {
-                tempTime += Time.deltaTime;
-                if (tempTime < animTimeRush)
-                {
-                    if (tempTime >= animTimeRush * 0.7f)
-                    {
-                        tempSpeed = Mathf.Lerp(tempSpeed, 0, Time.deltaTime * 10);
-                    }
-                    player.AddPosition(chargeDir * tempSpeed);
-
-                }
-                else
-                {
-                    weaponBase.nowAttack = false;
-                }
-            }
-
-            if (tempAtkCount == 1)
-            {
-                if (weapon.getAnimProgress() <= stepProgress)
-                    player.moveFoward(stepSpeed);
-            }
-
             HandleAttackCancel(weaponBase);
-            HandleAttackEND(weaponBase, endAttack);
+            HandleAttackEND(weaponBase);
         }
-    }
-
-
-    float tempSpeed;
-    float stepProgress = 0.25f;
-    float stepSpeed = 6f;
-    void endAttack(WeaponBase weaponBase)
-    {
-        weapon.AnimSpeed = 1;
-        weaponBase.CanRotateView = true;
-        weaponBase.CanAttackCancel = true;
-        weaponBase.setRotate(0);
-        weaponBase.nowAttack = false;
-        float r, t;
-        GetCoolTime(out r, out t);
-        StartCool();
-    }
-    void ChargeEnd(WeaponBase weaponBase)
-    {
-        if (tempTime <= 0.4f)
-        {//찌르기
-            DoAttack(weaponBase, 1);
-            tempAtkCount = 1;
-        }
-        else
-        {//돌진찌르기
-            preCalculate();
-            DoAttack(weaponBase, 2);
-            tempAtkCount = 2;
-            tempSpeed = chargeSpeed;
-            player.IgnoreEnemyPlayerCollison(true);
-        }
-        weaponBase.CanRotateView = false;
-        weaponBase.nowAttack = true;
-        weaponBase.CanAttackCancel = false;
-        attackedColliders.Clear();
-        weaponBase.SetColliderEnable(true);
-        weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
-        dashCondition = false;
-    }
-    void ChargeStart(WeaponBase weaponBase)
-    {
-        weaponBase.CanAttackCancel = false;
-        tempTime = 0;
-
-        DoAttack(weaponBase, 0);
-        effectLevel = 0;
-        tempAtkCount = 0;
-        dashCondition = true;
-        weaponBase.weakedSpeed = 0.8f;
+        
     }
     public override void StateEnd()
     {
-        player.IgnoreEnemyPlayerCollison(false);
         weapon.SetColliderEnable(false);
     }
 }

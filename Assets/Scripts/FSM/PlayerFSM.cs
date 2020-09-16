@@ -40,7 +40,7 @@ public class PlayerFSM : FSMbase
     void initData()
     {//현재는 임시 데이터
         _animator.SetInteger("WeaponNumber", (int)Weapon.weaponType);
-        status.setStat(STAT.hp, 50);
+        status.setStat(STAT.hp, 5000000);
         status.setStat(STAT.AtkPoint, 5);
         status.setStat(STAT.moveSpeed, moveSpeed);
         status.setStat(STAT.CriticalDamage, 2);

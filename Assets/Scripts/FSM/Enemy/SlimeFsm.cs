@@ -22,12 +22,10 @@ public class SlimeFsm : EnemyBase
     }
     public override void initData()
     {
-        //현재는 임시 데이터
         status.setStat(STAT.hp, 20);
         status.setStat(STAT.AtkPoint, 5);
         status.setStat(STAT.moveSpeed, 1);
         status.init();
-        //슬라임 데이터 임시로 넣어둠
         coolTimes = new float[]
         {
             3
@@ -93,6 +91,7 @@ public class SlimeFsm : EnemyBase
     {
         do
         {
+
             moveDir = (player.position - transform.position).normalized;
             if (!detectPlayer(disMaxDetect))
             {
@@ -126,7 +125,7 @@ public class SlimeFsm : EnemyBase
         {
             //TODO: 공격 시 몇% 애니 재생 시 판정으로 할 지
             //      아니면 애니메이션에서 키프레임에서 이벤트 호출시킬지
-            //      정해야함
+            //      정해야함 / 키프레임 하기로 정해짐 나중에 제대로 애니메이션 나오면 적용
             if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
             {//attack Anim 종료
                 doSimpleAttack();

@@ -285,23 +285,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7791f50ed9889543b8cb805d3ba8718, type: 3}
---- !u!1 &956614210 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7229258637010547689, guid: 479303b630fc812449bb430d14a054cb,
-    type: 3}
-  m_PrefabInstance: {fileID: 7229258638444207923}
-  m_PrefabAsset: {fileID: 0}
---- !u!210 &956614212
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956614210}
-  m_Enabled: 1
-  m_SortingLayerID: -1468923991
-  m_SortingLayer: 2
-  m_SortingOrder: 0
 --- !u!1001 &1009433230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -549,6 +532,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 226065664963836565, guid: 0ccd398394c88b942825493b53255b3a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e364119f2ad66b943b3b5834f2e17940, type: 2}
     - target: {fileID: 2310812759593946712, guid: 0ccd398394c88b942825493b53255b3a,
         type: 3}
       propertyPath: weaponBase
@@ -906,7 +894,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2087197248}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1537,6 +1525,27 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e364119f2ad66b943b3b5834f2e17940, type: 2}
+    - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 2434879749793502156, guid: 269a9001b29e05c42ba833a1d95e1e6f,
+        type: 3}
+    - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.0625
+      objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081583, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_Constraints
@@ -1580,6 +1589,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.26
+--- !u!210 &7229258638444207931
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229258638444207925}
+  m_Enabled: 1
+  m_SortingLayerID: -1468923991
+  m_SortingLayer: 2
+  m_SortingOrder: 0
 --- !u!1001 &7825295795810370277
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2226,6 +2246,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 97832876ce701da4faa9dd6c99832879,
         type: 3}
+    - target: {fileID: 410302232430944632, guid: eee7c2ab30e5cdf449c948577e777668,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e364119f2ad66b943b3b5834f2e17940, type: 2}
     - target: {fileID: 410302232430944633, guid: eee7c2ab30e5cdf449c948577e777668,
         type: 3}
       propertyPath: m_Offset.x

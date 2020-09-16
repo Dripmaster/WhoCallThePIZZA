@@ -79,6 +79,8 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
             weaponBase.attackComboCount = 0;
             if (!weaponBase.IsAttackCoolTimeRemain() && weaponBase.CanAttackCancel)
             {
+
+                weaponBase.CanAttackCancel = false;
                 if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
                 {
                     ///움직이면서 공격이 되는 애면
@@ -348,6 +350,8 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
+        if (weaponBase.objectState != PlayerState.attack)
+            weaponBase.setState(PlayerState.attack);
         weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.SetColliderEnable(true);
         tempTime = 0;
@@ -361,8 +365,6 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         flameDir.Normalize();
 
         weaponBase.CanRotateView = false;
-        if (weaponBase.objectState != PlayerState.attack)
-            weaponBase.setState(PlayerState.attack);
     }
     public void Update(WeaponBase weaponBase)
     {

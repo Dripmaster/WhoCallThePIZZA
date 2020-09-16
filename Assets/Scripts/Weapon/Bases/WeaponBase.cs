@@ -122,6 +122,9 @@ public class WeaponBase : MonoBehaviour
             case WeaponType.Lance:
                 Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
+            case WeaponType.FlameThrower:
+                FlameThrower.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
+                break;
             default:
                 break;
         }
@@ -242,6 +245,7 @@ public class WeaponBase : MonoBehaviour
         equipedWeapons = GetComponentsInChildren<WeaponInfo>();
         equipedWeapons[1].gameObject.SetActive(false);
         equipedWeapons[2].gameObject.SetActive(false);
+        equipedWeapons[3].gameObject.SetActive(false);
         currentWeapon = 0;
         setWeapon(equipedWeapons[currentWeapon].wType);
 

@@ -202,6 +202,39 @@ public class Bleeding : Buff
     }
 }
 
+public class Burn : Buff
+{
+    public float Damage;
+    float dealTime;
+    float dealedDamage;
+    public Burn(float time, float Dmg, FSMbase target)
+    {
+        buffName = BUFF.Burn;
+        totalTime = time;
+        Damage = Dmg;
+        dealTime = 0;
+        SetTarget(target);
+    }
+    public override void StartBuff()
+    {
+        AttackManager.Instance.SimpleDamage(Damage / totalTime, target);
+        dealedDamage += Damage / totalTime;
+    }
+    public override void Update()
+    {
+        if (dealedDamage >= Damage)
+            return;
+        dealTime += Time.deltaTime;
+        if (dealTime >= 1)
+        {
+            dealTime -= 1;
+            AttackManager.Instance.SimpleDamage(Damage / totalTime, target);
+            dealedDamage += Damage / totalTime;
+        }
+
+    }
+}
+
 public class Electrified : Buff
 {
     public Electrified(float time, FSMbase target)

@@ -29,6 +29,7 @@ public abstract class EnemyBase : FSMbase
         base.Awake();
         Physics2D.IgnoreCollision(GetComponent<CircleCollider2D>(), GetComponentsInChildren<CircleCollider2D>()[1]);
         initData();
+        player = WeaponBase.instance.player.transform;
     }
     public new void OnEnable()
     {

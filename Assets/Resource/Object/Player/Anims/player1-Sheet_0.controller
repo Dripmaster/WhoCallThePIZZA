@@ -82,10 +82,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
+    m_ConditionEvent: WeaponNumber
     m_EventTreshold: 0
   - m_ConditionMode: 6
-    m_ConditionEvent: WeaponNumber
+    m_ConditionEvent: State
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6871347291873622800}
@@ -121,7 +121,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e4631d95a7aa54c448026a149460cd37, type: 2}
+  m_Motion: {fileID: 7400000, guid: 386d5c54e2a85f946923e257562f9dea, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -175,7 +175,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a426338dd63fd664ebdcd118be3a90fb, type: 2}
+  m_Motion: {fileID: 7400000, guid: e471bb0f2626ae043ace7e15e4e8668b, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -322,7 +322,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 09a2b0cd10ba5ac429d63a167a2f645b, type: 2}
+  m_Motion: {fileID: 7400000, guid: 7e056446904c0f147a8c46bb26e047d1, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -336,6 +336,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 6
+    m_ConditionEvent: WeaponNumber
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: State
     m_EventTreshold: 6
@@ -365,11 +368,11 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
-    m_EventTreshold: 0
-  - m_ConditionMode: 6
     m_ConditionEvent: WeaponNumber
     m_EventTreshold: 2
+  - m_ConditionMode: 6
+    m_ConditionEvent: State
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7315576205586640731}
   m_Solo: 0
@@ -421,11 +424,11 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
-    m_EventTreshold: 1
-  - m_ConditionMode: 6
     m_ConditionEvent: WeaponNumber
     m_EventTreshold: 2
+  - m_ConditionMode: 6
+    m_ConditionEvent: State
+    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4465162370343452244}
   m_Solo: 0
@@ -677,7 +680,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d5653634575818049850da6d60b954f1, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9def67ddad9302a4fb97452c65fc0b87, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -746,11 +749,11 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
-    m_EventTreshold: 0
-  - m_ConditionMode: 6
     m_ConditionEvent: WeaponNumber
     m_EventTreshold: 1
+  - m_ConditionMode: 6
+    m_ConditionEvent: State
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6024256069385798345}
   m_Solo: 0
@@ -773,6 +776,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 6
+    m_ConditionEvent: WeaponNumber
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: State
     m_EventTreshold: 3
@@ -810,7 +816,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a426338dd63fd664ebdcd118be3a90fb, type: 2}
+  m_Motion: {fileID: 7400000, guid: e471bb0f2626ae043ace7e15e4e8668b, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -836,7 +842,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a426338dd63fd664ebdcd118be3a90fb, type: 2}
+  m_Motion: {fileID: 7400000, guid: e471bb0f2626ae043ace7e15e4e8668b, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -862,7 +868,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d5653634575818049850da6d60b954f1, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9def67ddad9302a4fb97452c65fc0b87, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -888,7 +894,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d5653634575818049850da6d60b954f1, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9def67ddad9302a4fb97452c65fc0b87, type: 2}
   m_Tag: 
   m_SpeedParameter: SpeedParam
   m_MirrorParameter: Mirror
@@ -903,10 +909,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
+    m_ConditionEvent: WeaponNumber
     m_EventTreshold: 1
   - m_ConditionMode: 6
-    m_ConditionEvent: WeaponNumber
+    m_ConditionEvent: State
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7374567300046480761}
@@ -1023,11 +1029,11 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: State
-    m_EventTreshold: 1
-  - m_ConditionMode: 6
     m_ConditionEvent: WeaponNumber
     m_EventTreshold: 0
+  - m_ConditionMode: 6
+    m_ConditionEvent: State
+    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7424355862491804139}
   m_Solo: 0

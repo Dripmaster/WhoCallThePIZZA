@@ -52,4 +52,5 @@ public enum InputKeys
     SkillBtn,
     UltmateBtn,
     WeaponSwapBtn,
+    InfoBtn,
 }

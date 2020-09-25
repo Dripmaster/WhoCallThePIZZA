@@ -48,6 +48,8 @@ public class StatusBase
     }
     public void AddBuff(Buff buff)
     {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
+        if (getCurrentStat(STAT.hp) <= 0)
+            return;
         StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
         buff.tempTime = Time.realtimeSinceStartup;
         buff.StartBuff();

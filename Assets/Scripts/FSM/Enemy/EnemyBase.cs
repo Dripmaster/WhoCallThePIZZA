@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class EnemyBase : FSMbase
 {
-
-    public EnemyType enemyType;
     protected float moveSpeed;
     protected float aggroSpeed;
     protected Vector2 moveDir;
@@ -154,4 +152,6 @@ public abstract class EnemyBase : FSMbase
         getChildCollider().isTrigger = value;
         getCollider().isTrigger = value;
     }
+
+    public override abstract void DropItem();
 }

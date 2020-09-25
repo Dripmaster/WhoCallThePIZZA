@@ -158,7 +158,9 @@ public class AttackManager : MonoBehaviour
     public void SimpleDamage(float Dmg, FSMbase target) {
         //TODO : cri계산??
         target.TakeAttack(Dmg,false);
-        defaultEffect(target,0);
+        var mHit = target as HitableBase;
+        if (mHit == null)
+            defaultEffect(target,0);
     }
     public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
@@ -171,7 +173,8 @@ public class AttackManager : MonoBehaviour
         {
             target.TakeKnockBack(m.knockBackDistance,m.knockBackVelocity, m.knockBackDir);
         }
-        
+        var mHit = target as HitableBase;
+        if(mHit==null)
         defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
     }
     void defaultEffect(FSMbase target, int hitEffectNum)

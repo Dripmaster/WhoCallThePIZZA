@@ -208,6 +208,8 @@ public class WeaponBase : MonoBehaviour
         {
             player.setState((int)PlayerState.attack);
         }
+        Rotator.localPosition = vLerpTarget;
+        Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
     }
     public void SetHitted(bool playerSet = false)
     {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
@@ -274,8 +276,8 @@ public class WeaponBase : MonoBehaviour
         weakedSpeed = 1f;
         //attackComboCount = 0;
     }
-    public void setRotate(float value) {
-        if (Rotator.localScale.x * tempScaleX < 0)
+    public void setRotate(float value,bool isAttack=false) {
+        if (!isAttack&&Rotator.localScale.x * tempScaleX < 0)
             value = -value;
         Rotator.rotation = Quaternion.Euler(0, 0, value);
     }

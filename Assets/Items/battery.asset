@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8815a5db53c08145984251988652641, type: 3}
-  m_Name: SampleItem
+  m_Script: {fileID: 11500000, guid: b3b57c68502a87147acb35a360d86285, type: 3}
+  m_Name: battery
   m_EditorClassIdentifier: 
   itemNumber: 0
   icon: {fileID: 21300000, guid: 93e87adeaed7c9f4b91b29df1fcb0382, type: 3}

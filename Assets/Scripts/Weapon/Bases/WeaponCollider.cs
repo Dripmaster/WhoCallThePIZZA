@@ -10,6 +10,5 @@ public class WeaponCollider : MonoBehaviour
     {
         FSMbase target = collision.GetComponent<FSMbase>();
         WeaponBase.instance.onWeaponTouch(myColliderType, collision);
-
     }
 }

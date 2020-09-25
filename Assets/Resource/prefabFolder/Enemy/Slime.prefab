@@ -210,8 +210,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectState: 0
+  animEnd: 0
   enemyType: 0
-  moveSpeed: 0
+  myDropItem: {fileID: 11400000, guid: 489e86e96c320c64fa28a92cc793bbe6, type: 2}
 --- !u!58 &2513935114517242636
 CircleCollider2D:
   m_ObjectHideFlags: 0

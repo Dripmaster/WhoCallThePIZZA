@@ -6,6 +6,17 @@ public class DroppedItem : MonoBehaviour{
 
     public ItemBase info;
 
+    public void Awake()
+    {
+    }
+    public void SetInfo(DroppedItemBase itemBase)
+    {
+        info = new ItemBase();
+        info.ItemInfo = itemBase;
+        GetComponent<SpriteRenderer>().sprite = itemBase.MyIcon;
+        //info = itemBase;
+
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

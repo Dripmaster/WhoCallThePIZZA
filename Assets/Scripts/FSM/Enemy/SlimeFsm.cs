@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SlimeFsm : EnemyBase
 {
+    public DroppedItemBase myDropItem;
     new void Awake()
     {
         base.Awake();
@@ -146,6 +147,11 @@ public class SlimeFsm : EnemyBase
     }
     public override void TakeAttack(float dmg, bool cancelAttack = false)
     {
+        if (status.getCurrentStat(STAT.hp) <= 0)
+        {
+            return;
+        }
+
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
@@ -190,7 +196,10 @@ public class SlimeFsm : EnemyBase
         setState(hittedNextState);
         SetCollidersTriggerNotTerrain(false);
     }
-
+    public override void DropItem()
+    {
+        ItemDropSystem.MyInstance.DropItem(transform.position,myDropItem);
+    }
     public enum SlimeState
     {//슬라임의 스테이트(고유 번호 고정)
         patrol = 0,

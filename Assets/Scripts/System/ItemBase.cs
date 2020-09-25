@@ -2,41 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ItemBase : ScriptableObject
+public class ItemBase
 {
-    [SerializeField]
-    private int itemNumber;
-    [SerializeField]
-    private Sprite icon;
-
-    [SerializeField]
-    private int stackSize;
-
+    /*여기다가 아이템 스탯 구조체든 클래스든 뭐 만들어서 하면 될듯*/
+    public DroppedItemBase ItemInfo;
     public int ItemNumber
     {
         get
         {
-            return itemNumber;
+            return ItemInfo.ItemNumber;
         }
     }
-
-
     public int StackSize
     {
         get
         {
-            return stackSize;
+            return ItemInfo.StackSize;
         }
     }
-
     public Sprite MyIcon
     {
         get
         {
-            return icon;
+            return ItemInfo.MyIcon;
         }
     }
-
-    public abstract bool Use();
+    public bool Use()
+    {
+        return ItemInfo.Use(this);
+    }
 
 }

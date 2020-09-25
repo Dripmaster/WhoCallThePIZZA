@@ -182,7 +182,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         weaponBase.CanRotateView = false;
 
         weaponBase.SetColliderEnable(true);
@@ -360,7 +360,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
         tempAtkCount = weaponBase.attackComboCount;
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         flameDir.Normalize();
 
@@ -378,7 +378,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
                 weaponBase.CanRotateView = true;
                 weaponBase.setViewPoint();
                 weaponBase.SP_FlipX();
-                weaponBase.setRotate(weaponBase.WeaponViewDirection);
+                weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
                 flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
                 flameDir.Normalize();
 

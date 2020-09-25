@@ -36,7 +36,6 @@ public class SamplebulletShooter : MonoBehaviour
             b.speed = Speed;
             b.touched += sampleBulletTouched;
             b.gameObject.SetActive(true);
-            
         }
     }
     bool sampleBulletTouched(Collider2D collision)

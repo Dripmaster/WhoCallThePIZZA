@@ -104,6 +104,8 @@ public class InputSystem : MonoBehaviour {
             keyValues[(int)InputKeys.WeaponSwapBtn] = true;
         if (Input.GetKey(KeyCode.I))
             keyValues[(int)InputKeys.InfoBtn] = true;
+        if (Input.GetKey(KeyCode.Q))
+            keyValues[(int)InputKeys.TakeBtn] = true;
 
         if (Input.GetKeyDown(KeyCode.W))
             keyDownValues[(int)InputKeys.Move_up] = true;
@@ -129,6 +131,8 @@ public class InputSystem : MonoBehaviour {
             keyDownValues[(int)InputKeys.WeaponSwapBtn] = true;
         if (Input.GetKeyDown(KeyCode.I))
             keyDownValues[(int)InputKeys.InfoBtn] = true;
+        if (Input.GetKeyDown(KeyCode.Q))
+            keyDownValues[(int)InputKeys.TakeBtn] = true;
 
         if (Input.GetKeyUp(KeyCode.W))
             keyUpValues[(int)InputKeys.Move_up] = true;
@@ -152,6 +156,8 @@ public class InputSystem : MonoBehaviour {
             keyUpValues[(int)InputKeys.WeaponSwapBtn] = true;
         if (Input.GetKeyUp(KeyCode.I))
             keyUpValues[(int)InputKeys.InfoBtn] = true;
+        if (Input.GetKeyUp(KeyCode.Q))
+            keyUpValues[(int)InputKeys.TakeBtn] = true;
     }
 
     public bool getKeyDown(InputKeys input)

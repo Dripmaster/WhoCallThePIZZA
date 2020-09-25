@@ -123,10 +123,12 @@ public abstract class FSMbase : MonoBehaviour
     
     IEnumerator dead()
     {
+        
         foreach (var item in _colliders)
         {
             item.enabled = false;
         }
+        DropItem();
         do
         {
             yield return null;
@@ -179,4 +181,5 @@ public abstract class FSMbase : MonoBehaviour
     {
         return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
+    public virtual void DropItem() { }
 }

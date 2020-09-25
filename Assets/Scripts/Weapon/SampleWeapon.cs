@@ -226,12 +226,12 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         if (!weaponBase.SP_FlipX())
         {
             weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection-30);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection-30, true);
         }
         else
         {
             weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 30);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection + 30, true);
         }
         weaponBase.transform.Find("ironhookParent/ironhook").transform.localScale = new Vector3(1,1,1);
         weaponBase.GetAnimatior().enabled = false;
@@ -419,13 +419,13 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         if (!weaponBase.SP_FlipX())
         {
             weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection+90+45);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection+90+45,true);
             flipX = true;
         }
         else
         {
             weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection -90-45);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection -90-45, true);
             flipX = false;
         }
 

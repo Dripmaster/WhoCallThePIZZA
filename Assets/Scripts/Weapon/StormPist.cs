@@ -151,9 +151,9 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     {
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
         if (weaponBase.ViewDirection < 2 || weaponBase.ViewDirection > 5)// (0, 1, 7,6)  right
-            weaponBase.setRotate(0);
+            weaponBase.setRotate(0, true);
         else
-            weaponBase.setRotate(0);
+            weaponBase.setRotate(0, true);
 
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         startPos = player.transform.position;
@@ -414,7 +414,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection );
+        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         CountCombo(weaponBase);
 
         weaponBase.CanRotateView = false;

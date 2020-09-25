@@ -39,7 +39,13 @@ public enum MoveWhileAttack {
     Move_Cancel_Attack , //player-move weapon-(attack->move)
     Cannot_Move //player-attack weapon-attack
 }
-
+public enum HitableState
+{
+    idle = 0,
+    collision,
+    destroy,
+    take
+}
 public enum InputKeys
 {
     Move_left=0,
@@ -53,4 +59,5 @@ public enum InputKeys
     UltmateBtn,
     WeaponSwapBtn,
     InfoBtn,
+    TakeBtn,
 }

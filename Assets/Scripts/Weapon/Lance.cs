@@ -186,12 +186,12 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         weaponBase.setViewPoint();
         if (weaponBase.SP_FlipX())
         {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
             flip = 180;
         }
         else
         {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
             flip = 0;
 
         }
@@ -431,7 +431,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             weaponBase.CanRotateView = true;
             weaponBase.setViewPoint();
             weaponBase.SP_FlipX();
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         }
         else
         {
@@ -473,7 +473,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         weapon.AnimSpeed = 1;
         weaponBase.CanRotateView = true;
         weaponBase.CanAttackCancel = true;
-        weaponBase.setRotate(0);
+        weaponBase.setRotate(0, true);
         weaponBase.nowAttack = false;
         float r, t;
         GetCoolTime(out r,out t);

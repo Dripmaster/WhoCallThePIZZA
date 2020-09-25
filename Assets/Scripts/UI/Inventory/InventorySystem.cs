@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
-    public List<Slot> slots = new List<Slot>();
-    public Image slotParent;
+    public List<Slot> itemSlots = new List<Slot>();
+    public List<Slot> equipAccSlots = new List<Slot>();
+    public Image InvenSlotParent;
+    public Image EquipedAccSlotParent;
     private static InventorySystem instance;
     private bool isOpen;
     public bool IsOpen
@@ -38,6 +40,7 @@ public class InventorySystem : MonoBehaviour
                 instance.gameObject.SetActive(false);
                 instance.initSlot();
 
+                instance.isOpen = instance.gameObject.activeInHierarchy;
             }
             return instance;
         }
@@ -49,16 +52,20 @@ public class InventorySystem : MonoBehaviour
     void initSlot()
     {
 
-        var s = slotParent.GetComponentsInChildren<Slot>();
+        var s = InvenSlotParent.GetComponentsInChildren<Slot>();
         foreach (var item in s)
         {
-            slots.Add(item);
+            itemSlots.Add(item);
+        }
+        var e = EquipedAccSlotParent.GetComponentsInChildren<Slot>();
+        foreach (var item in e)
+        {
+            equipAccSlots.Add(item);
         }
     }
     // Start is called before the first frame update
     void Awake()
     {
-        isOpen = gameObject.activeInHierarchy;
     }
 
     // Update is called once per frame
@@ -66,7 +73,7 @@ public class InventorySystem : MonoBehaviour
     {
         if (InputSystem.Instance.getKeyDown(InputKeys.MB_R_click))
         {
-            foreach (Slot slot in slots)
+            foreach (Slot slot in itemSlots)
             {
                 if (!slot.IsEmpty)
                 {
@@ -78,9 +85,29 @@ public class InventorySystem : MonoBehaviour
 
         }
     }
+
+    public bool EquipAcc(ItemBase item)
+    {
+
+        foreach (Slot slot in equipAccSlots)
+        {
+            
+            // 빈 슬롯이 있으면
+            if (slot.IsEmpty)
+            {
+                // 해당 슬롯에 아이템을 추가한다.
+                slot.AddItem(item);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     public bool AddItem(ItemBase item)
     {
-        foreach (Slot slot in slots)
+        foreach (Slot slot in itemSlots)
         {
             // 빈 슬롯이 있으면
             if (slot.IsEmpty)

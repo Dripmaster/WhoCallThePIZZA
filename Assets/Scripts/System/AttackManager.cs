@@ -42,6 +42,8 @@ public class AttackManager : MonoBehaviour
     public int hitEffectincrementCount = 1;
     public PlayerFSM player;
     Pool[] hitEffectPools;
+
+    public Transform bulletParent;
     void Awake()
     {
         var objs = FindObjectsOfType<AttackManager>();

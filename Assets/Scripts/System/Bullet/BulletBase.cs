@@ -17,7 +17,7 @@ public class BulletBase : MonoBehaviour
     {
         bool dest = false;
         if(touched != null)
-        dest = touched(collision);
+            dest = touched(collision);
         if (dest)
             gameObject.SetActive(false);
     }

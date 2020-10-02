@@ -33,6 +33,7 @@ public enum WeaponType { //무기목록
     StormPist,
     Lance,
     FlameThrower,
+    Firework,
 }
 public enum MoveWhileAttack { 
     Move_Attack = 0, // player-move weapon-attack

@@ -158,7 +158,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
     public Vector3 bulletDir;
-    public float Speed;
+    public float Speed;  //몇으로 해야하지
 
     public string tmpMessage;
 
@@ -167,7 +167,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     Transform bulletTransform;
     AttackMessage m;
-    float tempTime = 2; //유지시간
+    float tempTime = 2;
 
 
     WeaponBase weapon;
@@ -191,7 +191,6 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         tempAtkCount = 0;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;
-        dashCondition = true;
     }
 
     AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
@@ -218,8 +217,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
             weaponBase.setState(PlayerState.attack);
         weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.SetColliderEnable(true);
-        tempTime = 0;
-        weaponBase.weakedSpeed = 0.7f;
+        time = 0;
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
@@ -241,10 +239,11 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
             weaponBase.SP_FlipX();
             weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
             bulletDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
-            bulletDir.Normalize();
-
+            bulletDir.Normalize();//!TODO 마우스 방향이 아니라  +-45도 랜덤 방향 설정
+            //!TODO 랜덤 사거리 추가(랜덤지속시간으로 사거리 조정)
+            //!TODO 곡선 궤적
             time += Time.deltaTime;
-            if (time >= 2)
+            if (time >= tempTime)
             {
                 time = 0;
                 var b = bulletPool.GetObjectDisabled().GetComponent<BulletBase>();
@@ -253,8 +252,8 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
                 b.dir = bulletDir;
                 b.speed = Speed;
                 b.touched += fireworkBulletTouched;
-                b.gameObject.SetActive(true);
-            }
+                b.gameObject.SetActive(true);  //SetActive(false) ㅇㄷ?? 거기다가 파티클도 넣어야함
+            }  //2초에 한번 발사?
 
             weaponBase.CanRotateView = false;
             
@@ -268,8 +267,14 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     }
 
     bool fireworkBulletTouched(Collider2D collision)
-    {
-        Debug.Log("충돌 with:" + collision.name);
+    {//!TODO 넉백 추가
+        var fsm = collision.GetComponent<FSMbase>();
+        if (fsm != null)
+        {
+
+            AttackManager.GetInstance().HandleAttack(bulletHandle, fsm, player, 1.3f);
+
+        }
         return true;
     }
     
@@ -277,44 +282,49 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     {
         weapon.SetColliderEnable(false);
     }
-}  //하는중
+}  
 
 public class FireworkSkillStrategy : SkillValues, SkillStrategy
 {
+    public BulletBase bulletPrefab;
+    Pool bulletPool;
+    int FW_bulletinitialCount = 10;
+    int FW_bulletincrementCount = 1;
+    public Vector3 bulletDir;
+    public float Speed;
+
+    public string tmpMessage;
+
+    float time = 0;
+
+
+    Transform bulletTransform;
     AttackMessage m;
-    float tempTime;//경과시간
-    bool colliderEnable;//콜라이더 켜졌는지
-    //이펙트용 변수
-    GameObject[] FT_SkillEffects;
-    static Pool FT_SkillEffectsPool;
-    Transform effcetParent;
-    int FT_SkillEffectsinitialCount = 2;
-    int FT_SkillEffectsincrementCount = 1;
+    float tempTime = 2;
+
+
     WeaponBase weapon;
     public FireworkSkillStrategy(WeaponBase weaponBase)
     {
-        dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+        if (bulletPool == null)
+        {
+            bulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
+            bulletPool.incrementCount = FW_bulletincrementCount;
+            bulletPool.initialCount = FW_bulletinitialCount;
+            bulletPool.poolPrefab = bulletPrefab.gameObject;
+            bulletPool.Initialize();
+        }
+
+        dashCondition = true;
         m = new AttackMessage();
         weapon = weaponBase;
-        if (FT_SkillEffectsPool == null)
-        {
-            var e = weaponBase.GetComponentInChildren<WeaponEffects>();
-            FT_SkillEffects = e.Effects;
-            effcetParent = e.effcetParent;
 
-            FT_SkillEffectsPool = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
-            FT_SkillEffectsPool.poolPrefab = FT_SkillEffects[0];
-            FT_SkillEffectsPool.initialCount = FT_SkillEffectsinitialCount;
-            FT_SkillEffectsPool.incrementCount = FT_SkillEffectsincrementCount;
-            FT_SkillEffectsPool.Initialize();
-
-        }
+        moveSkillcondition = MoveWhileAttack.Move_Attack;
     }
 
     public override void SetCooltime()
     {
-        totalCoolTime = 6;
+        totalCoolTime = 4;
     }
 
 
@@ -323,63 +333,60 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         weaponBase.currentMoveCondition = moveSkillcondition;
         weaponBase.setState(PlayerState.skill);
 
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
-        weaponBase.CanRotateView = false;
-
-        weaponBase.SetColliderEnable(true);
         tempTime = 0;
-        colliderEnable = true;
-        weaponBase.weakedSpeed = 0.8f;
     }
     public void Update(WeaponBase weaponBase)
-    {
-        //랜스처럼 일정시간 되면 콜라이더 꺼야함?
+    {// 3초동안 10발
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
+        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+
+        time += Time.deltaTime;
+        if (time >= tempTime)
+        {
+            time = 0;
+            var b = bulletPool.GetObjectDisabled().GetComponent<BulletBase>();
+            //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
+            b.transform.position = AttackManager.GetInstance().bulletParent.transform.position;
+            b.dir = bulletDir;
+            b.speed = Speed;
+            b.touched += fireworkBulletTouched;
+            b.gameObject.SetActive(true);
+        }
 
         HandleSkillEND(weaponBase);
     }
 
-    AttackMessage explosionHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 2;
-        m.Cri_EffectNum = 2;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
+
         return m;
     }
+
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        if (colliderType == 0)
-            return;
-        var fsm = target.GetComponent<FSMbase>();
+        
+    }
+
+    bool fireworkBulletTouched(Collider2D collision)
+    {
+        var fsm = collision.GetComponent<FSMbase>();
         if (fsm != null)
-        {//!TODO 한 공격에 한번만 맞게 할 것
-            attackedColliders.Add(target);
-            AttackManager.GetInstance().HandleAttack(explosionHandle, fsm, player, 8f);
+        {
+
+            AttackManager.GetInstance().HandleAttack(bulletHandle, fsm, player, 1.3f);
+
         }
-    }
-
-    public override void motionEvent(int value)
-    {
-        if (value == 0)
-            E_FTCellExplosion();
-    }
-    void E_FTCellExplosion()
-    {
-        var t = FT_SkillEffectsPool.GetObjectDisabled(effcetParent);
-        t.transform.position = weapon.transform.position;   //생성자(맞나?)에서 따오는거랑 차이점 있음?
-        t.gameObject.SetActive(true);
-
-        float duration = 1;
-        t.GetComponent<Effector>().Scale(duration, 3f).Then().Alpha(duration, 0f).Then().Disable().Play();
-
+        return true;
     }
     public override void StateEnd()
     {
         weapon.SetColliderEnable(false);
     }
 
-}  //손안봄
+} 
 
 public class FireworkHittedStrategy : HittedStrategy
 {
@@ -392,4 +399,4 @@ public class FireworkHittedStrategy : HittedStrategy
     {
 
     }
-}  //손안봄
+} 

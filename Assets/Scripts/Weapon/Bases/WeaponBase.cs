@@ -125,6 +125,9 @@ public class WeaponBase : MonoBehaviour
             case WeaponType.FlameThrower:
                 FlameThrower.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
                 break;
+            case WeaponType.Firework:
+                Firework.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
+                break;
             default:
                 break;
         }

@@ -514,6 +514,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1673096990}
+    - target: {fileID: 7825295794109412065, guid: 1701036fb53d5334c98f527b7bc1b5c7,
+        type: 3}
+      propertyPath: bulletParent
+      value: 
+      objectReference: {fileID: 3376909901794069178}
     - target: {fileID: 7825295794109412070, guid: 1701036fb53d5334c98f527b7bc1b5c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2280,7 +2285,7 @@ PrefabInstance:
     - target: {fileID: 7229258637010547689, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7229258637901855801, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -2615,3 +2620,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b375536c06716740a01d363e155f8aa, type: 3}
+--- !u!4 &3376909901794069178 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3376909901725844787, guid: 2b375536c06716740a01d363e155f8aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 3376909901794069177}
+  m_PrefabAsset: {fileID: 0}

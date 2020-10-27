@@ -51,7 +51,6 @@ public class InventorySystem : MonoBehaviour
     }
     void initSlot()
     {
-
         var s = InvenSlotParent.GetComponentsInChildren<Slot>();
         foreach (var item in s)
         {
@@ -84,6 +83,20 @@ public class InventorySystem : MonoBehaviour
             }
 
         }
+    }
+    public bool IsEquipAcc(int accNumber)
+    {
+        foreach (Slot slot in equipAccSlots)
+        {
+            if (!slot.IsEmpty)
+            {
+                if(slot.MyItem.ItemNumber == accNumber)
+                    return true;
+            }
+
+        }
+
+        return false;
     }
 
     public bool EquipAcc(ItemBase item)

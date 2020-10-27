@@ -46,14 +46,31 @@ public class StatusBase
             StatValuePlus[(int)s] += value;
         CurrentStats[(int)s] = (Stats[(int)s] + StatValuePlus[(int)s]) * StatValueMultiply[(int)s];
     }
-    public void AddBuff(Buff buff)
+    public void AddBuff(Buff buff,bool reFresh = true)
     {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
         if (getCurrentStat(STAT.hp) <= 0)
             return;
-        StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
-        buff.tempTime = Time.realtimeSinceStartup;
-        buff.StartBuff();
-        buffs.Add(buff);
+        if (reFresh)
+        {
+            var tempBuff = GetBuff(buff.buffName);
+            if(tempBuff != null)
+            {
+                tempBuff.tempTime = Time.realtimeSinceStartup;
+                tempBuff.totalTime = buff.totalTime;
+                tempBuff.StartBuff();
+            }
+            else
+            {
+                AddBuff(buff, false);
+            }
+        }
+        else
+        {
+            StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
+            buff.tempTime = Time.realtimeSinceStartup;
+            buff.StartBuff();
+            buffs.Add(buff);
+        }
     }
     public bool IsBuff(BUFF buff)
     {
@@ -70,7 +87,6 @@ public class StatusBase
             else if(!buffs[i].isOn)
             {
                 EndBuff(buffs[i]);
-                buffs.Remove(buffs[i]);
             }
         }
     }
@@ -82,10 +98,37 @@ public class StatusBase
         }
         buffs.Clear();
     }
+    public Buff GetBuff(BUFF buff)
+    {
+        if (StatValuePlus[(int)buff + Stats.Length] > 0)
+        {
+            foreach (var item in buffs)
+            {
+                if(item.buffName == buff)
+                {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+    public Buff GetBuffs(BUFF buff)
+    {
+        /*필요시 구현*/
+        return null;
+    }
+    public void EndBuff(BUFF buff)
+    {
+        EndBuff(GetBuff(buff));
+    }
     public void EndBuff(Buff buff)
     {
-        StatValuePlus[(int)buff.buffName + Stats.Length] -= 1;
-        buff.EndBuff();
+        if (buff != null)
+        {
+            StatValuePlus[(int)buff.buffName + Stats.Length] -= 1;
+            buff.EndBuff(); 
+            buffs.Remove(buff);
+        }
     }
 
     public void init() {
@@ -117,6 +160,7 @@ public enum BUFF//아이콘, 시각표시 이펙트용 구분
     Bleeding,
     SuperArmor,
     Stuned,
+    BatteryCharged,
 
 }
 public class Buff {//상속해서 사용, 필요없으면 안해도됨
@@ -276,6 +320,30 @@ public class Pierced : Buff
     }
     public override void Update()
     {
+    }
+
+    public override void EndBuff()
+    {
+
+    }
+
+}
+public class BatteryCharged : Buff
+{
+    public BatteryCharged(float time, FSMbase target)
+    {
+        buffName = BUFF.BatteryCharged;
+        totalTime = time;
+        SetTarget(target);
+    }
+    public override void StartBuff()
+    {
+        showEffect(Resources.Load<GameObject>("BuffEffect/BatteryCharged"))
+       .Alpha(0.5f, 0.3f).And().Disable(0.5f, true).Play();
+    }
+    public override void Update()
+    {
+
     }
 
     public override void EndBuff()

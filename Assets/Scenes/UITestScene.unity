@@ -138,6 +138,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4091653419873530714, guid: c7791f50ed9889543b8cb805d3ba8718,
+        type: 3}
+      propertyPath: myDropItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b88c72d2095f434d9e5a0220137b27d,
+        type: 2}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1933,6 +1939,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4091653419873530714, guid: c7791f50ed9889543b8cb805d3ba8718,
+        type: 3}
+      propertyPath: myDropItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b88c72d2095f434d9e5a0220137b27d,
+        type: 2}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2981,7 +2993,7 @@ PrefabInstance:
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: DashFrameCount
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -3520,13 +3532,13 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
-      propertyPath: m_RefResolutionX
-      value: 320
+      propertyPath: m_UpscaleRT
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
-      propertyPath: m_RefResolutionY
-      value: 180
+      propertyPath: m_PixelSnapping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
@@ -3541,12 +3553,17 @@ PrefabInstance:
     - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
       propertyPath: m_StretchFill
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220805, guid: 3e5783263998dc94f908830c82760591,
+    - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: m_RefResolutionX
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 2286122829045220801, guid: 3e5783263998dc94f908830c82760591,
+        type: 3}
+      propertyPath: m_RefResolutionY
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 2286122829045220805, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
@@ -3607,36 +3624,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: orthographic size
-      value: 2.8125
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: m_ForceIntoRT
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2286122829045220807, guid: 3e5783263998dc94f908830c82760591,
-        type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2286122829045220810, guid: 3e5783263998dc94f908830c82760591,
         type: 3}
@@ -7866,6 +7853,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4091653419873530714, guid: c7791f50ed9889543b8cb805d3ba8718,
+        type: 3}
+      propertyPath: myDropItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b88c72d2095f434d9e5a0220137b27d,
+        type: 2}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x

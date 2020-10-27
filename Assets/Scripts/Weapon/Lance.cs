@@ -78,6 +78,7 @@ public class LanceMouseInputStrategy : MouseInputStrategy
         {
             if (!weaponBase.IsAttackCoolTimeRemain() && weaponBase.CanAttackCancel)
             {
+                weaponBase.CanAttackCancel = false;
                 if (weaponBase.getMoveAttackCondition() == MoveWhileAttack.Move_Attack)
                 {
                     ///움직이면서 공격이 되는 애면
@@ -294,6 +295,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     float chargeSpeed = 10f; //돌진속도
     float chargeLength;// 돌진 거리
     float pierceTime; // 방어구 파괴 시간
+    float maxChargeTime = 2;//최대 충전 시간
 
     WeaponBase weapon;
 
@@ -301,8 +303,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         chargeDir.Normalize();
-        if(tempTime>=2)
-            tempTime = 2;
+        if(tempTime>=maxChargeTime)
+            tempTime = maxChargeTime;
         chargeLength = tempTime*1.5f + 3;
         if (tempTime >= 1)
             pierceTime = (tempTime-1)*2+3;
@@ -333,8 +335,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage rushHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        //!TODO
-        //돌진 직각으로 넉백 시켜야하는데 안된다 나중에 디테일 작업함;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint ;
 
         target.status.AddBuff(new Pierced(pierceTime, target));
@@ -400,6 +400,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             firstTime = false;
             return;
         }
+        if(weaponBase.attackComboCount!=0)
         tempAtkCount = weaponBase.attackComboCount;
         switch (tempAtkCount)
         {
@@ -416,7 +417,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         if (tempAtkCount == 0)//차징
         {
-            tempTime += Time.deltaTime;
+            tempTime = UpdateCharge(tempTime);
             if (effectLevel == 1 && tempTime >= 2f)
             {
                 //불붙여
@@ -496,7 +497,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         }
         weaponBase.CanRotateView = false;
         weaponBase.nowAttack = true;
-        weaponBase.CanAttackCancel = false;
         attackedColliders.Clear();
         weaponBase.SetColliderEnable(true);
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
@@ -504,12 +504,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     void ChargeStart(WeaponBase weaponBase)
     {
-        weaponBase.CanAttackCancel = false;
-        tempTime = 0;
-        
-        DoAttack(weaponBase, 0);
+        StartCharge(weaponBase, out tempTime,maxChargeTime);
         effectLevel = 0;
-        tempAtkCount = 0;
         dashCondition = true;
         weaponBase.weakedSpeed = 0.8f;
     }

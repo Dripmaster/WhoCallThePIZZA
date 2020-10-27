@@ -13,7 +13,7 @@ public abstract class DroppedItemBase : ScriptableObject
     [SerializeField]
     private int stackSize = 0;
 
-    public int ItemNumber
+    public virtual int ItemNumber
     {
         get
         {

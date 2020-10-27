@@ -12,7 +12,7 @@ public class PlayerFSM : FSMbase
     Vector2 forcedDir;
     Vector2 viewDir;
 
-    public int dashFrameCount;
+    int dashFrameCount;
     WeaponBase Weapon;
     Camera mainCamera;
 
@@ -241,6 +241,11 @@ public class PlayerFSM : FSMbase
                     setState((int)PlayerState.idle);
                     Weapon.SetIdle();
                 }
+                if(InventorySystem.MyInstance.IsEquipAcc(0))
+                {
+                    /*풀차지*/
+                    status.AddBuff(new BatteryCharged(3, this));
+                }
             }
             yield return null;
         } while (!newState);
@@ -337,11 +342,12 @@ public class PlayerFSM : FSMbase
         }
         else
         {
-            /* 이렇게하면 플레이어도 공격 캔슬됨ㅋ
-            setState((int)PlayerState.hitted);
-            Weapon.SetHitted();
-            _animator.SetTrigger("OneShot");
-            */
+            if (cancelAttack)
+            {
+                setState((int)PlayerState.hitted);
+                Weapon.SetHitted();
+                _animator.SetTrigger("OneShot");
+            }
         }
     }
     public override void TakeCC(int CCnum)

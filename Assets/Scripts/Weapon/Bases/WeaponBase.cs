@@ -377,6 +377,7 @@ public class WeaponBase : MonoBehaviour
         nowAttack = false;
         CanRotateView = true;
         CanAttackCancel = true;
+        AnimSpeed = 1;
         SetColliderEnable(false);
     }
     IEnumerator skill()
@@ -392,6 +393,7 @@ public class WeaponBase : MonoBehaviour
         CanRotateView = true;
         CanAttackCancel = true;
         SetColliderEnable(false);
+        AnimSpeed = 1;
     }
     IEnumerator dead()
     {

@@ -221,6 +221,26 @@ public abstract class AttackValues {
         attackedColliders = new List<Collider2D>();
     }
     abstract public void SetCoolTimes();
+
+    public void StartCharge(WeaponBase weaponBase, out float tempTime, float maxChargeTime)
+    {
+        weaponBase.currentMoveCondition = attackMoveCondition;
+        weaponBase.SetComboCount(0);
+        if (weaponBase.objectState != PlayerState.attack)
+            weaponBase.setState(PlayerState.attack);
+        tempAtkCount = 0;
+        tempTime = 0;
+        if (player.status.IsBuff(BUFF.BatteryCharged))
+        {
+            tempTime = maxChargeTime;
+            player.status.EndBuff(BUFF.BatteryCharged);
+        }
+    }
+    public float UpdateCharge(float tempTime)
+    {
+        return tempTime + Time.deltaTime;
+    }
+
     public void CountCombo(WeaponBase weaponBase)
     {//공격 시 마다 어택콤보 늘어날때 setState에서 호출
         weaponBase.currentMoveCondition = attackMoveCondition;
@@ -320,6 +340,8 @@ public abstract class AttackValues {
         {
 
             totalCoolTime = coolTimes[tempAtkCount];
+            if (totalCoolTime <=0)
+                return;
             remainCoolTime = totalCoolTime;
             coolStartTime = Time.realtimeSinceStartup;
             isCooldown = true;

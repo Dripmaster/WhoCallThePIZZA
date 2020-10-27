@@ -1,11 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public class ItemBase { 
+    public float[] Stats;
+    bool hadEquiped;
 
-public class ItemBase
-{
-    /*여기다가 아이템 스탯 구조체든 클래스든 뭐 만들어서 하면 될듯*/
     public DroppedItemBase ItemInfo;
+    public bool HadEquiped
+    {
+        get
+        {
+            return hadEquiped;
+        }
+    }
     public int ItemNumber
     {
         get
@@ -27,8 +35,13 @@ public class ItemBase
             return ItemInfo.MyIcon;
         }
     }
+    public ItemBase()
+    {
+        Stats = new float[Enum.GetValues(typeof(STAT)).Length];
+    }
     public bool Use()
     {
+        hadEquiped = true;
         return ItemInfo.Use(this);
     }
 

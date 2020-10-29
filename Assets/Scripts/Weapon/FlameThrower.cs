@@ -159,9 +159,9 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             FT_SkillEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
 
-            FT_SkillEffectsPool = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+            FT_SkillEffectsPool = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
             FT_SkillEffectsPool.poolPrefab = FT_SkillEffects[0];
             FT_SkillEffectsPool.initialCount = FT_SkillEffectsinitialCount;
             FT_SkillEffectsPool.incrementCount = FT_SkillEffectsincrementCount;
@@ -285,9 +285,9 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             FT_AttackEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
 
-            FT_AttackEffectsPool = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+            FT_AttackEffectsPool = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
             FT_AttackEffectsPool.poolPrefab = FT_AttackEffects[1];
             FT_AttackEffectsPool.initialCount = FT_AttackEffectsinitialCount;
             FT_AttackEffectsPool.incrementCount = FT_AttackEffectsincrementCount;

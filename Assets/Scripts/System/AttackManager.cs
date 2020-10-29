@@ -36,14 +36,10 @@ public class AttackManager : MonoBehaviour
         return Instance;
     }
     #endregion
-    public Transform effcetParent;
-    public GameObject[] hitEffects;
-    public int hitEffectinitialCount;
-    public int hitEffectincrementCount = 1;
     public PlayerFSM player;
-    Pool[] hitEffectPools;
 
     public Transform bulletParent;
+    public EffectManager effectManager;
     void Awake()
     {
         var objs = FindObjectsOfType<AttackManager>();
@@ -52,15 +48,7 @@ public class AttackManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        hitEffectPools = new Pool[hitEffects.Length];
-        for (int i = 0; i < hitEffectPools.Length; i++)
-        {
-            hitEffectPools[i] = effcetParent.gameObject.AddComponent<Pool>();
-            hitEffectPools[i].poolPrefab = hitEffects[i];
-            hitEffectPools[i].initialCount = hitEffectinitialCount;
-            hitEffectPools[i].incrementCount = hitEffectincrementCount;
-            hitEffectPools[i].Initialize();
-        }
+        effectManager = EffectManager.GetInstance();
     }
     public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)  //원형범위 + 제외대상 제외
     {
@@ -162,7 +150,7 @@ public class AttackManager : MonoBehaviour
         target.TakeAttack(Dmg,false);
         var mHit = target as HitableBase;
         if (mHit == null)
-            defaultEffect(target,0);
+            effectManager.defaultEffect(target,0);
     }
     public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
@@ -176,15 +164,11 @@ public class AttackManager : MonoBehaviour
             target.TakeKnockBack(m.knockBackDistance,m.knockBackVelocity, m.knockBackDir);
         }
         var mHit = target as HitableBase;
-        if(mHit==null)
-        defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
-    }
-    void defaultEffect(FSMbase target, int hitEffectNum)
-    {//!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성하는것도 만들 것
-        var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
-        e.transform.position = target.transform.position;
-        e.gameObject.SetActive(true);
-        e.GetComponent<Effector>().Disable(0.5f).Play();
+        if(effectManager != null)
+        {
+            if (mHit == null)
+                effectManager.defaultEffect(target, m.isCritical ? m.Cri_EffectNum : m.EffectNum);
+        }
     }
 }
 public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);

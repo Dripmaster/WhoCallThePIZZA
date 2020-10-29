@@ -179,11 +179,11 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             lanceEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
             lanceSkillEffectsPools = new Pool[lanceEffects.Length];
             for (int i = 0; i < lanceSkillEffectsPools.Length; i++)
             {
-                lanceSkillEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                lanceSkillEffectsPools[i] = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
                 lanceSkillEffectsPools[i].poolPrefab = lanceEffects[i];
                 lanceSkillEffectsPools[i].initialCount = lanceSkillEffectsinitialCount;
                 lanceSkillEffectsPools[i].incrementCount = lanceSkillEffectsincrementCount;
@@ -245,7 +245,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 2;
+        m.EffectNum = 0;
         m.Cri_EffectNum = 2;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
@@ -258,7 +258,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
-                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
+            AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
         }
     }
 
@@ -344,7 +344,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         this.lance = lance;
         weapon = weaponBase;
         tempAtkCount = 1;
-        m.EffectNum = 0;
+        m.EffectNum = 1;
         m.Cri_EffectNum = 2;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;

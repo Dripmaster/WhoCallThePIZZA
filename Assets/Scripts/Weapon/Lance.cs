@@ -238,7 +238,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
-                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
+            AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
         }
     }
 

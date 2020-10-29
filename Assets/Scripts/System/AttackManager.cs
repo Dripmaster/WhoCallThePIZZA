@@ -181,10 +181,12 @@ public class AttackManager : MonoBehaviour
     }
     void defaultEffect(FSMbase target, int hitEffectNum)
     {//!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성하는것도 만들 것
+        if (hitEffectNum == -1)
+            return;
         var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
         e.transform.position = target.transform.position;
         e.gameObject.SetActive(true);
-        e.GetComponent<Effector>().Disable(0.5f).Play();
+        //e.GetComponent<Effector>().Disable(0.5f).Play();
     }
 }
 public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);

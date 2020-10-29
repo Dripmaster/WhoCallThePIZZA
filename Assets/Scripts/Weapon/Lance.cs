@@ -179,7 +179,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             lanceEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
             lanceSkillEffectsPools = new Pool[lanceEffects.Length];
             for (int i = 0; i < lanceSkillEffectsPools.Length; i++)
             {

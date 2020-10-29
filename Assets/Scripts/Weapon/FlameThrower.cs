@@ -159,7 +159,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             FT_SkillEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
 
             FT_SkillEffectsPool = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
             FT_SkillEffectsPool.poolPrefab = FT_SkillEffects[0];
@@ -285,7 +285,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             FT_AttackEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
 
             FT_AttackEffectsPool = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
             FT_AttackEffectsPool.poolPrefab = FT_AttackEffects[1];

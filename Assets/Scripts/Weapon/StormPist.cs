@@ -103,7 +103,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             stormPistHitEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effcetParent = e.effectParent;
             stormPistHitEffectPools = new Pool[stormPistHitEffects.Length];
             for (int i = 0; i < stormPistHitEffectPools.Length; i++)
             {

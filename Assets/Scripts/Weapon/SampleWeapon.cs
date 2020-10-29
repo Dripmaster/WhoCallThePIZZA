@@ -331,7 +331,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     int ironHookEffectsinitialCount = 10;
     int ironHookEffectsincrementCount = 5;
     static Pool[] ironHookEffectsPools;
-    Transform effcetParent;
+    Transform effectParent;
 
     Transform chainHead;
     int effectLevel = 0;
@@ -353,7 +353,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
             ironHookEffects = e.Effects;
-            effcetParent = e.effcetParent;
+            effectParent = e.effectParent;
             ironHookEffectsPools = new Pool[ironHookEffects.Length];
             for (int i = 0; i < ironHookEffectsPools.Length; i++)
             {
@@ -455,7 +455,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         point.Normalize();
         point *= distance;
         point += (Vector2)player.transform.position;
-        var t = ironHookEffectsPools[0].GetObjectDisabled(effcetParent);
+        var t = ironHookEffectsPools[0].GetObjectDisabled(effectParent);
         t.transform.position = point;
         int flipSlash = 1;
         if (flipX)

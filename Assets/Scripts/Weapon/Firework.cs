@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Firework
+public class Firework : AttackComponent
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public override void SetStrategy(WeaponBase weaponBase)
     {
-        i = new FireworkIdleStrategy();
-        m = new FireworkMoveStrategy();
-        d = new FireworkDeadStrategy();
-        mi = new FireworkMouseInputStrategy();
-        ds = new FireworkDashStrategy();
-        a = new FireworkAttackStrategy(weaponBase);
-        s = new FireworkSkillStrategy(weaponBase);
-        c = new FireworkHittedStrategy();
+        idleStrategy = new FireworkIdleStrategy();
+        moveStrategy = new FireworkMoveStrategy();
+        deadStrategy = new FireworkDeadStrategy();
+        mouseInputStrategy = new FireworkMouseInputStrategy();
+        dashStrategy = new FireworkDashStrategy();
+        attackStrategy = new FireworkAttackStrategy(weaponBase);
+        skillStrategy = new FireworkSkillStrategy(weaponBase);
+        hittedstrategy = new FireworkHittedStrategy();
     }
 }
 

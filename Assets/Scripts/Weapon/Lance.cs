@@ -4,24 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-public class Lance
+public class Lance : AttackComponent
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public override void SetStrategy(WeaponBase weaponBase)
     {
-        i = new LanceIdleStrategy();
-        m = new LanceMoveStrategy();
-        d = new LanceDeadStrategy();
-        mi = new LanceMouseInputStrategy();
-        ds = new LanceDashStrategy();
-        a = new LanceAttackStrategy(weaponBase);
-        s = new LanceSkillStrategy(weaponBase);
-        c = new LanceHittedStrategy();
+        idleStrategy = new LanceIdleStrategy(this);
+        moveStrategy = new LanceMoveStrategy(this);
+        deadStrategy = new LanceDeadStrategy(this);
+        mouseInputStrategy = new LanceMouseInputStrategy(this);
+        dashStrategy = new LanceDashStrategy(this);
+        attackStrategy = new LanceAttackStrategy(weaponBase, this);
+        skillStrategy = new LanceSkillStrategy(weaponBase, this);
+        hittedstrategy = new LanceHittedStrategy(this);
     }
 }
 
 public class LanceIdleStrategy : IdleStrategy
 {
+    Lance lance;
+    public LanceIdleStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void SetState(WeaponBase weaponBase)
     {
         if (weaponBase.CanAttackCancel)
@@ -42,6 +46,11 @@ public class LanceIdleStrategy : IdleStrategy
 }
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
 {
+    Lance lance;
+    public LanceMoveStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void SetState(WeaponBase weaponBase)
     {
         cannotMove(weaponBase);
@@ -58,7 +67,11 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
 }
 public class LanceDeadStrategy : DeadStrategy
 {
-
+    Lance lance;
+    public LanceDeadStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void SetState(WeaponBase weaponBase)
     {
         //미구현
@@ -71,6 +84,11 @@ public class LanceDeadStrategy : DeadStrategy
 }
 public class LanceMouseInputStrategy : MouseInputStrategy
 {
+    Lance lance;
+    public LanceMouseInputStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void HandleInput(WeaponBase weaponBase)
     {
         /////기본 공격
@@ -148,8 +166,10 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     int lanceSkillEffectsincrementCount = 7;
     float flip;
     WeaponBase weapon;
-    public LanceSkillStrategy(WeaponBase weaponBase)
+    Lance lance;
+    public LanceSkillStrategy(WeaponBase weaponBase, Lance lance)
     {
+        this.lance = lance;
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
@@ -270,6 +290,11 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
              
 public class LanceDashStrategy : DashFunction, DashStrategy
 {
+    Lance lance;
+    public LanceDashStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void SetState(WeaponBase weaponBase)
     {
         attack_Cancel(weaponBase);
@@ -298,7 +323,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     float maxChargeTime = 2;//최대 충전 시간
 
     WeaponBase weapon;
-
+    Lance lance;
     public void preCalculate()
     {
         chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
@@ -314,8 +339,9 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         animTimeAll = t * (1-devideRatio) + animTimeRush;
         weapon.AnimSpeed = 1 / animTimeAll;
     }
-    public LanceAttackStrategy(WeaponBase weaponBase) : base(3,0.8f)
+    public LanceAttackStrategy(WeaponBase weaponBase,Lance lance) : base(3,0.8f)
     {
+        this.lance = lance;
         weapon = weaponBase;
         tempAtkCount = 1;
         m.EffectNum = 1;
@@ -518,6 +544,11 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
              
 public class LanceHittedStrategy : HittedStrategy
 {
+    Lance lance;
+    public LanceHittedStrategy(Lance lance)
+    {
+        this.lance = lance;
+    }
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;

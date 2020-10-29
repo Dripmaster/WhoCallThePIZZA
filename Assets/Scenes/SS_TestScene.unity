@@ -1164,7 +1164,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -0.00018310547, y: 0.000061035156}
-  m_SizeDelta: {x: 405.6, y: 80}
+  m_SizeDelta: {x: 532.3, y: 80}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &920590877
 MonoBehaviour:
@@ -2314,7 +2314,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.445
+  m_FillAmount: 0.45
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

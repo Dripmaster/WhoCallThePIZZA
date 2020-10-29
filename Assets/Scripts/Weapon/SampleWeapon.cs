@@ -5,17 +5,18 @@ using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
 
-public class SampleWeapon {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
-    { 
-        i = new SampleIdleStrategy();
-        m = new SampleMoveStrategy();
-        d = new SampleDeadStrategy();
-        mi = new SampleMouseInputStrategy();
-        ds= new SampleDashStrategy();
-        a = new SampleAttackStrategy(weaponBase);
-        s = new SampleSkillStrategy();
-        c = new SampleHittedStrategy();
+public class SampleWeapon : AttackComponent
+{
+    public override void SetStrategy(WeaponBase weaponBase)
+    {
+        idleStrategy = new SampleIdleStrategy();
+        moveStrategy = new SampleMoveStrategy();
+        deadStrategy = new SampleDeadStrategy();
+        mouseInputStrategy = new SampleMouseInputStrategy();
+        dashStrategy = new SampleDashStrategy();
+        attackStrategy = new SampleAttackStrategy(weaponBase);
+        skillStrategy = new SampleSkillStrategy();
+        hittedstrategy = new SampleHittedStrategy();
     }
 }
 public class SampleIdleStrategy : IdleStrategy

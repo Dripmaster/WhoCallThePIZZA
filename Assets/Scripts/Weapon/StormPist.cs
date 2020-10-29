@@ -5,18 +5,19 @@ using System.Linq;
 using UnityEngine;
 
 
-public class StormPist
+public class StormPist : AttackComponent
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public override void SetStrategy(WeaponBase weaponBase)
     {
-        i = new StormPistIdleStrategy();
-        m = new StormPistMoveStrategy();
-        d = new StormPistDeadStrategy();
-        mi = new SampleMouseInputStrategy();
-        ds = new StormPistDashStrategy();
-        a = new StormPistAttackStrategy(weaponBase);
-        s = new StormPistSkillStrategy(weaponBase);
-        c = new StormPistHittedStrategy();
+        idleStrategy = new StormPistIdleStrategy();
+        moveStrategy = new StormPistMoveStrategy();
+        deadStrategy = new StormPistDeadStrategy();
+        mouseInputStrategy = new SampleMouseInputStrategy();
+        dashStrategy = new StormPistDashStrategy();
+        attackStrategy = new StormPistAttackStrategy(weaponBase);
+        skillStrategy = new StormPistSkillStrategy(weaponBase);
+        hittedstrategy = new StormPistHittedStrategy();
+
     }
 }
 

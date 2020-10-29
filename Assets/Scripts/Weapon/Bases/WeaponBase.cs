@@ -26,15 +26,6 @@ public class WeaponBase : MonoBehaviour
     private float animSpeed;
     int viewDirection;
 
-    IdleStrategy idleStrategy;
-    SkillStrategy skillStrategy;
-    MoveStrategy moveStrategy;
-    DashStrategy dashStrategy;
-    DeadStrategy deadStrategy;
-    MouseInputStrategy mouseInputStrategy;
-    AttackStrategy attackStrategy;
-    HittedStrategy hittedstrategy;
-
     public PlayerFSM player;
     public static WeaponBase instance;
 
@@ -50,6 +41,7 @@ public class WeaponBase : MonoBehaviour
     public float weakedSpeed;
 
     WeaponInfo[] equipedWeapons;
+    AttackComponent[] equipedWeaponsComponents;
     int currentWeapon;
     private WeaponBase() {
         instance = this;
@@ -109,41 +101,8 @@ public class WeaponBase : MonoBehaviour
         InitData();
     }
     void setStateEnum(WeaponType weaponType) {
-        switch (weaponType)
-        {
-            case WeaponType.sampleWeapon:
-                SampleWeapon.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
-                //스트래티지들 싹다 세팅
-                //애니메이션 컨트롤러 변경
-                break;
-            case WeaponType.StormPist:
-                StormPist.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
-                break;
-            case WeaponType.Lance:
-                Lance.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
-                break;
-            case WeaponType.FlameThrower:
-                FlameThrower.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
-                break;
-            case WeaponType.Firework:
-                Firework.SetStrategy(out idleStrategy, out moveStrategy, out deadStrategy, out mouseInputStrategy, out dashStrategy, out attackStrategy, out hittedstrategy, out skillStrategy, this);
-                break;
-            default:
-                break;
-        }
+        equipedWeaponsComponents[currentWeapon].SetStrategy(this);
     }
-    /// 플레이어 스테이트 변경
-    /// 무기 스테이트 변경
-    /// 무기별 왼쪽클릭 핸들링
-    /// 이렇게 말고 스트래티지 패턴으로 해야하지않나...?
-    /// 그럼 어택 카운트같은거 해서 애니메이션 바꾸는건 어떻게?->인자로 무기 넘겨
-    /// 애니메이커에 기존 컨트롤러 모션 추가 기능 넣어야 함
-    /// 무기 상속이 아니라 진짜 그냥 스트래티지들로 해서 할 수 있게 짤수도 있을거 같은데?
-    /// 무기에따라 애니메이션하고 stateEnum만 설정하는식으로.... 생각해보면 될듯함
-    /// idle move 좌클릭 우클릭 ... 스트레티지
-    /// 1. 무기 타입 설정
-    /// 2. 애니메이션 컨트롤 설정
-    /// 3. 스트래티지 설정
     public void InitData() {
         setStateEnum(weaponType);
         colliders = transform.GetComponentsInChildren<Collider2D>();
@@ -177,20 +136,20 @@ public class WeaponBase : MonoBehaviour
 
     }
     public void SetIdle(bool playerSet = false) {
-        idleStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].idleStrategy.SetState(this);
         if (playerSet) {
             player.setState((int)PlayerState.idle);
         }
     }
     public void SetMove(bool playerSet = false) {
-        moveStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].moveStrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.move);
         }
     }
     public void SetDead(bool playerSet = false) {
-        deadStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].deadStrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.dead);
@@ -198,7 +157,7 @@ public class WeaponBase : MonoBehaviour
     }
     public void SetSkill(bool playerSet = false)
     {
-        skillStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].skillStrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.skill);
@@ -206,7 +165,7 @@ public class WeaponBase : MonoBehaviour
     }
     public void SetAttack(bool playerSet = false)
     {
-        attackStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].attackStrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.attack);
@@ -216,17 +175,17 @@ public class WeaponBase : MonoBehaviour
     }
     public void SetHitted(bool playerSet = false)
     {//TODO : 하던거 캔슬하게(어차피 캔슬 되지만 추가작업 필요 할 수 있음)
-        hittedstrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].hittedstrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.hitted);
         }
     }
     public void MouseInput() {
-        mouseInputStrategy.HandleInput(this);
+        equipedWeaponsComponents[currentWeapon].mouseInputStrategy.HandleInput(this);
     }
     public void SetDash(bool playerSet = false) {
-        dashStrategy.SetState(this);
+        equipedWeaponsComponents[currentWeapon].dashStrategy.SetState(this);
         if (playerSet)
         {
             player.setState((int)PlayerState.dash);
@@ -234,9 +193,9 @@ public class WeaponBase : MonoBehaviour
     }
     public bool CanDash() {
         if (objectState == PlayerState.attack)
-            return attackStrategy.canDash();
+            return equipedWeaponsComponents[currentWeapon].attackStrategy.canDash();
         else if(objectState == PlayerState.skill)
-            return skillStrategy.canDash();
+            return equipedWeaponsComponents[currentWeapon].skillStrategy.canDash();
         else
             return true;
     }
@@ -248,9 +207,13 @@ public class WeaponBase : MonoBehaviour
         }
 
         equipedWeapons = GetComponentsInChildren<WeaponInfo>();
-        equipedWeapons[1].gameObject.SetActive(false);
-        equipedWeapons[2].gameObject.SetActive(false);
-        equipedWeapons[3].gameObject.SetActive(false);
+        equipedWeaponsComponents = GetComponentsInChildren<AttackComponent>();
+
+        for (int i = 1; i < equipedWeapons.Length; i++)
+        {
+
+            equipedWeapons[i].gameObject.SetActive(false);
+        }
         currentWeapon = 0;
         setWeapon(equipedWeapons[currentWeapon].wType);
 
@@ -341,7 +304,7 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            idleStrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].idleStrategy.Update(this);
             MouseInput();
             yield return null;
         } while (!newState);
@@ -350,7 +313,7 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            moveStrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].moveStrategy.Update(this);
             MouseInput();
             yield return null;
         } while (!newState);
@@ -360,7 +323,7 @@ public class WeaponBase : MonoBehaviour
         isDash = true;
         do
         {
-            dashStrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].dashStrategy.Update(this);
             MouseInput();
             yield return null;
         } while (!newState);
@@ -371,12 +334,12 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            attackStrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].attackStrategy.Update(this);
             MouseInput();
             yield return null;
         } while (!newState);
-        attackStrategy.StartCool();
-        attackStrategy.StateEnd();
+        equipedWeaponsComponents[currentWeapon].attackStrategy.StartCool();
+        equipedWeaponsComponents[currentWeapon].attackStrategy.StateEnd();
         nowAttack = false;
         CanRotateView = true;
         CanAttackCancel = true;
@@ -387,12 +350,12 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            skillStrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].skillStrategy.Update(this);
             MouseInput();
             yield return null;
         } while (!newState);
-        skillStrategy.StartCool();
-        skillStrategy.StateEnd();
+        equipedWeaponsComponents[currentWeapon].skillStrategy.StartCool();
+        equipedWeaponsComponents[currentWeapon].skillStrategy.StateEnd();
         CanRotateView = true;
         CanAttackCancel = true;
         SetColliderEnable(false);
@@ -409,7 +372,7 @@ public class WeaponBase : MonoBehaviour
     {
         do
         {
-            hittedstrategy.Update(this);
+            equipedWeaponsComponents[currentWeapon].hittedstrategy.Update(this);
             //MouseInput();
             yield return null;
         } while (!newState);
@@ -417,14 +380,14 @@ public class WeaponBase : MonoBehaviour
     }
     public void onWeaponTouch(int colliderType, Collider2D target) {
         if (objectState == PlayerState.skill)
-            skillStrategy.onWeaponTouch(colliderType, target);
+            equipedWeaponsComponents[currentWeapon].skillStrategy.onWeaponTouch(colliderType, target);
 
 
         if (!nowAttack)
         {
             return;
         }
-        attackStrategy.onWeaponTouch(colliderType,target);
+        equipedWeaponsComponents[currentWeapon].attackStrategy.onWeaponTouch(colliderType,target);
     }
     public void setViewPoint() {
         player.SetViewPoint();
@@ -439,11 +402,11 @@ public class WeaponBase : MonoBehaviour
     }
     public MoveWhileAttack getMoveAttackCondition()
     {
-        return attackStrategy.getAttackMoveCondition();
+        return equipedWeaponsComponents[currentWeapon].attackStrategy.getAttackMoveCondition();
     }
     public MoveWhileAttack getMoveSkillCondition()
     {
-        return skillStrategy.getSkillMoveCondition();
+        return equipedWeaponsComponents[currentWeapon].skillStrategy.getSkillMoveCondition();
     }
     public void SetComboCount(int c)
     {
@@ -455,7 +418,7 @@ public class WeaponBase : MonoBehaviour
     {
         float r;
         float t;
-        attackStrategy.GetCoolTime(out r, out t);
+        equipedWeaponsComponents[currentWeapon].attackStrategy.GetCoolTime(out r, out t);
         if (r <= 0)
         {
             return false;
@@ -469,7 +432,7 @@ public class WeaponBase : MonoBehaviour
     {
         float r;
         float t;
-        skillStrategy.GetCoolTime(out r, out t);
+        equipedWeaponsComponents[currentWeapon].skillStrategy.GetCoolTime(out r, out t);
         if (r <= 0)
         {
             return false;
@@ -500,12 +463,12 @@ public class WeaponBase : MonoBehaviour
             case PlayerState.move:
                 break;
             case PlayerState.attack:
-                attackStrategy.motionEvent(value);
+                equipedWeaponsComponents[currentWeapon].attackStrategy.motionEvent(value);
                 break;
             case PlayerState.dead:
                 break;
             case PlayerState.skill:
-                skillStrategy.motionEvent(value);
+                equipedWeaponsComponents[currentWeapon].skillStrategy.motionEvent(value);
                 break;
             case PlayerState.dash:
                 break;

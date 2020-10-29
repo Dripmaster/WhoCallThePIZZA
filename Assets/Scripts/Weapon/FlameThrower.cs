@@ -5,18 +5,19 @@ using System.Linq;
 using UnityEngine;
 
 
-public class FlameThrower
+public class FlameThrower : AttackComponent
 {
-    public static void SetStrategy(out IdleStrategy i, out MoveStrategy m, out DeadStrategy d, out MouseInputStrategy mi, out DashStrategy ds, out AttackStrategy a, out HittedStrategy c, out SkillStrategy s, WeaponBase weaponBase)
+    public override void SetStrategy(WeaponBase weaponBase)
     {
-        i = new FlameThrowerIdleStrategy();
-        m = new FlameThrowerMoveStrategy();
-        d = new FlameThrowerDeadStrategy();
-        mi = new FlameThrowerMouseInputStrategy();
-        ds = new FlameThrowerDashStrategy();
-        a = new FlameThrowerAttackStrategy(weaponBase);
-        s = new FlameThrowerSkillStrategy(weaponBase);
-        c = new FlameThrowerHittedStrategy();
+        idleStrategy = new FlameThrowerIdleStrategy();
+        moveStrategy = new FlameThrowerMoveStrategy();
+        deadStrategy = new FlameThrowerDeadStrategy();
+        mouseInputStrategy = new FlameThrowerMouseInputStrategy();
+        dashStrategy = new FlameThrowerDashStrategy();
+        attackStrategy = new FlameThrowerAttackStrategy(weaponBase);
+        skillStrategy = new FlameThrowerSkillStrategy(weaponBase);
+        hittedstrategy = new FlameThrowerHittedStrategy();
+
     }
 }
 

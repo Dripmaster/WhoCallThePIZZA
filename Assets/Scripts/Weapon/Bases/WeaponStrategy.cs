@@ -4,6 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
+#region Componet
+public abstract class AttackComponent : MonoBehaviour
+{
+    public IdleStrategy idleStrategy;
+    public SkillStrategy skillStrategy;
+    public MoveStrategy moveStrategy;
+    public DashStrategy dashStrategy;
+    public DeadStrategy deadStrategy;
+    public MouseInputStrategy mouseInputStrategy;
+    public AttackStrategy attackStrategy;
+    public HittedStrategy hittedstrategy;
+    public abstract void SetStrategy(WeaponBase weaponBase);
+
+}
+#endregion
+
 #region Strategy Interfaces
 public interface IdleStrategy
 {

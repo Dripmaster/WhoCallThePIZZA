@@ -356,7 +356,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             ironHookEffectsPools = new Pool[ironHookEffects.Length];
             for (int i = 0; i < ironHookEffectsPools.Length; i++)
             {
-                ironHookEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                ironHookEffectsPools[i] = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
                 ironHookEffectsPools[i].poolPrefab = ironHookEffects[i];
                 ironHookEffectsPools[i].initialCount = ironHookEffectsinitialCount;
                 ironHookEffectsPools[i].incrementCount = ironHookEffectsincrementCount;

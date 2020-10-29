@@ -122,7 +122,7 @@ public class Shaker : MonoBehaviour
                     shakeVec *= MagnitudeAt(totalETime/duration);
                 else
                     shakeVec *= magnitude;
-                transformToShake.localPosition = shakeVec;
+                transformToShake.localPosition = originalPosition + shakeVec;
                 eTime -= nextShakeTime;
                 if(speed == -1f)
                     nextShakeTime = 1f / SpeedAt(totalETime/duration);

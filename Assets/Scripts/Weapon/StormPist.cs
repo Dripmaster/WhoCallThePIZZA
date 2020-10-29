@@ -106,7 +106,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             stormPistHitEffectPools = new Pool[stormPistHitEffects.Length];
             for (int i = 0; i < stormPistHitEffectPools.Length; i++)
             {
-                stormPistHitEffectPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                stormPistHitEffectPools[i] = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
                 stormPistHitEffectPools[i].poolPrefab = stormPistHitEffects[i];
                 stormPistHitEffectPools[i].initialCount = stormPistHitEffectinitialCount;
                 stormPistHitEffectPools[i].incrementCount = stormPistHitEffectincrementCount;

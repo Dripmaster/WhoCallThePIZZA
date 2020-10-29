@@ -163,7 +163,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
             lanceSkillEffectsPools = new Pool[lanceEffects.Length];
             for (int i = 0; i < lanceSkillEffectsPools.Length; i++)
             {
-                lanceSkillEffectsPools[i] = AttackManager.GetInstance().effcetParent.gameObject.AddComponent<Pool>();
+                lanceSkillEffectsPools[i] = EffectManager.GetInstance().effectParent.gameObject.AddComponent<Pool>();
                 lanceSkillEffectsPools[i].poolPrefab = lanceEffects[i];
                 lanceSkillEffectsPools[i].initialCount = lanceSkillEffectsinitialCount;
                 lanceSkillEffectsPools[i].incrementCount = lanceSkillEffectsincrementCount;
@@ -225,7 +225,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 2;
+        m.EffectNum = 0;
         m.Cri_EffectNum = 2;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
@@ -318,7 +318,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         weapon = weaponBase;
         tempAtkCount = 1;
-        m.EffectNum = 0;
+        m.EffectNum = 1;
         m.Cri_EffectNum = 2;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;

@@ -48,6 +48,7 @@ public class AttackManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        effectManager = EffectManager.GetInstance();
     }
     public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)  //원형범위 + 제외대상 제외
     {
@@ -163,8 +164,11 @@ public class AttackManager : MonoBehaviour
             target.TakeKnockBack(m.knockBackDistance,m.knockBackVelocity, m.knockBackDir);
         }
         var mHit = target as HitableBase;
-        if(mHit == null)
-            effectManager.defaultEffect(target,m.isCritical ? m.Cri_EffectNum : m.EffectNum);
+        if(effectManager != null)
+        {
+            if (mHit == null)
+                effectManager.defaultEffect(target, m.isCritical ? m.Cri_EffectNum : m.EffectNum);
+        }
     }
 }
 public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);

@@ -26,7 +26,7 @@ public class EffectManager : MonoBehaviour
                 }
                 else
                 {
-                    var newSingleton = new GameObject("AttackManager Class").AddComponent<EffectManager>();
+                    var newSingleton = new GameObject("EffectManager Class").AddComponent<EffectManager>();
                     instance = newSingleton;
                 }
             }

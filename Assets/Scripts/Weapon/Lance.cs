@@ -13,7 +13,7 @@ public class Lance : AttackComponent
         deadStrategy = new LanceDeadStrategy(this);
         mouseInputStrategy = new LanceMouseInputStrategy(this);
         dashStrategy = new LanceDashStrategy(this);
-        attackStrategy = new LanceAttackStrategy(weaponBase, this);
+        attackStrategy = new LanceAttackStrategy(weaponBase,this);
         skillStrategy = new LanceSkillStrategy(weaponBase, this);
         hittedstrategy = new LanceHittedStrategy(this);
     }

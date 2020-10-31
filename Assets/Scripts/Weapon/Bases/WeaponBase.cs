@@ -442,6 +442,10 @@ public class WeaponBase : MonoBehaviour
             return true;
         }
     }
+    public AttackComponent WeaponComponent()
+    {
+        return equipedWeaponsComponents[currentWeapon];
+    }
     public Animator GetAnimatior() {
         return _animator;
     }

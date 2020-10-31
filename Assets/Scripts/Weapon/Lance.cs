@@ -6,28 +6,33 @@ using UnityEngine;
 
 public class Lance : AttackComponent
 {
+    public float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
+    public float chargeSpeed = 10f; //돌진속도
+    public float maxChargeTime = 2;//최대 충전 시간
+    public float stepProgress = 0.25f;
+    public float stepSpeed = 6f;
     public override void SetStrategy(WeaponBase weaponBase)
     {
-        idleStrategy = new LanceIdleStrategy(this);
-        moveStrategy = new LanceMoveStrategy(this);
-        deadStrategy = new LanceDeadStrategy(this);
-        mouseInputStrategy = new LanceMouseInputStrategy(this);
-        dashStrategy = new LanceDashStrategy(this);
-        attackStrategy = new LanceAttackStrategy(weaponBase,this);
-        skillStrategy = new LanceSkillStrategy(weaponBase, this);
-        hittedstrategy = new LanceHittedStrategy(this);
+        idleStrategy = new LanceIdleStrategy();
+        moveStrategy = new LanceMoveStrategy();
+        deadStrategy = new LanceDeadStrategy();
+        mouseInputStrategy = new LanceMouseInputStrategy();
+        dashStrategy = new LanceDashStrategy();
+        attackStrategy = new LanceAttackStrategy(weaponBase);
+        skillStrategy = new LanceSkillStrategy(weaponBase);
+        hittedstrategy = new LanceHittedStrategy();
     }
 }
 
 public class LanceIdleStrategy : IdleStrategy
 {
     Lance lance;
-    public LanceIdleStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void SetState(WeaponBase weaponBase)
     {
+        if (lance == null)
+        {
+            lance = weaponBase.WeaponComponent() as Lance;
+        }
         if (weaponBase.CanAttackCancel)
         {
             weaponBase.setState((int)PlayerState.idle);
@@ -47,10 +52,6 @@ public class LanceIdleStrategy : IdleStrategy
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
 {
     Lance lance;
-    public LanceMoveStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void SetState(WeaponBase weaponBase)
     {
         cannotMove(weaponBase);
@@ -68,10 +69,6 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
 public class LanceDeadStrategy : DeadStrategy
 {
     Lance lance;
-    public LanceDeadStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void SetState(WeaponBase weaponBase)
     {
         //미구현
@@ -85,10 +82,6 @@ public class LanceDeadStrategy : DeadStrategy
 public class LanceMouseInputStrategy : MouseInputStrategy
 {
     Lance lance;
-    public LanceMouseInputStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void HandleInput(WeaponBase weaponBase)
     {
         /////기본 공격
@@ -167,9 +160,8 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     float flip;
     WeaponBase weapon;
     Lance lance;
-    public LanceSkillStrategy(WeaponBase weaponBase, Lance lance)
+    public LanceSkillStrategy(WeaponBase weaponBase)
     {
-        this.lance = lance;
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
@@ -291,10 +283,6 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
 public class LanceDashStrategy : DashFunction, DashStrategy
 {
     Lance lance;
-    public LanceDashStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void SetState(WeaponBase weaponBase)
     {
         attack_Cancel(weaponBase);
@@ -314,13 +302,10 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     bool firstTime = true;
 
     Vector2 chargeDir; // 돌진 방향
-    float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
     float animTimeAll; // 전체 애니 재생시간(계산 후)
     float animTimeRush; // 전체에서 돌진부분 재생시간(계산 후)
-    float chargeSpeed = 10f; //돌진속도
     float chargeLength;// 돌진 거리
     float pierceTime; // 방어구 파괴 시간
-    float maxChargeTime = 2;//최대 충전 시간
 
     WeaponBase weapon;
     Lance lance;
@@ -328,21 +313,21 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         chargeDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         chargeDir.Normalize();
-        if(tempTime>=maxChargeTime)
-            tempTime = maxChargeTime;
+        if(tempTime>=lance.maxChargeTime)
+            tempTime = lance.maxChargeTime;
         chargeLength = tempTime*1.5f + 3;
         if (tempTime >= 1)
             pierceTime = (tempTime-1)*2+3;
         tempTime = 0;
-        float t = chargeLength / chargeSpeed;
-        animTimeRush = t * devideRatio;
-        animTimeAll = t * (1-devideRatio) + animTimeRush;
+        float t = chargeLength / lance.chargeSpeed;
+        animTimeRush = t * lance.devideRatio;
+        animTimeAll = t * (1- lance.devideRatio) + animTimeRush;
         weapon.AnimSpeed = 1 / animTimeAll;
     }
-    public LanceAttackStrategy(WeaponBase weaponBase,Lance lance) : base(3,0.8f)
+    public LanceAttackStrategy(WeaponBase weaponBase) : base(3,0.8f)
     {
-        this.lance = lance;
         weapon = weaponBase;
+        lance = weapon.WeaponComponent() as Lance;
         tempAtkCount = 1;
         m.EffectNum = 1;
         m.Cri_EffectNum = 2;
@@ -482,8 +467,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
 
             if (tempAtkCount == 1)
             {
-                if (weapon.getAnimProgress() <= stepProgress)
-                    player.moveFoward(stepSpeed);
+                if (weapon.getAnimProgress() <= lance.stepProgress)
+                    player.moveFoward(lance.stepSpeed);
             }
             
             HandleAttackCancel(weaponBase);
@@ -493,8 +478,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
 
 
     float tempSpeed;
-    float stepProgress = 0.25f;
-    float stepSpeed = 6f;
     void endAttack(WeaponBase weaponBase)
     {
         weapon.AnimSpeed = 1;
@@ -518,7 +501,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             preCalculate();
             DoAttack(weaponBase, 2);
             tempAtkCount = 2;
-            tempSpeed = chargeSpeed;
+            tempSpeed = lance.chargeSpeed;
             player.IgnoreEnemyPlayerCollison(true);
         }
         weaponBase.CanRotateView = false;
@@ -530,7 +513,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     void ChargeStart(WeaponBase weaponBase)
     {
-        StartCharge(weaponBase, out tempTime,maxChargeTime);
+        StartCharge(weaponBase, out tempTime, lance.maxChargeTime);
         effectLevel = 0;
         dashCondition = true;
         weaponBase.weakedSpeed = 0.8f;
@@ -545,10 +528,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
 public class LanceHittedStrategy : HittedStrategy
 {
     Lance lance;
-    public LanceHittedStrategy(Lance lance)
-    {
-        this.lance = lance;
-    }
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.CanRotateView = false;

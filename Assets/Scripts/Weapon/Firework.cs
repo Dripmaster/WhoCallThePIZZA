@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Firework : AttackComponent
 {
+    public BulletBase BulletPrefab;
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new FireworkIdleStrategy();
@@ -158,7 +159,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
     public Vector3 bulletDir;
-    public float Speed;  //몇으로 해야하지
+    public float Speed = 3;  //몇으로 해야하지
 
     public string tmpMessage;
 
@@ -176,6 +177,8 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     {
         if (bulletPool == null)
         {
+            Debug.Log((weaponBase.WeaponComponent() as Firework).BulletPrefab);
+            bulletPrefab = (weaponBase.WeaponComponent() as Firework).BulletPrefab;
             bulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
             bulletPool.incrementCount = FW_bulletincrementCount;
             bulletPool.initialCount = FW_bulletinitialCount;
@@ -302,7 +305,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
     public Vector3 bulletDir;
-    public float Speed;
+    public float Speed = 3;
 
     public string tmpMessage;
 
@@ -315,10 +318,13 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
 
 
     WeaponBase weapon;
+    Firework firework;
     public FireworkSkillStrategy(WeaponBase weaponBase)
     {
         if (bulletPool == null)
         {
+            firework = (weaponBase.WeaponComponent() as Firework);
+            bulletPrefab = firework.BulletPrefab;
             bulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
             bulletPool.incrementCount = FW_bulletincrementCount;
             bulletPool.initialCount = FW_bulletinitialCount;

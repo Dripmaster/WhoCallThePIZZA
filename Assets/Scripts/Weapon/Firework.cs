@@ -106,7 +106,7 @@ public class FireworkMouseInputStrategy : MouseInputStrategy
 
         if (InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
         {
-            weaponBase.attackComboCount = 1;
+            weaponBase.attackComboCount = 2;
         }
 
         ////스킬
@@ -167,7 +167,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     Transform bulletTransform;
     AttackMessage m;
-    float tempTime = 2;
+    float tempTime = 0;
 
 
     WeaponBase weapon;
@@ -225,14 +225,23 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         bulletDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         bulletDir.Normalize();
-
+        tempTime = 0;
         weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (tempAtkCount == 0)
+        if(tempAtkCount == 0)
         {
-            tempAtkCount = weaponBase.attackComboCount;
+            tempTime = 0;
+        }
+        else
+        {
+            tempTime = 0.33f;
+        }
+
+
+        if (tempAtkCount == 1 || tempAtkCount == 0)
+        {
             
             weaponBase.CanRotateView = true;
             weaponBase.setViewPoint();
@@ -253,7 +262,9 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
                 b.speed = Speed;
                 b.touched += fireworkBulletTouched;
                 b.gameObject.SetActive(true);  //SetActive(false) ㅇㄷ?? 거기다가 파티클도 넣어야함
-            }  //2초에 한번 발사?
+                CountCombo(weaponBase);
+                tempAtkCount = weaponBase.attackComboCount;
+            } 
 
             weaponBase.CanRotateView = false;
             
@@ -300,7 +311,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
 
     Transform bulletTransform;
     AttackMessage m;
-    float tempTime = 2;
+    float SkilltempTime;
 
 
     WeaponBase weapon;
@@ -333,17 +344,17 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         weaponBase.currentMoveCondition = moveSkillcondition;
         weaponBase.setState(PlayerState.skill);
 
-        tempTime = 0;
+        SkilltempTime = 0.18f;
     }
     public void Update(WeaponBase weaponBase)
-    {// 3초동안 10발
+    {
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
 
         time += Time.deltaTime;
-        if (time >= tempTime)
+        if (time >= SkilltempTime)
         {
             time = 0;
             var b = bulletPool.GetObjectDisabled().GetComponent<BulletBase>();

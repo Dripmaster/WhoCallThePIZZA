@@ -181,7 +181,6 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     {
         if (bulletPool == null)
         {
-            Debug.Log((weaponBase.WeaponComponent() as Firework).BulletPrefab);
             bulletPrefab = (weaponBase.WeaponComponent() as Firework).BulletPrefab;
             bulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
             bulletPool.incrementCount = FW_bulletincrementCount;

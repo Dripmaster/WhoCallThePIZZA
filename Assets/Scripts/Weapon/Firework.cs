@@ -32,8 +32,7 @@ public class FireworkIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX()); //여기서했는데
-        weaponBase.SP_FlipX();  //여기서도 해야되나?
+        weaponBase.setFlip(weaponBase.SP_FlipX());
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();

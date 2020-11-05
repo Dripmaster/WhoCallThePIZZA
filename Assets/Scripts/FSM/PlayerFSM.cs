@@ -53,7 +53,6 @@ public class PlayerFSM : FSMbase
             return;
         if (!Weapon.CanRotateView)
             return;
-       viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
         Quaternion r = Quaternion.FromToRotation(Vector2.right, viewDir);
         ViewDirection = (int)r.eulerAngles.z / 45;
@@ -199,6 +198,8 @@ public class PlayerFSM : FSMbase
                 _rigidbody2D.MovePosition((Vector2)transform.position + forcedDir * Time.deltaTime);
             forcedDir = Vector2.zero;
         }
+        viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+
     }
     IEnumerator idle()
     {

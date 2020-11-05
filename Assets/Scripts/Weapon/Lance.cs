@@ -35,6 +35,8 @@ public class Lance : AttackComponent
     }
     void SetChargeEffectColors()
     {
+        if (lanceChargeEffect1 == null)
+            return;
         lanceChargeEffect1.GetComponent<ParticleColorChanger>().SetColor(charge1Color);
         lanceChargeEffect2.GetComponent<ParticleColorChanger>().SetColor(charge2Color);
         lanceFullChargeEffect.GetComponent<ParticleColorChanger>().SetColor(fullChargeColor);

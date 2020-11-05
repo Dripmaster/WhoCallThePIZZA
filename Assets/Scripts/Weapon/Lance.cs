@@ -478,10 +478,11 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 StartChargeEffect(false);
                 effectLevel++;
             }
+
+            weaponBase.setFlip(weaponBase.SP_FlipX());
             weaponBase.CanRotateView = true;
             weaponBase.setViewPoint();
-            weaponBase.SP_FlipX();
-            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+            weaponBase.setRotate(weaponBase.WeaponViewDirection);
         }
         else
         {
@@ -561,6 +562,13 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         player.IgnoreEnemyPlayerCollison(false);
         weapon.SetColliderEnable(false);
+    }
+    public override void motionEvent(int value)
+    {
+        if(value == -1)
+        {
+            StateEnd();
+        }
     }
 }
              

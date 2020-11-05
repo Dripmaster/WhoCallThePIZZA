@@ -242,6 +242,7 @@ public class WeaponBase : MonoBehaviour
         weakedSpeed = 1f;
         //attackComboCount = 0;
     }
+    //공격중이라 위치flip 안할때 true
     public void setRotate(float value,bool isAttack=false) {
         if (!isAttack&&Rotator.localScale.x * tempScaleX < 0)
             value = -value;

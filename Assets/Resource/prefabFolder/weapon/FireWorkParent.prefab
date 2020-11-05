@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7669418262512002020}
   - component: {fileID: 7669418262512002022}
   - component: {fileID: 7669418262512002021}
+  - component: {fileID: 1666240374}
   m_Layer: 8
   m_Name: FireWorkParent
   m_TagString: Untagged
@@ -60,6 +61,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wType: 4
+--- !u!114 &1666240374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669418262512002019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d3b52e3fc4018b4389c739a63e126df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BulletPrefab: {fileID: 7500389306391038259, guid: ebd24be600cee2b4a8bd82996313221a,
+    type: 3}
 --- !u!1 &7669418264197980988
 GameObject:
   m_ObjectHideFlags: 0

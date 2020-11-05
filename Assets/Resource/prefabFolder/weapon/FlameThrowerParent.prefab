@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 5325898338514357605}
   - component: {fileID: 5389192283719415229}
   - component: {fileID: 976505198240130279}
+  - component: {fileID: 1415497791}
   m_Layer: 8
   m_Name: FlameThrowerParent
   m_TagString: Untagged
@@ -155,10 +156,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5820ff02001abc4fa962490a6903f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effcetParent: {fileID: 0}
+  effectParent: {fileID: 0}
   Effects:
   - {fileID: 1778761607196781619, guid: e84083c05f9613547b0020a607e04ace, type: 3}
   - {fileID: 1299520064525074437, guid: a7797b433b772f64ebc6a3b95a5f547e, type: 3}
+--- !u!114 &1415497791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325898338514357604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6226af6f734df3f429076d0217ce3252, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5325898338852059316
 GameObject:
   m_ObjectHideFlags: 0

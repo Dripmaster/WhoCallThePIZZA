@@ -498,6 +498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 410302231478669927}
   - component: {fileID: 1625204544}
+  - component: {fileID: 877071063}
   m_Layer: 8
   m_Name: headChain
   m_TagString: Untagged
@@ -532,6 +533,22 @@ Transform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -60}
 --- !u!114 &1625204544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410302231478669924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e030ac1d63ded941b011b598cfcdf00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolPrefab: {fileID: 920898006293731241, guid: de05ff1f1e640574dabfaeb8fc4eefe1,
+    type: 3}
+  initialCount: 20
+  incrementCount: 1
+--- !u!114 &877071063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1599,6 +1616,7 @@ GameObject:
   - component: {fileID: 8473896062864027750}
   - component: {fileID: 1798679086}
   - component: {fileID: 1798679087}
+  - component: {fileID: 877071071}
   m_Layer: 8
   m_Name: ironhookParent
   m_TagString: Untagged
@@ -1646,6 +1664,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5820ff02001abc4fa962490a6903f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effcetParent: {fileID: 0}
+  effectParent: {fileID: 0}
   Effects:
   - {fileID: 790251787362598360, guid: 0ed75c3461e589c40895f3eba6b8d195, type: 3}
+--- !u!114 &877071071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8473896062864027749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0312c35fad4b4bd4a8516eb42dae9fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

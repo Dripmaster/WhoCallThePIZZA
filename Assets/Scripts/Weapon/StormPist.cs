@@ -299,8 +299,8 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     }
     AttackMessage ThunderHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 1;
-        m.Cri_EffectNum = 1;
+        m.effectType = EffectType.MID;
+        m.critEffectType = EffectType.CRIT;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
         target.status.AddBuff(new Electrified(1, target));
@@ -308,8 +308,8 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     }
     AttackMessage GroundHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 0;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.SMALL;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         m.CalcKnockBack(target, sender, 2,2);
 
@@ -348,8 +348,8 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(6)
     {
         weapon = weaponBase;
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 2;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.CRIT;
 
         attackMoveCondition = MoveWhileAttack.Cannot_Move;
         dashCondition = false;

@@ -11,6 +11,13 @@ public class Lance : AttackComponent
     public float maxChargeTime = 2;//최대 충전 시간
     public float stepProgress = 0.25f;
     public float stepSpeed = 6f;
+
+    public GameObject lanceChargeEffect1;
+    public Color charge1Color;
+    public GameObject lanceChargeEffect2;
+    public Color charge2Color;
+    public GameObject lanceFullChargeEffect;
+    public Color fullChargeColor;
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new LanceIdleStrategy();
@@ -21,6 +28,16 @@ public class Lance : AttackComponent
         attackStrategy = new LanceAttackStrategy(weaponBase);
         skillStrategy = new LanceSkillStrategy(weaponBase);
         hittedstrategy = new LanceHittedStrategy();
+    }
+    public void Awake()
+    {
+        SetChargeEffectColors();
+    }
+    void SetChargeEffectColors()
+    {
+        lanceChargeEffect1.GetComponent<ParticleColorChanger>().SetColor(charge1Color);
+        lanceChargeEffect2.GetComponent<ParticleColorChanger>().SetColor(charge2Color);
+        lanceFullChargeEffect.GetComponent<ParticleColorChanger>().SetColor(fullChargeColor);
     }
 }
 
@@ -237,8 +254,8 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 2;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.CRIT;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
     }
@@ -329,8 +346,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         weapon = weaponBase;
         lance = weapon.WeaponComponent() as Lance;
         tempAtkCount = 1;
-        m.EffectNum = 1;
-        m.Cri_EffectNum = 2;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.CRIT;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;
         dashCondition = true;
@@ -424,6 +441,22 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
 
         }
     }
+    
+    void SetFullChargeEffect(bool active)
+    {
+        if (lance.lanceFullChargeEffect == null)
+            return;
+        lance.lanceFullChargeEffect.SetActive(active);
+    }
+    void StartChargeEffect(bool isFullCharge)
+    {
+        if (lance.lanceChargeEffect1 == null)
+            return;
+        if (isFullCharge)
+            lance.lanceChargeEffect2.SetActive(true);
+        else
+            lance.lanceChargeEffect1.SetActive(true);
+    }
     public void Update(WeaponBase weaponBase)
     {
         if (tempAtkCount == 0)//차징
@@ -432,12 +465,15 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             if (effectLevel == 1 && tempTime >= 2f)
             {
                 //불붙여
+                StartChargeEffect(true);
                 //발광이펙트
+                SetFullChargeEffect(true);
                 effectLevel++;
             }
             else if (effectLevel == 0 && tempTime >= 1f)
             {
                 //발광이펙트
+                StartChargeEffect(false);
                 effectLevel++;
             }
             weaponBase.CanRotateView = true;
@@ -510,6 +546,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         weaponBase.SetColliderEnable(true);
         weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
         dashCondition = false;
+        SetFullChargeEffect(false);
     }
     void ChargeStart(WeaponBase weaponBase)
     {

@@ -167,7 +167,7 @@ public class AttackManager : MonoBehaviour
         if(effectManager != null)
         {
             if (mHit == null)
-                effectManager.defaultEffect(target, m.isCritical ? m.Cri_EffectNum : m.EffectNum);
+                effectManager.defaultEffect(target, m.isCritical ? m.critEffectType : m.effectType);
         }
     }
 }
@@ -175,8 +175,8 @@ public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float a
 public struct AttackMessage
 {
     public float FinalDamage;
-    public int EffectNum;
-    public int Cri_EffectNum;
+    public EffectType effectType;
+    public EffectType critEffectType;
     public bool isCritical;
     public bool criCalculated;
     public Vector2 knockBackDir;

@@ -59,25 +59,47 @@ public class EffectManager : MonoBehaviour
             hitEffectPools[i].Initialize();
         }
     }
-    public void defaultEffect(FSMbase target, int hitEffectNum)
+    public void defaultEffect(FSMbase target, EffectType effectType)
     {
         //!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성하는것도 만들 것
-        if (hitEffectNum == -1)
+        if (effectType == EffectType.NONE)
             return;
-        Debug.Log("!");
-        var e = hitEffectPools[hitEffectNum].GetObjectDisabled();
+        var e = GetEffectFromPool(effectType);
         e.transform.position = target.transform.position;
         e.gameObject.SetActive(true);
         //e.GetComponent<Effector>().Disable(0.5f).Play();
-        if (hitEffectNum == 0)
+        if (effectType == EffectType.SMALL)
         {
             smallHit();
         }
-        
-    }
+        if (effectType == EffectType.MID)
+        {
+            midHit();
+        }
 
-    public void smallHit()
-    {
-        cameraShaker.StartShake(0.2f, 0.2f, 10f);
     }
+    PoolableObject GetEffectFromPool(EffectType type)
+    {
+        if (type == EffectType.SMALL)
+            return hitEffectPools[0].GetObjectDisabled();
+        else// if (type == EffectType.MID)
+            return hitEffectPools[1].GetObjectDisabled();
+    }
+    void smallHit()
+    {
+        cameraShaker.StartShake(0.2f, 0.15f, 10f);
+    }
+    void midHit()
+    {
+        cameraShaker.StartShake(0.3f, 0.25f, 15f);
+    }
+}
+
+public enum EffectType
+{
+    NONE = -1,
+    SMALL = 0,
+    MID = 1,
+    BIG = 2,
+    CRIT = 3
 }

@@ -172,8 +172,8 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     }
     AttackMessage TouchHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 0;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.CRIT;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
         if (m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
@@ -348,7 +348,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             0.3f,
             0.35f };
 
-        m.Cri_EffectNum = 2;
+        m.critEffectType = EffectType.SMALL;
         if (ironHookEffectsPools == null)
         {
             var e = weaponBase.GetComponentInChildren<WeaponEffects>();
@@ -384,7 +384,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             attackedColliders.Add(target);
             if (colliderType == 0)
             {
-                m.EffectNum = 1;
+                m.effectType = EffectType.MID;
                 if (tempAtkCount == 1)
                 {
                     AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4, false, true);
@@ -396,7 +396,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             }
             else
             {
-                m.EffectNum = 0;
+                m.effectType = EffectType.SMALL;
                 AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player, Damages[tempAtkCount]);
             }
         }

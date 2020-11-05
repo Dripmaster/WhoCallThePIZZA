@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public class FlameThrower : AttackComponent
@@ -200,8 +196,8 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
 
     AttackMessage explosionHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
-        m.EffectNum = 2;
-        m.Cri_EffectNum = 2;
+        m.effectType = EffectType.BIG;
+        m.critEffectType = EffectType.CRIT;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
     }
@@ -296,8 +292,8 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         }
 
         tempAtkCount = 0;
-        m.EffectNum = 0;
-        m.Cri_EffectNum = 2;
+        m.effectType = EffectType.SMALL;
+        m.critEffectType = EffectType.CRIT;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;
         dashCondition = true;

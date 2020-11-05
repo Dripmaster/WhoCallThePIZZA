@@ -24,7 +24,7 @@ TagManager:
   - Rigidbody_child_Player
   - Rigidbody_terrain
   - DroppedItem
-  - 
+  - PlayerBullet
   - 
   - 
   - 

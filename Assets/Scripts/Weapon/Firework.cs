@@ -159,7 +159,8 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
     public Vector3 bulletDir;
-    public float Speed = 3;  //몇으로 해야하지
+    public Vector3 mouseDir;
+    public float Speed = 3; 
 
     public string tmpMessage;
 
@@ -169,6 +170,9 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     Transform bulletTransform;
     AttackMessage m;
     float tempTime = 0;
+
+    float randomAngle;
+    Quaternion qRandomAngle;
 
 
     WeaponBase weapon;
@@ -250,14 +254,18 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
             weaponBase.setViewPoint();
             weaponBase.SP_FlipX();
             weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
-            bulletDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
-            bulletDir.Normalize();//!TODO 마우스 방향이 아니라  +-45도 랜덤 방향 설정
-            //!TODO 랜덤 사거리 추가(랜덤지속시간으로 사거리 조정)
-            //!TODO 곡선 궤적
+            
+            //!TODO 랜덤 사거리 추가(랜덤지속시간으로 사거리 조정) //시간을 어디서 각 총알에서 세야하나?
+            //!TODO 곡선 궤적  //이것도 불릿 베이스 에서 해야하나? 상속 받아서 해야하나?
             time += Time.deltaTime;
             if (time >= tempTime)
             {
                 time = 0;
+                randomAngle = (UnityEngine.Random.Range(-3, 4)) * 15;                 //-45 -30 -15 0 15 30 45 랜덤방향 설정
+                qRandomAngle = Quaternion.AngleAxis(randomAngle, new Vector3(0, 0, 1));
+                mouseDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+                bulletDir = qRandomAngle * mouseDir;
+                bulletDir.Normalize();
                 var b = bulletPool.GetObjectDisabled().GetComponent<BulletBase>();
                 //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
                 b.transform.position = AttackManager.GetInstance().bulletParent.transform.position;
@@ -281,7 +289,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     }
 
     bool fireworkBulletTouched(Collider2D collision)
-    {//!TODO 넉백 추가
+    {//!TODO 넉백 추가 파티클 추가
         var fsm = collision.GetComponent<FSMbase>();
         if (fsm != null)
         {
@@ -316,6 +324,9 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
     AttackMessage m;
     float SkilltempTime;
 
+    public Vector3 mouseDir;
+    float randomAngle;
+    Quaternion qRandomAngle;
 
     WeaponBase weapon;
     Firework firework;
@@ -358,11 +369,18 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+        //!TODO 랜덤 사거리 추가(랜덤지속시간으로 사거리 조정)
+        //!TODO 곡선 궤적
 
         time += Time.deltaTime;
         if (time >= SkilltempTime)
         {
             time = 0;
+            randomAngle = (UnityEngine.Random.Range(-3, 4)) * 15;                 //-45 -30 -15 0 15 30 45 랜덤방향 설정
+            qRandomAngle = Quaternion.AngleAxis(randomAngle, new Vector3(0, 0, 1));
+            mouseDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+            bulletDir = qRandomAngle * mouseDir;
+            bulletDir.Normalize();
             var b = bulletPool.GetObjectDisabled().GetComponent<BulletBase>();
             //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
             b.transform.position = AttackManager.GetInstance().bulletParent.transform.position;

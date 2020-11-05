@@ -204,6 +204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlameThrowerParent
       objectReference: {fileID: 0}
+    - target: {fileID: 5325898338514357604, guid: ff2e44c7cd4e2f54a89c4f53f602fd79,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5325898338514357605, guid: ff2e44c7cd4e2f54a89c4f53f602fd79,
         type: 3}
       propertyPath: m_LocalPosition.x

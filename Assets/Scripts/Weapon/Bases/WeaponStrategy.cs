@@ -86,6 +86,7 @@ public interface AttackStrategy
     void StartCool();
     void motionEvent(int value);
     void motionEvent(string msg);
+    
     void StateEnd();
 }
 public interface SkillStrategy

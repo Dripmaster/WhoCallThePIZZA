@@ -483,6 +483,32 @@ public class WeaponBase : MonoBehaviour
                 break;
         }
     }
+    public void motionEvent(string msg)
+    {
+        //!TODO 모든 스테이트에 대해 모션 이벤트 받도록
+        //스트래티지 인터페이스 수정 필요.
+        switch (objectState)
+        {
+            case PlayerState.idle:
+                break;
+            case PlayerState.move:
+                break;
+            case PlayerState.attack:
+                equipedWeaponsComponents[currentWeapon].attackStrategy.motionEvent(msg);
+                break;
+            case PlayerState.dead:
+                break;
+            case PlayerState.skill:
+                equipedWeaponsComponents[currentWeapon].skillStrategy.motionEvent(msg);
+                break;
+            case PlayerState.dash:
+                break;
+            case PlayerState.hitted:
+                break;
+            default:
+                break;
+        }
+    }
     private void FixedUpdate()
     {
         if ((vLerpTarget - (Vector2)Rotator.localPosition).sqrMagnitude >= 0.0001f)

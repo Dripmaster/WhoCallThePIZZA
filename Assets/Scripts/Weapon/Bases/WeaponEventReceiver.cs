@@ -14,8 +14,12 @@ public class WeaponEventReceiver : MonoBehaviour
         }
     }
 
-    public void motionEvent(int value)
+    public void motionEventInt(int value)
     {
         weaponBase.motionEvent(value);
+    }
+    public void motionEventString(string msg)
+    {
+        weaponBase.motionEvent(msg);
     }
 }

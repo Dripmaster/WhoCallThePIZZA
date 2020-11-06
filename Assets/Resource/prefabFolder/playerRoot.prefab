@@ -222,7 +222,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7229258637901855803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.045, y: 0.117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6286304418302767117}
@@ -334,7 +334,8 @@ SpriteRenderer:
   m_SortingLayerID: -1468923991
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 650b4e6da281cee43bb74c0a20a18722, type: 3}
+  m_Sprite: {fileID: 8793639957104055765, guid: f0bbe0edf5b2f0341b2a292c3eca67bd,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -609,7 +610,7 @@ PrefabInstance:
     - target: {fileID: 226065664794136391, guid: 0ccd398394c88b942825493b53255b3a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.22
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: 226065664794136391, guid: 0ccd398394c88b942825493b53255b3a,
         type: 3}
@@ -679,6 +680,30 @@ PrefabInstance:
     - target: {fileID: 619030567, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
       propertyPath: effcetParent
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: stepSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: stepStart
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: stepEnd
+      value: 0.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: strongStepSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: strongStepStart
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8165029050871606, guid: 994c3aeb1ba6dc94fbbc01e117c49c39, type: 3}
+      propertyPath: strongStepEnd
+      value: 0.43
       objectReference: {fileID: 0}
     - target: {fileID: 3924143022341742000, guid: 994c3aeb1ba6dc94fbbc01e117c49c39,
         type: 3}

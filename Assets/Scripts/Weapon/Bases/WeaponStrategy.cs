@@ -85,6 +85,7 @@ public interface AttackStrategy
     void GetCoolTime(out float remain, out float total);
     void StartCool();
     void motionEvent(int value);
+    void motionEvent(string msg);
     void StateEnd();
 }
 public interface SkillStrategy
@@ -98,6 +99,7 @@ public interface SkillStrategy
     void GetCoolTime(out float remain, out float total);
     void StateEnd();
     void motionEvent(int value);
+    void motionEvent(string msg);
 }
 
 public interface MouseInputStrategy
@@ -194,6 +196,10 @@ public abstract class SkillValues
         }
     }
     public virtual void motionEvent(int value)
+    {
+
+    }
+    public virtual void motionEvent(string msg)
     {
 
     }
@@ -399,6 +405,10 @@ public abstract class AttackValues {
     }
 
     public virtual void motionEvent(int value)
+    {
+
+    }
+    public virtual void motionEvent(string msg)
     {
 
     }

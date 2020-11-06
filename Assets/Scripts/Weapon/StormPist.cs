@@ -7,6 +7,13 @@ using UnityEngine;
 
 public class StormPist : AttackComponent
 {
+    public float stepSpeed;//1,2공격 시 한발짝 이동 속도
+    public float stepStart;//1,2공격 시 한발짝 이동 시작
+    public float stepEnd;//1,2공격 시 한발짝 이동 끝
+
+    public float strongStepSpeed;//3,4공격 시 한발짝 이동 속도
+    public float strongStepStart;//3,4공격 시 한발짝 이동 시작
+    public float strongStepEnd;//3,4공격 시 한발짝 이동 끝
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new StormPistIdleStrategy();
@@ -344,10 +351,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     int attackConnectCount=3;//스태틱 몇명
     float[] Damages;
     AttackMessage m;
-    WeaponBase weapon;
+    WeaponBase weaponBase;
+    StormPist stormpist;
     public StormPistAttackStrategy(WeaponBase weaponBase) : base(6)
     {
-        weapon = weaponBase;
+        stormpist = weaponBase.WeaponComponent() as StormPist;
+        this.weaponBase = weaponBase;
         m.effectType = EffectType.SMALL;
         m.critEffectType = EffectType.CRIT;
 
@@ -420,19 +429,26 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
         weaponBase.CanRotateView = false;
     }
-    float stepSpeed = 6;//공격 시 한발짝 이동 속도
-    float stepProgress = 0.25f;//공격 시 한발짝 이동 시간
     public void Update(WeaponBase weaponBase)
     {
-        if(weapon.getAnimProgress()<=stepProgress)
-            player.moveFoward(stepSpeed);
+        if (ATK_COMBO_COUNT % 3 != 0 &&
+            this.weaponBase.getAnimProgress() <= stormpist.stepEnd && this.weaponBase.getAnimProgress() >= stormpist.stepStart)
+            player.moveFoward(stormpist.stepSpeed);
+        else if (this.weaponBase.getAnimProgress() <= stormpist.strongStepEnd && this.weaponBase.getAnimProgress() >= stormpist.strongStepStart)
+            player.moveFoward(stormpist.strongStepSpeed);
+
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
     public override void StateEnd()
     {
-        weapon.SetColliderEnable(false);
+        weaponBase.SetColliderEnable(false);
+    }
+    public override void motionEvent(string msg)
+    {
+        if(msg == "MoveConditionTo_Move_Attack")
+            weaponBase.currentMoveCondition = MoveWhileAttack.Move_Attack;
     }
 
 }

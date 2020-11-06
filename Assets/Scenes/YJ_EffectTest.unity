@@ -4482,11 +4482,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerRoot
       objectReference: {fileID: 0}
-    - target: {fileID: 7229258638212081577, guid: 479303b630fc812449bb430d14a054cb,
-        type: 3}
-      propertyPath: mouseCamera
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 479303b630fc812449bb430d14a054cb, type: 3}
 --- !u!114 &944565607 stripped
@@ -8841,6 +8836,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4721175563552603859, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
+        type: 3}
+      propertyPath: m_RefResolutionX
+      value: 480
+      objectReference: {fileID: 0}
+    - target: {fileID: 4721175563552603859, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
+        type: 3}
+      propertyPath: m_RefResolutionY
+      value: 270
+      objectReference: {fileID: 0}
     - target: {fileID: 4721175563552603863, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
         type: 3}
       propertyPath: target

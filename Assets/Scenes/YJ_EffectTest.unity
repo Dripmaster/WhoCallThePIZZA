@@ -4422,6 +4422,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1578111120, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7229258637010547688, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7646,54 +7665,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1758235318, guid: c7791f50ed9889543b8cb805d3ba8718, type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2513935114517242636, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.46
-      objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530713, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530713, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530714, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530718, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530718, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530718, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.378
+      value: 1.008
       objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0001
+      value: 0.058
       objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
@@ -7739,16 +7724,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7791f50ed9889543b8cb805d3ba8718, type: 3}
@@ -8836,16 +8811,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4721175563552603859, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
-        type: 3}
-      propertyPath: m_RefResolutionX
-      value: 480
-      objectReference: {fileID: 0}
-    - target: {fileID: 4721175563552603859, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
-        type: 3}
-      propertyPath: m_RefResolutionY
-      value: 270
-      objectReference: {fileID: 0}
     - target: {fileID: 4721175563552603863, guid: 824c09d0d51a5744ca0b62a4fb0e614e,
         type: 3}
       propertyPath: target

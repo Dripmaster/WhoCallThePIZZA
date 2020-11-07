@@ -24,7 +24,7 @@ public class StormPist : AttackComponent
         attackStrategy = new StormPistAttackStrategy(weaponBase);
         skillStrategy = new StormPistSkillStrategy(weaponBase);
         hittedstrategy = new StormPistHittedStrategy();
-
+        
     }
 }
 
@@ -372,7 +372,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-        m.CalcKnockBack(target, sender, 2,1);
+        m.CalcKnockBack(target, sender, 1,1);
 
         //20퍼센트 확률로 감전
         int r = UnityEngine.Random.Range(0, 100);

@@ -844,9 +844,10 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.36666667
-    functionName: motionEvent
+    functionName: stepFoward
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11400000, guid: be6b69e2ee8b79f4fb719a0aca401af9,
+      type: 2}
     floatParameter: 0
     intParameter: -1
     messageOptions: 0

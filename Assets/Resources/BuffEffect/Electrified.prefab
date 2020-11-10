@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 7298995877303737352}
   - component: {fileID: 5874439778715153684}
   - component: {fileID: 8375157678578946458}
+  - component: {fileID: 601230567}
+  - component: {fileID: 601230566}
   m_Layer: 0
-  m_Name: eeee
+  m_Name: Electrified
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 515623519
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 46aa777ea4cc4144ca187abbfbc31b19, type: 3}
+  m_Sprite: {fileID: -43521591558666301, guid: 24571f89950c745499f164dcbcd09a5d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,3 +96,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 667f5d6710fd77c40976e252f977911c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &601230567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5144981044756524752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375336f2d3ea01b429d542b14ecba441, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationClip: {fileID: 7400000, guid: 0870c5c3674253a4ea5926e716eccff3, type: 2}
+--- !u!95 &601230566
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5144981044756524752}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c9bfe6e875d7bde4ba9cfdf0981b4307, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

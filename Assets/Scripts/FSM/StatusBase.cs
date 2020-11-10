@@ -292,8 +292,7 @@ public class Electrified : Buff
     public override void StartBuff()
     {
         target.TakeCC();
-        showEffect(Resources.Load<GameObject>("BuffEffect/Electrified"))
-       .Alpha(0.5f, 0.3f).And().Disable(0.5f,true).Play();
+        showEffect(Resources.Load<GameObject>("BuffEffect/Electrified"));
     }
     public override void Update()
     {

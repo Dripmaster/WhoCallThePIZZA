@@ -16,6 +16,7 @@ public abstract class FSMbase : MonoBehaviour
 {
     protected Animator _animator;
     protected SpriteRenderer _sr;
+    protected StepFoward stepFoward;
     public int objectState;
     Type stateType;
     protected bool newState = false;
@@ -28,6 +29,7 @@ public abstract class FSMbase : MonoBehaviour
     protected float knockBackVelocity;
     protected float knockBackDistance;
     protected Vector2 knockDir;
+    protected Vector2 viewDir;
     protected int hittedNextState;
     public  bool animEnd;
     protected float AnimSpeed {
@@ -64,6 +66,7 @@ public abstract class FSMbase : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         status = new StatusBase();
         _colliders = GetComponentsInChildren<CircleCollider2D>();
+        stepFoward = GetComponent<StepFoward>();
     }
     protected void Update()
     {
@@ -182,4 +185,9 @@ public abstract class FSMbase : MonoBehaviour
         return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
     public virtual void DropItem() { }
+
+    public void moveFoward(StepForwardValues sfv)
+    {
+        stepFoward.SetStep(sfv, viewDir);
+    }
 }

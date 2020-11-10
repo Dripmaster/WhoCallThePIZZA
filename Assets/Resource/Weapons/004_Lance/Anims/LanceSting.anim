@@ -843,7 +843,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.36666667
+  - time: 0.13333334
     functionName: stepFoward
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: be6b69e2ee8b79f4fb719a0aca401af9,

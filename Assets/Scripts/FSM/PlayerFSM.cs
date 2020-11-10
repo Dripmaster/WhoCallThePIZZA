@@ -10,7 +10,6 @@ public class PlayerFSM : FSMbase
     public int DashFrameCount;
     Vector2 moveDir;
     Vector2 forcedDir;
-    Vector2 viewDir;
 
     int dashFrameCount;
     WeaponBase Weapon;
@@ -399,9 +398,4 @@ public class PlayerFSM : FSMbase
     {
         forcedDir = movePos;
     }
-    public void moveFoward(float speed)
-    {
-        AddPosition( viewDir*speed);
-    }
-
 }

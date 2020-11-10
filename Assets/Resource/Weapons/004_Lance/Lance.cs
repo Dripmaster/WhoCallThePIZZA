@@ -9,8 +9,6 @@ public class Lance : AttackComponent
     public float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
     public float chargeSpeed = 10f; //돌진속도
     public float maxChargeTime = 2;//최대 충전 시간
-    public float stepProgress = 0.25f;
-    public float stepSpeed = 6f;
 
     public GameObject lanceChargeEffect1;
     public Color charge1Color;
@@ -244,16 +242,9 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
             attackedColliders.Clear();
             weaponBase.SetColliderEnable(colliderEnable);
         }
-
-        if (weapon.getAnimProgress() <= stepProgressEnd && weapon.getAnimProgress() >= stepProgress)
-            player.moveFoward(stepSpeed);
-
         HandleSkillEND(weaponBase);
     }
 
-    float stepProgress = 0.75f;
-    float stepProgressEnd = 0.95f;
-    float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.SMALL;
@@ -504,11 +495,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 }
             }
 
-            if (tempAtkCount == 1)
-            {
-                if (weapon.getAnimProgress() <= lance.stepProgress)
-                    player.moveFoward(lance.stepSpeed);
-            }
             
             HandleAttackCancel(weaponBase);
             HandleAttackEND(weaponBase, endAttack);

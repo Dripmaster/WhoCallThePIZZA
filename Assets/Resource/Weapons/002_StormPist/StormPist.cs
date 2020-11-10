@@ -431,12 +431,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (ATK_COMBO_COUNT % 3 != 0 &&
-            this.weaponBase.getAnimProgress() <= stormpist.stepEnd && this.weaponBase.getAnimProgress() >= stormpist.stepStart)
-            player.moveFoward(stormpist.stepSpeed);
-        else if (this.weaponBase.getAnimProgress() <= stormpist.strongStepEnd && this.weaponBase.getAnimProgress() >= stormpist.strongStepStart)
-            player.moveFoward(stormpist.strongStepSpeed);
-
+        
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40daaad7a4e1e1543baab20a469cec69, type: 3}
   m_Name: lanceStep
   m_EditorClassIdentifier: 
-  distance: 1
-  duration: 1
+  distance: 3
+  duration: 0.1
   angle: 0

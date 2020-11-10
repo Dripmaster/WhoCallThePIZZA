@@ -536,7 +536,6 @@ public class WeaponBase : MonoBehaviour
 
     private void Update()
     {
-        
         if (InputSystem.Instance.getKeyDown(InputKeys.WeaponSwapBtn))
         {
             if (objectState == PlayerState.idle || objectState == PlayerState.move)
@@ -549,5 +548,10 @@ public class WeaponBase : MonoBehaviour
                 setWeapon(num + 1);
             }
         }
+    }
+
+    public void StepFoward(StepForwardValues sfv)
+    {
+        player.moveFoward(sfv);
     }
 }

@@ -36,7 +36,7 @@ public class FireworkIdleStrategy : IdleStrategy
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 
@@ -53,7 +53,7 @@ public class FireworkMoveStrategy : MoveFunction, MoveStrategy
 
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 

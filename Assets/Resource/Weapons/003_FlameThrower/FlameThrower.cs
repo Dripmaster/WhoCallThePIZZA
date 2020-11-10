@@ -34,7 +34,7 @@ public class FlameThrowerIdleStrategy : IdleStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class FlameThrowerMoveStrategy : MoveFunction, MoveStrategy
@@ -50,7 +50,7 @@ public class FlameThrowerMoveStrategy : MoveFunction, MoveStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class FlameThrowerDeadStrategy : DeadStrategy

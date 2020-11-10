@@ -63,7 +63,7 @@ public class LanceIdleStrategy : IdleStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection*0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
@@ -80,7 +80,7 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class LanceDeadStrategy : DeadStrategy

@@ -35,7 +35,6 @@ public class StepFoward : MonoBehaviour
     }
     public void SetStep(StepForwardValues sfv,Vector2 stepDir)
     {
-        Debug.Log("step");
         sf_eTime = 0;
         this.stepDir = stepDir;
         this.sfv = sfv;

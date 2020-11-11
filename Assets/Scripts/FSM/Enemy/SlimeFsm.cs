@@ -15,7 +15,7 @@ public class SlimeFsm : EnemyBase
         base.OnEnable();
         setState((int)SlimeState.idle);
     }
-    void FixedUpdate()
+    void Update()
     {
         moveAggro((int)SlimeState.jump);
         moveKnockBack();
@@ -133,7 +133,7 @@ public class SlimeFsm : EnemyBase
             hittedNextState = (int)SlimeState.jump;
         }
     }
-    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
+    public override void TakeKnockBack(float force, Vector2 knockBackDir)
     {
 
         if (status.getCurrentStat(STAT.hp) <= 0)
@@ -143,12 +143,11 @@ public class SlimeFsm : EnemyBase
         _animator.SetTrigger("OneShot");
         setState((int)SlimeState.hitted);
         hittedNextState = (int)SlimeState.jump;
-        knockBackDistance = distance;
-        knockBackVelocity = velocity;
 
-        knockDir = knockBackDir.normalized * distance + (Vector2)transform.position;
+        knockDir = knockBackDir.normalized*force;
         SetCollidersTriggerNotTerrain(true);
     }
+    
     public override void KnockBackEnd()
     {
 

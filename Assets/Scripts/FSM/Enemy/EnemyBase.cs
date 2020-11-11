@@ -60,6 +60,25 @@ public abstract class EnemyBase : FSMbase
     public bool moveKnockBack()
     {
         bool result = false;
+        if (knockDir.sqrMagnitude> 0)
+        {
+            result = true;
+            knockDir = Vector2.Lerp(knockDir,Vector2.zero,Time.deltaTime);
+
+            Vector2 tempPos = transform.position;
+            Vector2 targetPos = (Vector2)transform.position + knockDir;
+            if (knockDir.sqrMagnitude <= 0.0001 || (targetPos-tempPos).sqrMagnitude<=0.0001)
+            {
+                clearKnockBack();
+            }
+
+            _rigidbody2D.MovePosition(targetPos);
+        }
+        return result;
+    }/*
+    public bool moveKnockBack()
+    {
+        bool result = false;
         if (knockBackDistance > 0)
         {
             result = true;
@@ -71,7 +90,7 @@ public abstract class EnemyBase : FSMbase
             _rigidbody2D.MovePosition(movePos);
         }
         return result;
-    }
+    }*/
     public abstract void initData();
     public bool detectPlayer(float dis) {
         Collider2D c =  Physics2D.OverlapCircle(transform.position, dis,1<<9);
@@ -137,7 +156,7 @@ public abstract class EnemyBase : FSMbase
         }
     }
     public override abstract void TakeAttack(float dmg, bool cancelAttack = false);
-    public override abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+  //  public override abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
     public override abstract void KnockBackEnd();
     public override abstract void TakeCC(int CCnum);
     public override abstract void CCfree();

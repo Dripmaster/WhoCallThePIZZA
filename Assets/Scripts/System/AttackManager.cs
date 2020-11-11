@@ -161,7 +161,7 @@ public class AttackManager : MonoBehaviour
         target.TakeAttack(m.FinalDamage,cancelAttack);
         if (isKnockBack)
         {
-            target.TakeKnockBack(m.knockBackDistance,m.knockBackVelocity, m.knockBackDir);
+            target.TakeKnockBack(m.knockBackVelocity/50, m.knockBackDir);
         }
         var mHit = target as HitableBase;
         if(effectManager != null)

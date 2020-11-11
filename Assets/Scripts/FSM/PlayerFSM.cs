@@ -370,14 +370,12 @@ public class PlayerFSM : FSMbase
             Weapon.SetIdle();
         }
     }
-    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
+    
+    public override void TakeKnockBack(float force, Vector2 knockBackDir)
     {
-        knockDir = knockBackDir;
-        knockBackDistance = distance;
-        knockBackVelocity = velocity;
-        IgnoreEnemyPlayerCollison(true);
 
-        
+        IgnoreEnemyPlayerCollison(true);
+        knockDir = knockBackDir.normalized * force;
     }
     public override void KnockBackEnd()
     {
@@ -406,4 +404,6 @@ public class PlayerFSM : FSMbase
         IgnoreEnemyPlayerCollison(true);
         stepFoward.SetStep(sfv, viewDir, IgnoreEnemyPlayerCollison, false);
     }
+
+    
 }

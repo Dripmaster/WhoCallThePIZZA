@@ -139,7 +139,8 @@ public abstract class FSMbase : MonoBehaviour
         } while (!newState);
     }
     public abstract void TakeAttack(float dmg, bool cancelAttack);
-    public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+   // public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+    public abstract void TakeKnockBack(float force, Vector2 knockBackDir);
     public abstract void TakeCC(int CCnum = 0);
     public abstract void CCfree();
     public abstract void KnockBackEnd();

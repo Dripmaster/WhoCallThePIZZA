@@ -5618,7 +5618,7 @@ GameObject:
   - component: {fileID: 1351194641}
   - component: {fileID: 1351194640}
   - component: {fileID: 1351194639}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7811,11 +7811,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
-    - target: {fileID: 4091653419873530713, guid: c7791f50ed9889543b8cb805d3ba8718,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9034,7 +9029,7 @@ PrefabInstance:
     - target: {fileID: 1465515893600705825, guid: 6823dbded8835684595b3c1799be43f7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1465515893600705831, guid: 6823dbded8835684595b3c1799be43f7,
         type: 3}
@@ -9090,6 +9085,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1465515894327741305, guid: 6823dbded8835684595b3c1799be43f7,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3215279776866247886, guid: 6823dbded8835684595b3c1799be43f7,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6823dbded8835684595b3c1799be43f7, type: 3}

@@ -553,6 +553,5 @@ public class WeaponBase : MonoBehaviour
     public void StepFoward(StepForwardValues sfv)
     {
         player.moveFoward(sfv);
-        currentMoveCondition = MoveWhileAttack.Move_Attack;
     }
 }

@@ -154,4 +154,9 @@ public abstract class EnemyBase : FSMbase
     }
 
     public override abstract void DropItem();
+    public override void moveFoward(StepForwardValues sfv)
+    {
+        SetCollidersTriggerNotTerrain(true);
+        stepFoward.SetStep(sfv, viewDir,SetCollidersTriggerNotTerrain,false);
+    }
 }

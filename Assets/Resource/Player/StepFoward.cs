@@ -9,7 +9,8 @@ public class StepFoward : MonoBehaviour
     float stepSpeed;
     Rigidbody2D rigid;
     Vector2 stepDir;
-
+    FSMbase.StepFowardCallBack endCallBack;
+    bool endValue;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -36,15 +37,18 @@ public class StepFoward : MonoBehaviour
         else
         {
             sfv = null;
+            endCallBack.Invoke(endValue);
         }
 
     }
-    public void SetStep(StepForwardValues sfv,Vector2 stepDir)
+    public void SetStep(StepForwardValues sfv,Vector2 stepDir, FSMbase.StepFowardCallBack callBack, bool v)
     {
         this.sfv = sfv;
         sf_eTime = 0;
         setAngle(sfv.angle, stepDir);
         stepSpeed = sfv.distance / sfv.duration;
+        endCallBack = callBack;
+        endValue = v;
     }
     void setAngle(float v, Vector2 dir)
     {

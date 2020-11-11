@@ -62,6 +62,7 @@ public abstract class FSMbase : MonoBehaviour
     protected void Awake()
     {
         _animator = GetComponent<Animator>();
+        var rigids = GetComponentsInChildren<Rigidbody2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         status = new StatusBase();
@@ -186,8 +187,6 @@ public abstract class FSMbase : MonoBehaviour
     }
     public virtual void DropItem() { }
 
-    public void moveFoward(StepForwardValues sfv)
-    {
-        stepFoward.SetStep(sfv, viewDir);
-    }
+    public abstract void moveFoward(StepForwardValues sfv);
+    public delegate void StepFowardCallBack(bool v);
 }

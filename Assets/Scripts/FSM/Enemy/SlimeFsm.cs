@@ -13,12 +13,11 @@ public class SlimeFsm : EnemyBase
     new void OnEnable()
     {
         base.OnEnable();
-        setState((int)SlimeState.patrol);
+        setState((int)SlimeState.idle);
     }
     void FixedUpdate()
     {
-        movePatrol((int)SlimeState.patrol);
-        moveAggro((int)SlimeState.aggro);
+        moveAggro((int)SlimeState.jump);
         moveKnockBack();
     }
     public override void initData()
@@ -55,48 +54,18 @@ public class SlimeFsm : EnemyBase
             tmpTime += Time.deltaTime;
             if (detectPlayer(disDetect))
             {
-                setAggro((int)SlimeState.aggro);
-            }
-            else if (tmpTime >= tIdle)
-            {
-                setState((int)SlimeState.patrol);
-
+                setAggro((int)SlimeState.jump);
             }
             yield return null;
         } while (!newState);
     }
-    IEnumerator patrol()
-    {
-        float tmpTime = 0;
-        moveDir = Vector2.zero;
-        do
-        {
-            tmpTime += Time.deltaTime;
-            if (detectPlayer(disDetect))
-            {
-                setAggro((int)SlimeState.aggro);
-            }
-            else if (tmpTime >= tPatrol + tIdle)
-            {
-                tmpTime = 0;
-                moveDir = Vector2.zero;
-            }
-            else if (moveDir == Vector2.zero && tmpTime >= tIdle)
-            {
-                moveDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            }
-            yield return null;
-        } while (!newState);
-    }
-    IEnumerator aggro()
+    IEnumerator jump()
     {
         do
         {
-
             moveDir = (player.position - transform.position).normalized;
             if (!detectPlayer(disMaxDetect))
             {
-                setState((int)SlimeState.patrol);
             }
             else
             if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
@@ -111,7 +80,7 @@ public class SlimeFsm : EnemyBase
         do
         {
             yield return null;
-            if (animEnd&&knockBackDistance <= 0&&!CCreamin())
+            if (animEnd&&!CCreamin())
             {
                 CCfree();
             }
@@ -130,7 +99,7 @@ public class SlimeFsm : EnemyBase
             if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
             {//attack Anim 종료
                 doSimpleAttack();
-                setAggro((int)SlimeState.aggro);
+                setAggro((int)SlimeState.jump);
             }
             yield return null;
         } while (!newState);
@@ -161,7 +130,7 @@ public class SlimeFsm : EnemyBase
         {
             setState((int)SlimeState.hitted);
             _animator.SetTrigger("OneShot");
-            hittedNextState = (int)SlimeState.aggro;
+            hittedNextState = (int)SlimeState.jump;
         }
     }
     public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
@@ -173,7 +142,7 @@ public class SlimeFsm : EnemyBase
         }
         _animator.SetTrigger("OneShot");
         setState((int)SlimeState.hitted);
-        hittedNextState = (int)SlimeState.aggro;
+        hittedNextState = (int)SlimeState.jump;
         knockBackDistance = distance;
         knockBackVelocity = velocity;
 
@@ -202,8 +171,8 @@ public class SlimeFsm : EnemyBase
     }
     public enum SlimeState
     {//슬라임의 스테이트(고유 번호 고정)
-        patrol = 0,
-        aggro,
+        idle = 0,
+        jump,
         attack,
         dead,
         hitted,

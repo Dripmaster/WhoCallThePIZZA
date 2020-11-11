@@ -287,6 +287,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     void E_LanceStings()
     {
         var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.rotation = Quaternion.identity;
         t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection + lance.skillAngles[skillStack]);
         t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
         //t.transform.rotation = lanceTransform.rotation;
@@ -302,6 +303,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     void LastSting()
     {
         var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.rotation = Quaternion.identity;
         t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection);
         t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
         //t.transform.rotation = lanceTransform.rotation;

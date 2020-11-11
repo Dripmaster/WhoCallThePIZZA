@@ -280,5 +280,8 @@ public class HitableBase : FSMbase
     {
     }
 
-   
+    public override void moveFoward(StepForwardValues sfv)
+    {
+      
+    }
 }

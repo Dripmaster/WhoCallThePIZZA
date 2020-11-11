@@ -401,4 +401,9 @@ public class PlayerFSM : FSMbase
     {
         forcedDir = movePos;
     }
+    public override void moveFoward(StepForwardValues sfv)
+    {
+        IgnoreEnemyPlayerCollison(true);
+        stepFoward.SetStep(sfv, viewDir, IgnoreEnemyPlayerCollison, false);
+    }
 }

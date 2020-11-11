@@ -8,7 +8,7 @@ public class EffectorTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        effector.Scale(1f,3f).And().Alpha(0.5f,0.5f).ThenWait(1f)
+        effector.Scale(1f,3f).And().Alpha(0.5f,0.5f).Then().Wait(1f)
                 .Then().RotateTo(1f,180f).Then().ColorChange(1f,new Color(0,0,0,1))
                 .Then().Move(1f,new Vector2(2,2));
     }

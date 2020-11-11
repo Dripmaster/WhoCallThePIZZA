@@ -14,6 +14,12 @@ public class StepFoward : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
     }
+    public bool IsProgress()
+    {
+        if (sfv == null)
+            return false;
+        return true;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -35,9 +41,13 @@ public class StepFoward : MonoBehaviour
     }
     public void SetStep(StepForwardValues sfv,Vector2 stepDir)
     {
-        sf_eTime = 0;
-        this.stepDir = stepDir;
         this.sfv = sfv;
+        sf_eTime = 0;
+        setAngle(sfv.angle, stepDir);
         stepSpeed = sfv.distance / sfv.duration;
+    }
+    void setAngle(float v, Vector2 dir)
+    {
+        stepDir = Quaternion.Euler(0, 0, v) * dir;
     }
 }

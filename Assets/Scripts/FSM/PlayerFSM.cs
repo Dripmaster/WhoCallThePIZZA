@@ -181,6 +181,11 @@ public class PlayerFSM : FSMbase
 
     private void FixedUpdate()
     {
+        viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        if (stepFoward.IsProgress())
+        {
+            return;
+        }
         if (moveDir != Vector2.zero)
         {
             if (objectState == (int)PlayerState.move)
@@ -197,8 +202,6 @@ public class PlayerFSM : FSMbase
                 _rigidbody2D.MovePosition((Vector2)transform.position + forcedDir * Time.deltaTime);
             forcedDir = Vector2.zero;
         }
-        viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-
     }
     IEnumerator idle()
     {

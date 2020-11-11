@@ -16,6 +16,8 @@ public class Lance : AttackComponent
     public Color charge2Color;
     public GameObject lanceFullChargeEffect;
     public Color fullChargeColor;
+
+    public int[] skillAngles;
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new LanceIdleStrategy();
@@ -175,14 +177,16 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     int lanceSkillEffectsinitialCount = 14;
     int lanceSkillEffectsincrementCount = 7;
     float flip;
-    WeaponBase weapon;
+    WeaponBase weaponBase;
     Lance lance;
+    int skillStack;
     public LanceSkillStrategy(WeaponBase weaponBase)
     {
+        lance = weaponBase.WeaponComponent() as Lance;
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
-        weapon = weaponBase;
+        this.weaponBase = weaponBase;
         lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
         if(lanceSkillEffectsPools == null)
         {
@@ -199,6 +203,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
                 lanceSkillEffectsPools[i].Initialize();
             }
         }
+        skillStack = 0;
     }
 
     public override void SetCooltime()
@@ -264,27 +269,53 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         }
     }
 
-    public override void motionEvent(int value)
+    public override void motionEvent(string msg)
     {
-        if (value == 0)
+        if (msg == "SkillEffect")
             E_LanceStings();
+        else if (msg == "ResetStack")
+            skillStack = 0;
+        else if (msg == "LastSting")
+            LastSting();
+    }
+    float SkillAlphaEffectCurve(float t)
+    {
+        float stayTime = 0.4f;
+        float result = (t - stayTime) * (1f / stayTime);
+        return result > 0 ? result : 0;
     }
     void E_LanceStings()
     {
         var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
-        t.transform.position = lanceTransform.position;
-        t.transform.rotation = lanceTransform.rotation;
-        t.transform.Rotate(0, 0, flip);
+        t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection + lance.skillAngles[skillStack]);
+        t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
+        //t.transform.rotation = lanceTransform.rotation;
+
         t.transform.localScale = lanceTransform.localScale;
         t.gameObject.SetActive(true);
 
-        float duration = 1;
-        t.GetComponent<Effector>().Alpha(duration, 0f).And().Scale(duration, 2f).Then().Disable().Play();
+        float duration = 0.3f;  //Wait(duration/2).Then().
+        t.GetComponent<Effector>().Alpha(duration/2, 0, SkillAlphaEffectCurve).And().Scale(duration, 0.5f).And().Move(duration, t.transform.right * 0.25f)
+                                    .Then().Disable().Play();
+        skillStack++;
+    }
+    void LastSting()
+    {
+        var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection);
+        t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
+        //t.transform.rotation = lanceTransform.rotation;
+        t.transform.localScale = lanceTransform.localScale*1.5f;
+        t.gameObject.SetActive(true);
 
+        float duration = 0.5f;  //Wait(duration/2).Then().
+        t.GetComponent<Effector>().Alpha(duration / 2, 0, SkillAlphaEffectCurve).And().Scale(duration, 0.8f).And().Move(duration, t.transform.right * 0.4f)
+                                    .Then().Disable().Play();
+        skillStack++;
     }
     public override void StateEnd()
     {
-        weapon.SetColliderEnable(false);
+        weaponBase.SetColliderEnable(false);
     }
 
 }

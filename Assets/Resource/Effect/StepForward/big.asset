@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40daaad7a4e1e1543baab20a469cec69, type: 3}
-  m_Name: lanceStep
+  m_Name: big
   m_EditorClassIdentifier: 
-  distance: 3
-  duration: 0.1
+  distance: 2.5
+  duration: 0.07
   angle: 0

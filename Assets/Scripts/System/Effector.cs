@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Effector : MonoBehaviour
 {
+    //EffectCurve) 인자 time : normalized 지난 시간 / 리턴값 : normalized 된 효과 value
     public delegate float EffectCurve(float time);
 
     public static EffectCurve IncreCurve = increCurve;
@@ -213,7 +214,22 @@ public class Effector : MonoBehaviour
         resetProperty();
     }
     #endregion
- 
+
+#region Wait
+    public Effector Wait(float duration)
+    {
+#if UNITY_EDITOR
+        if (isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
+#endif
+        effectList.Add(new Effect(WaitCoroutine(duration), duration));
+        return this;
+    }
+    IEnumerator WaitCoroutine(float timeOffset)
+    {
+        if (timeOffset != 0f)
+            yield return new WaitForSeconds(timeOffset);
+    }
+    #endregion
 
 #region Connections
     public Effector ThenWait(float timeOffset = 0f)
@@ -224,11 +240,6 @@ public class Effector : MonoBehaviour
     #endif
         effectList.Add(new Effect(WaitCoroutine(timeOffset), timeOffset));
         return this;
-    }
-    IEnumerator WaitCoroutine(float timeOffset)
-    {
-        if(timeOffset != 0f)
-            yield return new WaitForSeconds(timeOffset);
     }
 
     public Effector And()

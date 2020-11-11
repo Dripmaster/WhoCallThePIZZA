@@ -1215,7 +1215,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &276366612
 PrefabInstance:
@@ -1544,7 +1544,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &371057548
 PrefabInstance:
@@ -1702,6 +1702,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: mosquito
       objectReference: {fileID: 0}
+    - target: {fileID: 4091653419873530713, guid: c7791f50ed9889543b8cb805d3ba8718,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530717, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_Controller
@@ -1746,7 +1751,7 @@ PrefabInstance:
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_RootOrder
-      value: 33
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
@@ -3725,7 +3730,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &676119383
 GameObject:
@@ -4140,7 +4145,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &758586761
 GameObject:
@@ -4526,6 +4531,42 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[0]
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[1]
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[3]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[4]
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[5]
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[6]
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[8]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
+      propertyPath: skillAngles.Array.data[9]
+      value: -10
+      objectReference: {fileID: 0}
     - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -4806,7 +4847,7 @@ PrefabInstance:
     - target: {fileID: 1649803945078530814, guid: 1549cfaa60bc4ef4a9456c4a1597c94e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1649803945078530814, guid: 1549cfaa60bc4ef4a9456c4a1597c94e,
         type: 3}
@@ -5033,7 +5074,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1212380749 stripped
 Transform:
@@ -5563,7 +5604,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1351194637
 GameObject:
@@ -7770,6 +7811,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 4091653419873530713, guid: c7791f50ed9889543b8cb805d3ba8718,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7808,7 +7854,7 @@ PrefabInstance:
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
       propertyPath: m_RootOrder
-      value: 30
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 4091653419873530719, guid: c7791f50ed9889543b8cb805d3ba8718,
         type: 3}
@@ -8005,7 +8051,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1800140808
 PrefabInstance:
@@ -8378,7 +8424,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1932801342
 GameObject:
@@ -8513,7 +8559,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1988890765
 GameObject:
@@ -8835,7 +8881,7 @@ PrefabInstance:
     - target: {fileID: 6727938911945934150, guid: 55341ff0f0e7def41bbe42605e9e54a0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 32
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6727938911945934150, guid: 55341ff0f0e7def41bbe42605e9e54a0,
         type: 3}
@@ -8985,6 +9031,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime_Sick
       objectReference: {fileID: 0}
+    - target: {fileID: 1465515893600705825, guid: 6823dbded8835684595b3c1799be43f7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1465515893600705831, guid: 6823dbded8835684595b3c1799be43f7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9023,7 +9074,7 @@ PrefabInstance:
     - target: {fileID: 1465515893600705831, guid: 6823dbded8835684595b3c1799be43f7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 31
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 1465515893600705831, guid: 6823dbded8835684595b3c1799be43f7,
         type: 3}

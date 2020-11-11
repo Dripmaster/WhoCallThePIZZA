@@ -3,8 +3,17 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
+/*
+ * 사용법 : effector.Alpha(0.5f, 0f).And().Scale(0.5f, 0f).Then().Disable().Play();
+ *          효과.커넥션.효과.커넥션....효과.커넥션.플레이 <이런식으로 써야함
+ * 작동 : 이펙트들을 And()로 묶어서 큐 해놓으면 Then()전까지 전부 실행
+ *        실행한 이펙트 중 제일 긴 이펙트가 끝날때 다음 Then()까지 읽어옴, 반복
+ * EffectCurve] 인자 time : normalized 지난 시간 / 리턴값 : normalized 된 효과 value
+ * 
+ */
 public class Effector : MonoBehaviour
 {
+    
     public delegate float EffectCurve(float time);
 
     public static EffectCurve IncreCurve = increCurve;
@@ -213,23 +222,25 @@ public class Effector : MonoBehaviour
         resetProperty();
     }
     #endregion
- 
 
-#region Connections
-    public Effector ThenWait(float timeOffset = 0f)
+#region Wait
+    public Effector Wait(float duration)
     {
-        Then();
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(WaitCoroutine(timeOffset), timeOffset));
+#if UNITY_EDITOR
+        if (isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
+#endif
+        effectList.Add(new Effect(WaitCoroutine(duration), duration));
         return this;
     }
     IEnumerator WaitCoroutine(float timeOffset)
     {
-        if(timeOffset != 0f)
+        if (timeOffset != 0f)
             yield return new WaitForSeconds(timeOffset);
     }
+    #endregion
+
+#region Connections
+
 
     public Effector And()
     {

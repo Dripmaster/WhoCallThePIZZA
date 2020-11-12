@@ -7,7 +7,7 @@ public class BulletBase : MonoBehaviour
     public BulletTouched touched;
     public Vector2 dir;
     public float speed;
-    Rigidbody2D myrigid;
+    protected Rigidbody2D myrigid;
 
     private void Awake()
     {

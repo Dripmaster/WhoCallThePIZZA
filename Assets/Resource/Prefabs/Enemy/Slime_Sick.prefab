@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1465515893600705829}
   - component: {fileID: 1465515893600705828}
   - component: {fileID: 1465515893600705826}
-  - component: {fileID: 1044198776572398964}
+  - component: {fileID: 6056171998243760918}
   m_Layer: 10
-  m_Name: Slime (1)
+  m_Name: Slime_Sick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,8 +143,9 @@ MonoBehaviour:
   objectState: 0
   animEnd: 0
   myDropItem: {fileID: 11400000, guid: 489e86e96c320c64fa28a92cc793bbe6, type: 2}
---- !u!58 &1044198776572398964
-CircleCollider2D:
+  jumpWaitTime: 1
+--- !u!61 &6056171998243760918
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -156,9 +157,19 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.02}
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.27
+  m_Size: {x: 0.51, y: 0.55}
+  m_EdgeRadius: 0
 --- !u!1 &1465515894327741303
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1465515894327741304}
   - component: {fileID: 1465515894327741305}
-  - component: {fileID: 8692489389344148331}
+  - component: {fileID: 3079984192796477410}
   m_Layer: 14
   m_Name: RigidwithCharacter
   m_TagString: Untagged
@@ -211,9 +222,9 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!58 &8692489389344148331
-CircleCollider2D:
+  m_Constraints: 4
+--- !u!61 &3079984192796477410
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -225,9 +236,19 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.02}
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.27
+  m_Size: {x: 0.51, y: 0.55}
+  m_EdgeRadius: 0
 --- !u!1 &3215279775016931374
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +340,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3215279776866247884}
   - component: {fileID: 3215279776866247886}
-  - component: {fileID: 3215279776866247885}
+  - component: {fileID: 517939297708194023}
   m_Layer: 16
   m_Name: childRigidTerrain
   m_TagString: Untagged
@@ -361,9 +382,9 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!58 &3215279776866247885
-CircleCollider2D:
+  m_Constraints: 4
+--- !u!61 &517939297708194023
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -375,6 +396,16 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.02}
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.27
+  m_Size: {x: 0.51, y: 0.55}
+  m_EdgeRadius: 0

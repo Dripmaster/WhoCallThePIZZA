@@ -24,7 +24,7 @@ public abstract class FSMbase : MonoBehaviour
     private float animSpeed;
     protected Rigidbody2D _rigidbody2D;
     public StatusBase status;
-    CircleCollider2D[] _colliders;
+    Collider2D[] _colliders;
 
     protected float knockBackVelocity;
     protected float knockBackDistance;
@@ -162,18 +162,19 @@ public abstract class FSMbase : MonoBehaviour
         Physics2D.IgnoreLayerCollision(14, 9, value);
         Physics2D.IgnoreLayerCollision(15, 10, value);
     }
-    public CircleCollider2D getChildCollider()
-    {
-        return _colliders[1];
-    }
-    public CircleCollider2D getTerrainCollider()
-    {
-        return _colliders[2];
-    }
-    public CircleCollider2D getCollider()
+    public Collider2D getCollider()
     {
         return _colliders[0];
     }
+    public Collider2D getChildCollider()
+    {
+        return _colliders[1];
+    }
+    public Collider2D getTerrainCollider()
+    {
+        return _colliders[2];
+    }
+    
     public bool getAnimEnd(float targetTime = 0.99f)
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= targetTime)

@@ -5,6 +5,8 @@ using UnityEngine;
 public class SlimeFsm : EnemyBase
 {
     public DroppedItemBase myDropItem;
+    public float jumpWaitTime  =1f;
+    bool attackTrigger = false;
     new void Awake()
     {
         base.Awake();
@@ -15,7 +17,7 @@ public class SlimeFsm : EnemyBase
         base.OnEnable();
         setState((int)SlimeState.idle);
     }
-    void Update()
+    void FixedUpdate()
     {
         moveAggro((int)SlimeState.jump);
         moveKnockBack();
@@ -61,11 +63,30 @@ public class SlimeFsm : EnemyBase
     }
     IEnumerator jump()
     {
+        _animator.SetTrigger("OneShot");
+        float tempTime = 0;
         do
         {
+            if (animEnd)
+            {
+                moveDir = Vector2.zero;
+                tempTime += Time.deltaTime;
+                if (tempTime < jumpWaitTime)
+                {
+                    yield return null;
+                    continue;
+                }
+                else
+                {
+                    setState((int)SlimeState.jump);
+                    yield return null;
+                    continue;
+                }
+            }
             moveDir = (player.position - transform.position).normalized;
             if (!detectPlayer(disMaxDetect))
             {
+                setState((int)SlimeState.idle);
             }
             else
             if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
@@ -93,12 +114,13 @@ public class SlimeFsm : EnemyBase
         SetComboCount(tempAttackCount);
         do
         {
-            //TODO: 공격 시 몇% 애니 재생 시 판정으로 할 지
-            //      아니면 애니메이션에서 키프레임에서 이벤트 호출시킬지
-            //      정해야함 / 키프레임 하기로 정해짐 나중에 제대로 애니메이션 나오면 적용
-            if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
-            {//attack Anim 종료
+           if (attackTrigger)
+            {
+                attackTrigger = false;
                 doSimpleAttack();
+            }
+            if (animEnd)
+            {
                 setAggro((int)SlimeState.jump);
             }
             yield return null;
@@ -113,6 +135,10 @@ public class SlimeFsm : EnemyBase
             }
             coolStartTime = Time.realtimeSinceStartup;
         }
+    }
+    public override void  sendAttackMessage(int attackType)
+    {
+        attackTrigger = true;
     }
     public override void TakeAttack(float dmg, bool cancelAttack = false)
     {
@@ -135,7 +161,6 @@ public class SlimeFsm : EnemyBase
     }
     public override void TakeKnockBack(float force, Vector2 knockBackDir)
     {
-
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
             return;

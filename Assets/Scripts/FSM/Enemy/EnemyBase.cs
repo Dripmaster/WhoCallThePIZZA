@@ -169,7 +169,13 @@ public abstract class EnemyBase : FSMbase
     public void SetCollidersTriggerNotTerrain(bool value)
     {
         getChildCollider().isTrigger = value;
-        getCollider().isTrigger = value;
+        if(value == true)
+        gameObject.layer = 16;
+        else
+        {
+            gameObject.layer = 10;
+        }
+        //getCollider().isTrigger = value;
     }
 
     public override abstract void DropItem();
@@ -178,4 +184,5 @@ public abstract class EnemyBase : FSMbase
         SetCollidersTriggerNotTerrain(true);
         stepFoward.SetStep(sfv, viewDir,SetCollidersTriggerNotTerrain,false);
     }
+    public abstract void sendAttackMessage(int attackType);
 }

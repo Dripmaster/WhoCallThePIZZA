@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8257260677067923392}
   - component: {fileID: 8257260677067923406}
-  - component: {fileID: 8257260677067923407}
+  - component: {fileID: 1050341975}
   m_Layer: 14
   m_Name: RigidwithCharacter
   m_TagString: Untagged
@@ -134,8 +134,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &8257260677067923407
-BoxCollider2D:
+--- !u!58 &1050341975
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -148,18 +148,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.51, y: 0.55}
-  m_EdgeRadius: 0
+  m_Radius: 0.28
 --- !u!1 &8257260677712251873
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +163,7 @@ GameObject:
   - component: {fileID: 8257260677712251885}
   - component: {fileID: 8257260677712251884}
   - component: {fileID: 8257260677712251887}
-  - component: {fileID: 8257260677712251880}
+  - component: {fileID: 337815160}
   m_Layer: 10
   m_Name: Slime
   m_TagString: Untagged
@@ -276,7 +266,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 8257260677712251873}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 1
+  m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -303,8 +293,8 @@ MonoBehaviour:
   animEnd: 0
   myDropItem: {fileID: 11400000, guid: 489e86e96c320c64fa28a92cc793bbe6, type: 2}
   jumpWaitTime: 1
---- !u!61 &8257260677712251880
-BoxCollider2D:
+--- !u!58 &337815160
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -317,15 +307,5 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.51, y: 0.55}
-  m_EdgeRadius: 0
+  m_Radius: 0.28

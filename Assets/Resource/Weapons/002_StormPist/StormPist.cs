@@ -163,6 +163,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         else
             weaponBase.setRotate(0, true);
 
+        //!TODO 메인카메라 캐싱할것
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         startPos = player.transform.position;
         PreCalculate();
@@ -182,8 +183,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         t += Time.deltaTime;
 
         float x = lerpPos.x;
-        float y = lerpPos.y+h;
-
+        float y = lerpPos.y;
         if (t <= all_t * 0.2f) {
             h =vyCalculated;
         }
@@ -214,7 +214,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
 
 
-        Vector2 movePos = new Vector2(x, y);
+        Vector3 movePos = new Vector3(x, y,h);
         if (had_Thunder == false&&
             t>=all_t*0.7f)
         {
@@ -278,6 +278,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
                 AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<FSMbase>(), player, stormPistSkillDamage2, false, true);
             }
             weaponBase.AnimSpeed = 1;
+            player.setZ(0);
         }
         else
         {

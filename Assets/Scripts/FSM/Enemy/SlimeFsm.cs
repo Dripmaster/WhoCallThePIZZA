@@ -24,7 +24,7 @@ public class SlimeFsm : EnemyBase
     }
     public override void initData()
     {
-        status.setStat(STAT.hp, 50000);
+        status.setStat(STAT.hp, 50);
         status.setStat(STAT.AtkPoint, 0);
         status.setStat(STAT.moveSpeed, 1);
         status.init();
@@ -191,7 +191,7 @@ public class SlimeFsm : EnemyBase
     }
     public override void DropItem()
     {
-        ItemDropSystem.MyInstance.DropItem(transform.position,myDropItem);
+       // ItemDropSystem.MyInstance.DropItem(transform.position,myDropItem);
     }
     public enum SlimeState
     {//슬라임의 스테이트(고유 번호 고정)

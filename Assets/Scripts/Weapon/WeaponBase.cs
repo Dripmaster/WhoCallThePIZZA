@@ -540,16 +540,21 @@ public class WeaponBase : MonoBehaviour
         {
             if (objectState == PlayerState.idle || objectState == PlayerState.move)
             {
-                int num = currentWeapon;
-                if (num == equipedWeapons.Length - 1)
-                {
-                    num = -1;
-                }
-                setWeapon(num + 1);
+                WeaponSwap();
             }
         }
     }
+    public void WeaponSwap()
+    {
+        SetIdle(true);
+        int num = currentWeapon;
+        if (num == equipedWeapons.Length - 1)
+        {
+            num = -1;
+        }
+        setWeapon(num + 1);
 
+    }
     public void StepFoward(StepForwardValues sfv)
     {
         player.moveFoward(sfv);

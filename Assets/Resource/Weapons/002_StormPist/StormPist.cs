@@ -44,7 +44,7 @@ public class StormPistMoveStrategy : MoveFunction,MoveStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        cannotMove(weaponBase);
+        cannotMove(weaponBase,weaponBase.currentMoveCondition);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -123,7 +123,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 1;
+        skillCoolTimes[0] = 1;
     }
 
     void PreCalculate() {
@@ -436,8 +436,6 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        HandleAttackCancel(weaponBase);
-        HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
     public override void StateEnd()
@@ -445,12 +443,11 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         weaponBase.SetColliderEnable(false);
         stormpist.comboEndTime = Time.realtimeSinceStartup;
     }
+
     public override void motionEvent(string msg)
     {
-        if(msg == "MoveConditionTo_Move_Attack")
-            weaponBase.currentMoveCondition = MoveWhileAttack.Move_Attack;
+        base.motionEvent(msg);
     }
-
 }
 
 public class StormPistHittedStrategy : HittedStrategy

@@ -33,6 +33,9 @@ public abstract class FSMbase : MonoBehaviour
     protected int hittedNextState;
     public  bool animEnd;
 
+    [SerializeField]
+    public bool isDead;
+
     protected ZSystem zSystem;
 
     public ZSystem GetZSystem()

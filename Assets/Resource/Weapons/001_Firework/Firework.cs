@@ -176,7 +176,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     WeaponBase weapon;
 
-    public FireworkAttackStrategy(WeaponBase weaponBase) : base(3, 0.8f)
+    public FireworkAttackStrategy(WeaponBase weaponBase) : base()
     {
         if (bulletPool == null)
         {
@@ -213,7 +213,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     public override void SetCoolTimes()
     {
-        totalCoolTime = 0.33f;
+        coolTimes[0] = 0.33f;
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -280,7 +280,6 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         }
         else
         {
-            HandleAttackCancel(weaponBase);
             HandleAttackEND(weaponBase);
         }
 
@@ -350,7 +349,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 4;
+        skillCoolTimes[0] = 4;
     }
 
 

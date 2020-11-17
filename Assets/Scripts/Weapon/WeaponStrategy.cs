@@ -37,6 +37,11 @@ public abstract class MoveFunction {
         if (weaponBase.CanAttackCancel)
             weaponBase.setState(PlayerState.move);
     }
+    public void cannotMove(WeaponBase weaponBase,MoveWhileAttack move)
+    {
+        if (weaponBase.CanAttackCancel && move == MoveWhileAttack.Move_Attack)
+            weaponBase.setState(PlayerState.move);
+    }
     public void attack_Cancel(WeaponBase weaponBase)
     {//움직이면 공격 캔슬될 때 호출
         weaponBase.CanAttackCancel = true;
@@ -127,9 +132,10 @@ public abstract class SkillValues
     protected List<Collider2D> attackedColliders;
 
     public SkillValues() {
-        SetCooltime();
         player = WeaponBase.instance.player;
+        skillCoolTimes = new float[1];
         attackedColliders = new List<Collider2D>();
+        SetCooltime();
     }
 
     abstract public void SetCooltime();
@@ -215,9 +221,6 @@ public abstract class SkillValues
 #region AttackValues
 public abstract class AttackValues {
     public int ATK_COMBO_COUNT = 3;//공격 콤보
-    public float ATK_CANCEL_PROGRESS = 0.8f; //공격 캔슬 가능 진행도
-    public float ATK_COMMAND_PROGRESS_START = 0f; // 이 진행도 부터 공격 범위
-    public float ATK_COMMAND_PROGRESS_END = 0.8f; // 이 진행도 까지 공격 범위
     public int tempAtkCount; 
     public bool CancelConditonOnce;
     public bool AttackOnce;
@@ -229,17 +232,21 @@ public abstract class AttackValues {
     protected float coolStartTime;
     bool isCooldown = false;
     protected PlayerFSM player;
+    WeaponBase weaponBase;
+    string msg_moveTo = "MoveConditionTo_Move_Attack";
+    string msg_moveCancel = "MoveConditionTo_Move_Cancel_Attack";
+    string msg_AttackOn = "AttackOn";
+    string msg_AttackOff = "AttackOff";
+    string msg_AttackEnd = "AttackEnd";
 
     protected List<Collider2D> attackedColliders;
 
-    public AttackValues(int ATK_COMBO_count= 3,float ATK_CANCEL_progress = 0.8f, float ATK_COMMAND_progress_START = 0f, float ATK_COMMAND_progress_END = 1f) {
+    public AttackValues(int ATK_COMBO_count= 1) {
         ATK_COMBO_COUNT = ATK_COMBO_count;
-        ATK_CANCEL_PROGRESS = ATK_CANCEL_progress;
-        ATK_COMMAND_PROGRESS_START = ATK_COMMAND_progress_START;
-        ATK_COMMAND_PROGRESS_END = ATK_COMMAND_progress_END;
         tempAtkCount = ATK_COMBO_count;
         coolTimes = new float[ATK_COMBO_count];
         SetCoolTimes();
+        weaponBase = WeaponBase.instance;
         player = WeaponBase.instance.player;
         attackedColliders = new List<Collider2D>();
     }
@@ -284,7 +291,7 @@ public abstract class AttackValues {
             weaponBase.setState(PlayerState.attack);
     }
     public void HandleAttackCancel(WeaponBase weaponBase) {//ATK_CANCEL_PROGRESS에 도달하면 끊고 이동 및 다음 공격이 가능해지는 애들 업데이트에서 호출
-        if (!CancelConditonOnce && weaponBase.getAnimProgress() >= ATK_CANCEL_PROGRESS)
+        if (!CancelConditonOnce)
         {//프로그래스 이상 진행 시 끊고 이동 가능, 다음 공격 가능
             weaponBase.currentMoveCondition = MoveWhileAttack.Move_Cancel_Attack;
             weaponBase.CanAttackCancel = true;
@@ -293,28 +300,19 @@ public abstract class AttackValues {
         }
         HandleOnceInit(weaponBase);
     }
-    public void HandleAttackCommand(WeaponBase weaponBase)
+    public void HandleAttackCommand(WeaponBase weaponBase, int v)
     {//스타트 프로그래스되면 나우 어택 on, end 프로그래스 되면 off
-        float progress = weaponBase.getAnimProgress();
-        if (!weaponBase.nowAttack)
-        {
-            if (progress >= ATK_COMMAND_PROGRESS_END)
-                return;
-
-            if (progress >= ATK_COMMAND_PROGRESS_START)
+            if (v==0)
             {
                 weaponBase.nowAttack = true;
                 attackedColliders.Clear();
                 weaponBase.SetColliderEnable(true);
             }
-        }
-        else {
-            if (progress >= ATK_COMMAND_PROGRESS_END)
+            else if (v==1)
             {
                 weaponBase.nowAttack = false;
                 weaponBase.SetColliderEnable(false);
             }
-        }
     }
     public void HandleAttackEND(WeaponBase weaponBase) {//Attack애니메이션이 종료 되었다면 idle로 보내는 애들 업데이트에서 호출
         if (weaponBase.getAnimEnd())
@@ -324,6 +322,7 @@ public abstract class AttackValues {
             weaponBase.SetIdle();
             weaponBase.SetPlayerFree();
             weaponBase.SetColliderEnable(false);
+            StartCool();
         }
     }
     public void HandleAttackEND(WeaponBase weaponBase, Action<WeaponBase> callback)
@@ -411,7 +410,18 @@ public abstract class AttackValues {
     }
     public virtual void motionEvent(string msg)
     {
-
+        if (msg == msg_moveTo)
+        {
+            weaponBase.currentMoveCondition = MoveWhileAttack.Move_Attack;
+        }
+        if (msg == msg_moveCancel)
+            HandleAttackCancel(weaponBase);
+        if (msg == msg_AttackOn)
+            HandleAttackCommand(weaponBase, 0);
+        if(msg == msg_AttackOff)
+            HandleAttackCommand(weaponBase, 1);
+        if (msg == msg_AttackEnd)
+            HandleAttackEND(weaponBase);
     }
     public virtual void StateEnd()
     {

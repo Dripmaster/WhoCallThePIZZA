@@ -55,7 +55,6 @@ public class LanceIdleStrategy : IdleStrategy
         if (weaponBase.CanAttackCancel)
         {
             weaponBase.setState((int)PlayerState.idle);
-            weaponBase.setRotate(0);
         }
     }
     public void Update(WeaponBase weaponBase)
@@ -180,6 +179,9 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     WeaponBase weaponBase;
     Lance lance;
     int skillStack;
+    string mst_skillEffect = "SkillEffect";
+    string mst_ResetStack = "ResetStack";
+    string mst_LastSting = "LastSting";
     public LanceSkillStrategy(WeaponBase weaponBase)
     {
         lance = weaponBase.WeaponComponent() as Lance;
@@ -208,7 +210,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 4;
+        skillCoolTimes[0] = 4;
     }
 
 
@@ -271,11 +273,12 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
 
     public override void motionEvent(string msg)
     {
-        if (msg == "SkillEffect")
+        
+        if (msg == mst_skillEffect)
             E_LanceStings();
-        else if (msg == "ResetStack")
+        else if (msg == mst_ResetStack)
             skillStack = 0;
-        else if (msg == "LastSting")
+        else if (msg == mst_LastSting)
             LastSting();
     }
     float SkillAlphaEffectCurve(float t)
@@ -367,7 +370,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         animTimeAll = t * (1- lance.devideRatio) + animTimeRush;
         weapon.AnimSpeed = 1 / animTimeAll;
     }
-    public LanceAttackStrategy(WeaponBase weaponBase) : base(3,0.8f)
+    public LanceAttackStrategy(WeaponBase weaponBase) : base(3)
     {
         weapon = weaponBase;
         lance = weapon.WeaponComponent() as Lance;

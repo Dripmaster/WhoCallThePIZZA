@@ -25,7 +25,7 @@ public class SlimeFsm : EnemyBase
     public override void initData()
     {
         status.setStat(STAT.hp, 50);
-        status.setStat(STAT.AtkPoint, 0);
+        status.setStat(STAT.AtkPoint, 10);
         status.setStat(STAT.moveSpeed, 1);
         status.init();
         coolTimes = new float[]

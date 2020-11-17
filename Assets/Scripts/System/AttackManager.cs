@@ -147,6 +147,11 @@ public class AttackManager : MonoBehaviour
     */
     public void SimpleDamage(float Dmg, FSMbase target) {
         //TODO : cri계산??
+        if (target.isDead)
+        {
+
+            return;
+        }
         target.TakeAttack(Dmg,false);
         var mHit = target as HitableBase;
         if (mHit == null)
@@ -154,6 +159,10 @@ public class AttackManager : MonoBehaviour
     }
     public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
+        if (target.isDead)
+        {
+            return;
+        }
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
             m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));

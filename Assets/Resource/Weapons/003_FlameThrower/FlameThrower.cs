@@ -24,7 +24,6 @@ public class FlameThrowerIdleStrategy : IdleStrategy
         if (weaponBase.CanAttackCancel)
         {
             weaponBase.setState((int)PlayerState.idle);
-            weaponBase.setRotate(0);
         }
     }
     public void Update(WeaponBase weaponBase)
@@ -71,7 +70,7 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
     public void HandleInput(WeaponBase weaponBase)
     {
         /////기본 공격
-        if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.MB_L_click))
+        if (!weaponBase.isDash && InputSystem.Instance.getKey(InputKeys.MB_L_click))
         {
             weaponBase.attackComboCount = 0;
             if (!weaponBase.IsAttackCoolTimeRemain() && weaponBase.CanAttackCancel)
@@ -99,11 +98,6 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
             }
         }
 
-        if (InputSystem.Instance.getKeyUp(InputKeys.MB_L_click))
-        {
-            weaponBase.attackComboCount = 1;
-        }
-
         ////스킬
         if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.SkillBtn))
         {
@@ -111,23 +105,6 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
             {
                 weaponBase.CanAttackCancel = false;
                 weaponBase.SetSkill(true); // 이거 맞나
-
-                //!TODO skill도 따로 확인할 것
-                /*if (weaponBase.getMoveSkillCondition() == MoveWhileAttack.Move_Attack)
-                {
-                    if (weaponBase.getPlayerState() != PlayerState.move)
-                    {
-                        weaponBase.SetSkill(true);
-                    }
-                    else
-                    {
-                        weaponBase.SetSkill(false);
-                    }
-                }
-                else
-                {
-                    weaponBase.SetSkill(true);
-                }*/
             }
         }
 
@@ -168,7 +145,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 6;
+        skillCoolTimes[0] = 6;
     }
 
 
@@ -269,7 +246,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
 
     WeaponBase weapon;
 
-    public FlameThrowerAttackStrategy(WeaponBase weaponBase) : base(3, 0.8f)
+    public FlameThrowerAttackStrategy(WeaponBase weaponBase) : base()
     {
         burnTime = 1f;
         burnDmg = 5f;
@@ -342,7 +319,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
 
     public override void SetCoolTimes()
     {
-        totalCoolTime = 0.33f;
+        coolTimes[0] = 0.33f;
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -350,43 +327,24 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         if (weaponBase.objectState != PlayerState.attack)
             weaponBase.setState(PlayerState.attack);
         weaponBase.currentMoveCondition = attackMoveCondition;
-        weaponBase.SetColliderEnable(true);
         tempTime = 0;
         weaponBase.weakedSpeed = 0.7f;
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        tempAtkCount = weaponBase.attackComboCount;
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         flameDir.Normalize();
-
-        weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (tempAtkCount == 0)
-        {
-            tempAtkCount = weaponBase.attackComboCount;
-            tempTime += Time.deltaTime;
-            if (tempTime >= dirChangeTime)
-            {//TODO : 방향전환이 1칸이내의 근접한 방향으로 바뀌게 바꿔야함
-                tempTime = 0;
-                weaponBase.CanRotateView = true;
-                weaponBase.setViewPoint();
-                weaponBase.SP_FlipX();
-                weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
-                flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
-                flameDir.Normalize();
 
-                weaponBase.CanRotateView = false;
-            }
-        }
-        else
-        {
-            HandleAttackCancel(weaponBase);
+        weaponBase.setFlip(weaponBase.SP_FlipX());
+
+        weaponBase.CanRotateView = true;
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+
+        flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+            flameDir.Normalize();
             HandleAttackEND(weaponBase);
-        }
         
     }
     public override void StateEnd()

@@ -349,9 +349,15 @@ public class PlayerFSM : FSMbase
     public override void TakeAttack(float dmg, bool cancelAttack = false)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
         //!TODO : 
+        if (isDead)
+        {
+            return;
+        }
+
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
+            isDead = true;
             setState((int)PlayerState.dead);
             Weapon.SetDead();
         }

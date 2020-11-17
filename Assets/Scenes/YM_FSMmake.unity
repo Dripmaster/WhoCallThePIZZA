@@ -487,6 +487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &270784406
@@ -696,6 +697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: 0ed83b71c70af1148a9cda6f61730d8a, type: 2}
   currentHp: 0
 --- !u!58 &484429381
@@ -2116,6 +2118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &753158000
@@ -2251,6 +2254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &773681616
@@ -2386,6 +2390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &810014785
@@ -2640,6 +2645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &903652943
@@ -3019,6 +3025,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &967932198
@@ -3408,6 +3415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1096018513
@@ -4024,6 +4032,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1320196803
@@ -4159,6 +4168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1337948816
@@ -4458,6 +4468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1459279113
@@ -4793,6 +4804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: cf79dd93ee4b4c84e8c9c09797e29326, type: 2}
   currentHp: 0
 --- !u!58 &1535324262
@@ -4928,6 +4940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1559104760
@@ -5182,6 +5195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1672855191
@@ -5492,7 +5506,7 @@ PrefabInstance:
     - target: {fileID: 1760152420017876512, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7229258637010547688, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -5562,7 +5576,7 @@ PrefabInstance:
     - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081582, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
@@ -5715,6 +5729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1839916380
@@ -5850,6 +5865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &1840191106
@@ -5944,7 +5960,7 @@ GameObject:
   - component: {fileID: 1848934384}
   - component: {fileID: 1848934383}
   - component: {fileID: 1848934382}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8765,6 +8781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &2079393319
@@ -8900,6 +8917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectState: 0
   animEnd: 0
+  isDead: 0
   myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
   currentHp: 0
 --- !u!58 &2092413233

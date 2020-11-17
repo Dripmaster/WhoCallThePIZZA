@@ -4710,6 +4710,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerRoot
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+    - target: {fileID: 7229258637901855802, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081581, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081583, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258638212081583, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 0
+      objectReference: {fileID: 0}
+=======
+>>>>>>> 1c692e5727348add75793f18cc4b181a1eba599c
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 479303b630fc812449bb430d14a054cb, type: 3}
 --- !u!114 &944565607 stripped

@@ -7,13 +7,11 @@ using UnityEngine;
 
 public class StormPist : AttackComponent
 {
-    public float stepSpeed;//1,2공격 시 한발짝 이동 속도
-    public float stepStart;//1,2공격 시 한발짝 이동 시작
-    public float stepEnd;//1,2공격 시 한발짝 이동 끝
+    public float comboExitTime = 1;
+    [SerializeField]
+    public float comboEndTime;
 
-    public float strongStepSpeed;//3,4공격 시 한발짝 이동 속도
-    public float strongStepStart;//3,4공격 시 한발짝 이동 시작
-    public float strongStepEnd;//3,4공격 시 한발짝 이동 끝
+
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new StormPistIdleStrategy();
@@ -426,13 +424,18 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         weaponBase.SP_FlipX();
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+
+        if(Time.realtimeSinceStartup - stormpist.comboEndTime >= stormpist.comboExitTime)
+        {
+            tempAtkCount =ATK_COMBO_COUNT;
+        }
+
         CountCombo(weaponBase);
 
         weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        
         HandleAttackCancel(weaponBase);
         HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
@@ -440,6 +443,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     public override void StateEnd()
     {
         weaponBase.SetColliderEnable(false);
+        stormpist.comboEndTime = Time.realtimeSinceStartup;
     }
     public override void motionEvent(string msg)
     {

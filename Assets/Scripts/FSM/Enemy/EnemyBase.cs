@@ -7,6 +7,7 @@ public abstract class EnemyBase : FSMbase
     protected float moveSpeed;
     protected float aggroSpeed;
     protected Vector2 moveDir;
+    protected float targetZ;
     protected Transform player;
     protected PlayerFSM playerFsm;
     protected float[] coolTimes;
@@ -36,6 +37,18 @@ public abstract class EnemyBase : FSMbase
         {
             playerFsm = WeaponBase.instance.player;
         }
+    }
+    public void FixedUpdate()
+    {
+        if (targetZ != 0)
+        {
+            zSystem.Z += targetZ * Time.deltaTime;
+            targetZ = 0;
+        }
+    }
+    public override void setZ(float z)
+    {
+        base.setZ(z);
     }
     public bool movePatrol(int state)
     {
@@ -101,6 +114,15 @@ public abstract class EnemyBase : FSMbase
                 player = c.transform;
                 playerFsm = c.GetComponent<PlayerFSM>();
             }
+            return true;
+        }
+        return false;
+    }
+    public bool canAttackPlayer()
+    {
+        if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
+        {
+            if(CollisionByZ.Zcheck(zSystem,playerFsm.GetZSystem()))
             return true;
         }
         return false;

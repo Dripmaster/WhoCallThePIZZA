@@ -89,7 +89,7 @@ public class SlimeFsm : EnemyBase
                 setState((int)SlimeState.idle);
             }
             else
-            if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
+            if (canAttackPlayer())
             {
                 setState((int)SlimeState.attack);
             }

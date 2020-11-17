@@ -32,6 +32,14 @@ public abstract class FSMbase : MonoBehaviour
     protected Vector2 viewDir;
     protected int hittedNextState;
     public  bool animEnd;
+
+    protected ZSystem zSystem;
+
+    public ZSystem GetZSystem()
+    {
+        return zSystem;
+    }
+
     protected float AnimSpeed {
         get {
             return animSpeed;
@@ -73,8 +81,13 @@ public abstract class FSMbase : MonoBehaviour
     {
         status.UpdateBuff();
     }
+    public virtual void setZ(float z)
+    {
+        zSystem.Z = z;
+    }
     protected void OnEnable()
     {
+        zSystem = GetComponent<ZSystem>();
         ViewDirection = 6;
         setState(0);
         AnimSpeed = 1;

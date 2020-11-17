@@ -14,13 +14,14 @@ GameObject:
   - component: {fileID: 1465515893600705828}
   - component: {fileID: 1465515893600705826}
   - component: {fileID: 1059104851}
+  - component: {fileID: 7022250551670818938}
   m_Layer: 10
   m_Name: Slime_Sick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1465515893600705831
 Transform:
   m_ObjectHideFlags: 0
@@ -159,6 +160,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &7022250551670818938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465515893600705825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6a1a9de797a04a940918920377a39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImageTransform: {fileID: 3215279775016931375}
 --- !u!1 &1465515894327741303
 GameObject:
   m_ObjectHideFlags: 0

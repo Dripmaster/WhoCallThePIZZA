@@ -14,7 +14,6 @@ public class PlayerFSM : FSMbase
     int dashFrameCount;
     WeaponBase Weapon;
     Camera mainCamera;
-    ZSystem zSystem;
 
     new void Awake()
     {
@@ -29,7 +28,6 @@ public class PlayerFSM : FSMbase
     new void OnEnable()
     {
         base.OnEnable();
-        zSystem = GetComponent<ZSystem>();
         moveDir = Vector3.zero;
         dashFrameCount = 0;
         setState((int)PlayerState.idle);
@@ -199,8 +197,11 @@ public class PlayerFSM : FSMbase
                 doDash(moveDir);
             }
         }
-        zSystem.Z += forcedDir.z*Time.deltaTime;
-        forcedDir.z = 0;
+        if (forcedDir.z != 0)
+        {
+            zSystem.Z += forcedDir.z * Time.deltaTime;
+            forcedDir.z = 0;
+        }
 
         if (forcedDir.x!= 0 && forcedDir.y != 0)
         {
@@ -209,9 +210,9 @@ public class PlayerFSM : FSMbase
             forcedDir = Vector3.zero;
         }
     }
-    public void setZ(float z)
+    public override void setZ(float z)
     {
-        zSystem.Z = z;
+        base.setZ(z);
         forcedDir.z = 0;
     }
     IEnumerator idle()

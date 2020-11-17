@@ -4650,66 +4650,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1578111120, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.size
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[0]
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[1]
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[3]
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[4]
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[5]
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[6]
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[8]
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1825457446, guid: 479303b630fc812449bb430d14a054cb, type: 3}
-      propertyPath: skillAngles.Array.data[9]
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6286304418302767117, guid: 479303b630fc812449bb430d14a054cb,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7229258636783642962, guid: 479303b630fc812449bb430d14a054cb,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 7229258637010547688, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4770,6 +4710,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: playerRoot
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 7229258637901855802, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -4790,6 +4731,8 @@ PrefabInstance:
       propertyPath: m_UseFullKinematicContacts
       value: 0
       objectReference: {fileID: 0}
+=======
+>>>>>>> 1c692e5727348add75793f18cc4b181a1eba599c
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 479303b630fc812449bb430d14a054cb, type: 3}
 --- !u!114 &944565607 stripped

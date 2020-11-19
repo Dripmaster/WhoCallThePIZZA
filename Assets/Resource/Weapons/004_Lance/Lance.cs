@@ -59,12 +59,7 @@ public class LanceIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip( weaponBase.SP_FlipX());
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouse(weaponBase);
     }
 }
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
@@ -76,12 +71,8 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX());
+        ViewManager.viewMouse(weaponBase);
 
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class LanceDeadStrategy : DeadStrategy
@@ -217,20 +208,18 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     public void SetState(WeaponBase weaponBase)
     {
         weaponBase.currentMoveCondition = moveSkillcondition;
-        weaponBase.setState(PlayerState.skill); 
-        
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        if (weaponBase.SP_FlipX())
+        weaponBase.setState(PlayerState.skill);
+
+        bool doFlip;
+        ViewManager.viewMouse(weaponBase, out doFlip);
+
+        if (doFlip)
         {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
             flip = 180;
         }
         else
         {
-            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
             flip = 0;
-
         }
         weaponBase.CanRotateView = false;
 
@@ -506,10 +495,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 effectLevel++;
             }
 
-            weaponBase.setFlip(weaponBase.SP_FlipX());
-            weaponBase.CanRotateView = true;
-            weaponBase.setViewPoint();
-            weaponBase.setRotate(weaponBase.WeaponViewDirection);
+            ViewManager.viewMouse(weaponBase);
         }
         else
         {
@@ -542,9 +528,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     void endAttack(WeaponBase weaponBase)
     {
         weapon.AnimSpeed = 1;
-        weaponBase.CanRotateView = true;
-        weaponBase.CanAttackCancel = true;
-        weaponBase.setRotate(0, true);
+        ViewManager.viewMouse(weaponBase);
         weaponBase.nowAttack = false;
         float r, t;
         GetCoolTime(out r,out t);

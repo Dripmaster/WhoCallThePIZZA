@@ -28,12 +28,7 @@ public class FlameThrowerIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX());
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouse(weaponBase);
     }
 }
 public class FlameThrowerMoveStrategy : MoveFunction, MoveStrategy
@@ -44,12 +39,7 @@ public class FlameThrowerMoveStrategy : MoveFunction, MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX());
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouse(weaponBase);
     }
 }
 public class FlameThrowerDeadStrategy : DeadStrategy
@@ -154,9 +144,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         weaponBase.currentMoveCondition = moveSkillcondition;
         weaponBase.setState(PlayerState.skill);
 
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+        ViewManager.viewMouse(weaponBase);
         weaponBase.CanRotateView = false;
 
         weaponBase.SetColliderEnable(true);
@@ -334,13 +322,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-
-        weaponBase.setFlip(weaponBase.SP_FlipX());
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+                ViewManager.viewMouse(weaponBase);
 
         flameDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
             flameDir.Normalize();

@@ -28,7 +28,7 @@ public class WeaponBase : MonoBehaviour
 
     public PlayerFSM player;
     public static WeaponBase instance;
-
+    float targetRot;
     Transform Rotator;
     bool flipValue;
     float tempX;
@@ -39,6 +39,7 @@ public class WeaponBase : MonoBehaviour
 
 
     public float weakedSpeed;
+    public float rotSpeed=5f;
 
     WeaponInfo[] equipedWeapons;
     AttackComponent[] equipedWeaponsComponents;
@@ -82,6 +83,7 @@ public class WeaponBase : MonoBehaviour
 
     public float WeaponViewDirection;
     public float MouseViewDegree;
+   
     protected void Awake()
     {
     }
@@ -243,19 +245,34 @@ public class WeaponBase : MonoBehaviour
         //attackComboCount = 0;
     }
     //공격중이라 위치flip 안할때 true
-    public void setRotate(float value,bool isAttack=false) {
+    public void setRotateLerp(float value,bool isAttack=false) {
         if (!isAttack&&Rotator.localScale.x * tempScaleX < 0)
             value = -value;
-        Rotator.rotation = Quaternion.Euler(0, 0, value);
+        targetRot = value;
     }
-    public void setFlipScaleX(float value)//플립
+    public void setRotate(float value, bool isAttack = false)
+    {
+        if (!isAttack && Rotator.localScale.x * tempScaleX < 0)
+            value = -value;
+        Rotator.rotation = Quaternion.Euler(0, 0, value);
+        targetRot = value;
+    }
+
+    void lerpRotate(float value)
+    {
+        Quaternion r = Rotator.rotation;
+        Rotator.rotation = Quaternion.Lerp(r, Quaternion.Euler(0, 0, value), Time.deltaTime * rotSpeed);
+
+
+    }
+    void setFlipScaleX(float value)//플립
     {
         if (tempScaleX !=value)
         {
             tempScaleX = value;
         }
     }
-    public void setFlipScaleY(float value)//플립
+    void setFlipScaleY(float value)//플립
     {
         if (tempScaleY != value)
         {
@@ -511,6 +528,8 @@ public class WeaponBase : MonoBehaviour
     }
     private void FixedUpdate()
     {
+
+        lerpRotate(targetRot);
         if ((vLerpTarget - (Vector2)Rotator.localPosition).sqrMagnitude >= 0.0001f)
         {
             Rotator.localPosition =
@@ -520,6 +539,7 @@ public class WeaponBase : MonoBehaviour
             if (Rotator.localScale.x != tempScaleX&&vLerpTarget.x * Rotator.localPosition.x >= 0)
             {
                 Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
+                
             }
         }
         else

@@ -29,17 +29,7 @@ public class SampleIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (!weaponBase.SP_FlipX())
-        {
-            weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection+180);
-        }
-        else
-        {
-            weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-
-        }
+        ViewManager.viewMouse(weaponBase, 180);
     }
 }
 public class SampleMoveStrategy : MoveFunction,MoveStrategy
@@ -52,17 +42,7 @@ public class SampleMoveStrategy : MoveFunction,MoveStrategy
     
     public void Update(WeaponBase weaponBase)
     {
-        if (!weaponBase.SP_FlipX())
-        {
-            weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-        }
-        else
-        {
-            weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 180);
-
-        }
+        ViewManager.viewMouse(weaponBase, 180);
     }
 }
 public class SampleDeadStrategy : DeadStrategy
@@ -224,16 +204,8 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         {
             pool = weaponBase.GetComponentInChildren<Pool>();
         }
-        if (!weaponBase.SP_FlipX())
-        {
-            weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection-30, true);
-        }
-        else
-        {
-            weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection + 30, true);
-        }
+        ViewManager.viewMouse(weaponBase, -30,30);
+
         weaponBase.transform.Find("ironhookParent/ironhook").transform.localScale = new Vector3(1,1,1);
         weaponBase.GetAnimatior().enabled = false;
         collisionFlag = false;
@@ -416,18 +388,9 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        if (!weaponBase.SP_FlipX())
-        {
-            weaponBase.setFlip(false);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection+90+45,true);
-            flipX = true;
-        }
-        else
-        {
-            weaponBase.setFlip(true);
-            weaponBase.setRotate(weaponBase.WeaponViewDirection -90-45, true);
-            flipX = false;
-        }
+
+        ViewManager.viewMouse(weaponBase,out flipX, 90+45, -90-45);
+        flipX = !flipX;
 
         CountCombo(weaponBase);
         effectLevel = 0;

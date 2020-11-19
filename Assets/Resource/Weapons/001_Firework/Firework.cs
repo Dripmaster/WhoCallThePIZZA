@@ -34,11 +34,7 @@ public class FireworkIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX());
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouse(weaponBase);
     }
 }
 
@@ -50,12 +46,7 @@ public class FireworkMoveStrategy : MoveFunction, MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.setFlip(weaponBase.SP_FlipX());
-        weaponBase.SP_FlipX();
-
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouse(weaponBase);
     }
 }
 
@@ -240,23 +231,17 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
             weaponBase.setState(PlayerState.attack);
         weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.SetColliderEnable(true);
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
+        ViewManager.viewMouse(weaponBase);
         tempAtkCount = weaponBase.attackComboCount;
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         bulletDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         bulletDir.Normalize();
         weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.CanRotateView = true;
-            weaponBase.setViewPoint();
-            weaponBase.SP_FlipX();
-            weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+        ViewManager.viewMouse(weaponBase);
 
-            weaponBase.CanRotateView = false;
+        weaponBase.CanRotateView = false;
     }
     public override void motionEvent(int value)
     {
@@ -372,10 +357,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+        ViewManager.viewMouse(weaponBase);
         //!TODO 곡선 궤적
 
         time += Time.deltaTime;

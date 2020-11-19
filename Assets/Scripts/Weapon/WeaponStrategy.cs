@@ -429,3 +429,55 @@ public abstract class AttackValues {
     }
 }
 #endregion
+
+public static class ViewManager
+{
+    
+    public static void viewMouse(WeaponBase weaponBase)
+    {
+        bool q;
+        viewMouse(weaponBase,out q,0,0);
+    }
+    public static void viewMouse(WeaponBase weaponBase,float r)
+    {
+        bool q;
+        viewMouse(weaponBase, out q,r);
+    }
+    public static void viewMouse(WeaponBase weaponBase, float r, float t)
+    {
+        bool q;
+        viewMouse(weaponBase, out q, r, t);
+    }
+    public static void viewMouse(WeaponBase weaponBase, out bool doFlip)
+    {
+
+        viewMouse(weaponBase, out doFlip, 0, 0);
+    }
+    public static void viewMouse(WeaponBase weaponBase, out bool doFlip, float r)
+    {
+        weaponBase.setFlip(weaponBase.SP_FlipX());
+        doFlip = weaponBase.SP_FlipX();
+        viewMouseNoMove(weaponBase, r);
+    }
+    public static void viewMouse(WeaponBase weaponBase,out bool doFlip,float r, float t)
+    {
+        weaponBase.setFlip(weaponBase.SP_FlipX());
+        doFlip = weaponBase.SP_FlipX();
+        if (!doFlip)
+            viewMouseNoMove(weaponBase, r);
+        else
+        {
+            viewMouseNoMove(weaponBase, t);
+        }
+    }
+    public static void viewMouseNoMove(WeaponBase weaponBase, float r=0)
+    {
+
+        weaponBase.CanRotateView = true;
+
+        weaponBase.setViewPoint();
+        weaponBase.SP_FlipX();
+        weaponBase.setRotate(weaponBase.WeaponViewDirection+r);
+
+    }
+}

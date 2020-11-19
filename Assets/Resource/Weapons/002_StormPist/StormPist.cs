@@ -35,9 +35,8 @@ public class StormPistIdleStrategy : IdleStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouseNoMove(weaponBase);
     }
 }
 public class StormPistMoveStrategy : MoveFunction,MoveStrategy
@@ -48,9 +47,7 @@ public class StormPistMoveStrategy : MoveFunction,MoveStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        weaponBase.SP_FlipX();
-
-        weaponBase.setRotate(weaponBase.WeaponViewDirection);
+        ViewManager.viewMouseNoMove(weaponBase);
     }
 }
 public class StormPistDeadStrategy : DeadStrategy
@@ -419,13 +416,10 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.CanRotateView = true;
-        weaponBase.setViewPoint();
-        weaponBase.SP_FlipX();
 
-        weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+        ViewManager.viewMouseNoMove(weaponBase);
 
-        if(Time.realtimeSinceStartup - stormpist.comboEndTime >= stormpist.comboExitTime)
+        if (Time.realtimeSinceStartup - stormpist.comboEndTime >= stormpist.comboExitTime)
         {
             tempAtkCount =ATK_COMBO_COUNT;
         }

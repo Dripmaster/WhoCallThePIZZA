@@ -526,6 +526,8 @@ public class WeaponBase : MonoBehaviour
                 break;
         }
     }
+    [HideInInspector]
+    public bool snapFrame = false;
     private void FixedUpdate()
     {
 
@@ -535,11 +537,11 @@ public class WeaponBase : MonoBehaviour
             Rotator.localPosition =
                 Vector2.Lerp(Rotator.localPosition, vLerpTarget,
                 Time.deltaTime*5);
+            snapFrame = Rotator.localScale.x != tempScaleX && vLerpTarget.x * Rotator.localPosition.x >= 0;
 
-            if (Rotator.localScale.x != tempScaleX&&vLerpTarget.x * Rotator.localPosition.x >= 0)
+            if (snapFrame)
             {
                 Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
-                
             }
         }
         else
@@ -547,6 +549,7 @@ public class WeaponBase : MonoBehaviour
             Rotator.localPosition = vLerpTarget;
             if (Rotator.localScale.x != tempScaleX)
             {
+                snapFrame = true;
                 Rotator.localScale = new Vector3(tempScaleX, tempScaleY);
             }
         }

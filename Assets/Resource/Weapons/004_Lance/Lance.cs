@@ -516,9 +516,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                     weaponBase.nowAttack = false;
                 }
             }
-
-            
-            HandleAttackCancel(weaponBase);
             HandleAttackEND(weaponBase, endAttack);
         }
     }
@@ -528,7 +525,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     void endAttack(WeaponBase weaponBase)
     {
         weapon.AnimSpeed = 1;
-        ViewManager.viewMouse(weaponBase);
         weaponBase.nowAttack = false;
         float r, t;
         GetCoolTime(out r,out t);

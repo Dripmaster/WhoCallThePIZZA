@@ -472,12 +472,15 @@ public static class ViewManager
     }
     public static void viewMouseNoMove(WeaponBase weaponBase, float r=0)
     {
-
         weaponBase.CanRotateView = true;
 
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection+r);
+        if (weaponBase.snapFrame)
+        {
+            weaponBase.setRotate((weaponBase.WeaponViewDirection + r));
+        }else
+        weaponBase.setRotateLerp(weaponBase.WeaponViewDirection+r);
 
     }
 }

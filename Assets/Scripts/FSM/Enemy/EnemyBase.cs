@@ -7,6 +7,7 @@ public abstract class EnemyBase : FSMbase
     protected float moveSpeed;
     protected float aggroSpeed;
     protected Vector2 moveDir;
+    protected float targetZ;
     protected Transform player;
     protected PlayerFSM playerFsm;
     protected float[] coolTimes;
@@ -37,6 +38,18 @@ public abstract class EnemyBase : FSMbase
             playerFsm = WeaponBase.instance.player;
         }
     }
+    public void FixedUpdate()
+    {
+        if (targetZ != 0)
+        {
+            zSystem.Z += targetZ * Time.deltaTime;
+            targetZ = 0;
+        }
+    }
+    public override void setZ(float z)
+    {
+        base.setZ(z);
+    }
     public bool movePatrol(int state)
     {
         bool result = false;
@@ -60,6 +73,25 @@ public abstract class EnemyBase : FSMbase
     public bool moveKnockBack()
     {
         bool result = false;
+        if (knockDir.sqrMagnitude> 0)
+        {
+            result = true;
+            knockDir = Vector2.Lerp(knockDir,Vector2.zero,Time.deltaTime);
+
+            Vector2 tempPos = transform.position;
+            Vector2 targetPos = (Vector2)transform.position + knockDir;
+            if (knockDir.sqrMagnitude <= 0.0001 || (targetPos-tempPos).sqrMagnitude<=0.0001)
+            {
+                clearKnockBack();
+            }
+
+            _rigidbody2D.MovePosition(targetPos);
+        }
+        return result;
+    }/*
+    public bool moveKnockBack()
+    {
+        bool result = false;
         if (knockBackDistance > 0)
         {
             result = true;
@@ -71,7 +103,7 @@ public abstract class EnemyBase : FSMbase
             _rigidbody2D.MovePosition(movePos);
         }
         return result;
-    }
+    }*/
     public abstract void initData();
     public bool detectPlayer(float dis) {
         Collider2D c =  Physics2D.OverlapCircle(transform.position, dis,1<<9);
@@ -82,6 +114,15 @@ public abstract class EnemyBase : FSMbase
                 player = c.transform;
                 playerFsm = c.GetComponent<PlayerFSM>();
             }
+            return true;
+        }
+        return false;
+    }
+    public bool canAttackPlayer()
+    {
+        if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
+        {
+            if(CollisionByZ.Zcheck(zSystem,playerFsm.GetZSystem()))
             return true;
         }
         return false;
@@ -137,7 +178,7 @@ public abstract class EnemyBase : FSMbase
         }
     }
     public override abstract void TakeAttack(float dmg, bool cancelAttack = false);
-    public override abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+  //  public override abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
     public override abstract void KnockBackEnd();
     public override abstract void TakeCC(int CCnum);
     public override abstract void CCfree();
@@ -150,8 +191,20 @@ public abstract class EnemyBase : FSMbase
     public void SetCollidersTriggerNotTerrain(bool value)
     {
         getChildCollider().isTrigger = value;
-        getCollider().isTrigger = value;
+        if(value == true)
+        gameObject.layer = 16;
+        else
+        {
+            gameObject.layer = 10;
+        }
+        //getCollider().isTrigger = value;
     }
 
     public override abstract void DropItem();
+    public override void moveFoward(StepForwardValues sfv)
+    {
+        SetCollidersTriggerNotTerrain(true);
+        stepFoward.SetStep(sfv, viewDir,SetCollidersTriggerNotTerrain,false);
+    }
+    public abstract void sendAttackMessage(int attackType);
 }

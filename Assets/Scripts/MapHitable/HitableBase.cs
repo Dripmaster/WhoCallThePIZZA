@@ -264,9 +264,7 @@ public class HitableBase : FSMbase
         HitFunc(dmg);
     }
 
-    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
-    {
-    }
+ 
 
     public override void TakeCC(int CCnum = 0)
     {
@@ -280,5 +278,12 @@ public class HitableBase : FSMbase
     {
     }
 
-   
+    public override void moveFoward(StepForwardValues sfv)
+    {
+      
+    }
+
+    public override void TakeKnockBack(float force, Vector2 knockBackDir)
+    {
+    }
 }

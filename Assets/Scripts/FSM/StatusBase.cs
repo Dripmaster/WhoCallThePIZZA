@@ -198,7 +198,7 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
         //!TODO
         //각각에서 호출 하지말고 bool로 받아서 호출된다거나..
         //파일명들을 문자열 배열로 캐싱..
-        var e =GameObject.Instantiate(o, target.transform.parent).GetComponent<Effector>();
+        var e =GameObject.Instantiate(o, target.transform).GetComponent<Effector>();
         e.transform.position = target.transform.position;
         return e;
     }
@@ -292,8 +292,7 @@ public class Electrified : Buff
     public override void StartBuff()
     {
         target.TakeCC();
-        showEffect(Resources.Load<GameObject>("BuffEffect/Electrified"))
-       .Alpha(0.5f, 0.3f).And().Disable(0.5f,true).Play();
+        showEffect(Resources.Load<GameObject>("BuffEffect/Electrified"));
     }
     public override void Update()
     {

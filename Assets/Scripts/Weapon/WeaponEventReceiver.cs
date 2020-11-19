@@ -22,4 +22,8 @@ public class WeaponEventReceiver : MonoBehaviour
     {
         weaponBase.motionEvent(msg);
     }
+    public void stepFoward(StepForwardValues v )
+    {
+        weaponBase.StepFoward(v);
+    }
 }

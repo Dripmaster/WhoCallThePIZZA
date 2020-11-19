@@ -16,6 +16,7 @@ public abstract class FSMbase : MonoBehaviour
 {
     protected Animator _animator;
     protected SpriteRenderer _sr;
+    protected StepFoward stepFoward;
     public int objectState;
     Type stateType;
     protected bool newState = false;
@@ -23,13 +24,25 @@ public abstract class FSMbase : MonoBehaviour
     private float animSpeed;
     protected Rigidbody2D _rigidbody2D;
     public StatusBase status;
-    CircleCollider2D[] _colliders;
+    Collider2D[] _colliders;
 
     protected float knockBackVelocity;
     protected float knockBackDistance;
     protected Vector2 knockDir;
+    protected Vector2 viewDir;
     protected int hittedNextState;
     public  bool animEnd;
+
+    [SerializeField]
+    public bool isDead;
+
+    protected ZSystem zSystem;
+
+    public ZSystem GetZSystem()
+    {
+        return zSystem;
+    }
+
     protected float AnimSpeed {
         get {
             return animSpeed;
@@ -60,17 +73,24 @@ public abstract class FSMbase : MonoBehaviour
     protected void Awake()
     {
         _animator = GetComponent<Animator>();
+        var rigids = GetComponentsInChildren<Rigidbody2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         status = new StatusBase();
         _colliders = GetComponentsInChildren<CircleCollider2D>();
+        stepFoward = GetComponent<StepFoward>();
     }
     protected void Update()
     {
         status.UpdateBuff();
     }
+    public virtual void setZ(float z)
+    {
+        zSystem.Z = z;
+    }
     protected void OnEnable()
     {
+        zSystem = GetComponent<ZSystem>();
         ViewDirection = 6;
         setState(0);
         AnimSpeed = 1;
@@ -135,7 +155,8 @@ public abstract class FSMbase : MonoBehaviour
         } while (!newState);
     }
     public abstract void TakeAttack(float dmg, bool cancelAttack);
-    public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+   // public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
+    public abstract void TakeKnockBack(float force, Vector2 knockBackDir);
     public abstract void TakeCC(int CCnum = 0);
     public abstract void CCfree();
     public abstract void KnockBackEnd();
@@ -157,18 +178,19 @@ public abstract class FSMbase : MonoBehaviour
         Physics2D.IgnoreLayerCollision(14, 9, value);
         Physics2D.IgnoreLayerCollision(15, 10, value);
     }
-    public CircleCollider2D getChildCollider()
-    {
-        return _colliders[1];
-    }
-    public CircleCollider2D getTerrainCollider()
-    {
-        return _colliders[2];
-    }
-    public CircleCollider2D getCollider()
+    public Collider2D getCollider()
     {
         return _colliders[0];
     }
+    public Collider2D getChildCollider()
+    {
+        return _colliders[1];
+    }
+    public Collider2D getTerrainCollider()
+    {
+        return _colliders[2];
+    }
+    
     public bool getAnimEnd(float targetTime = 0.99f)
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= targetTime)
@@ -182,4 +204,7 @@ public abstract class FSMbase : MonoBehaviour
         return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
     public virtual void DropItem() { }
+
+    public abstract void moveFoward(StepForwardValues sfv);
+    public delegate void StepFowardCallBack(bool v);
 }

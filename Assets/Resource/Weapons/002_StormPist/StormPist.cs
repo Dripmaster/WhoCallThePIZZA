@@ -7,13 +7,11 @@ using UnityEngine;
 
 public class StormPist : AttackComponent
 {
-    public float stepSpeed;//1,2공격 시 한발짝 이동 속도
-    public float stepStart;//1,2공격 시 한발짝 이동 시작
-    public float stepEnd;//1,2공격 시 한발짝 이동 끝
+    public float comboExitTime = 1;
+    [SerializeField]
+    public float comboEndTime;
 
-    public float strongStepSpeed;//3,4공격 시 한발짝 이동 속도
-    public float strongStepStart;//3,4공격 시 한발짝 이동 시작
-    public float strongStepEnd;//3,4공격 시 한발짝 이동 끝
+
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new StormPistIdleStrategy();
@@ -46,7 +44,7 @@ public class StormPistMoveStrategy : MoveFunction,MoveStrategy
 {
     public void SetState(WeaponBase weaponBase)
     {
-        cannotMove(weaponBase);
+        cannotMove(weaponBase,weaponBase.currentMoveCondition);
     }
     public void Update(WeaponBase weaponBase)
     {
@@ -125,7 +123,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     public override void SetCooltime()
     {
-        totalCoolTime = 1;
+        skillCoolTimes[0] = 1;
     }
 
     void PreCalculate() {
@@ -163,6 +161,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         else
             weaponBase.setRotate(0, true);
 
+        //!TODO 메인카메라 캐싱할것
         targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         startPos = player.transform.position;
         PreCalculate();
@@ -182,8 +181,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         t += Time.deltaTime;
 
         float x = lerpPos.x;
-        float y = lerpPos.y+h;
-
+        float y = lerpPos.y;
         if (t <= all_t * 0.2f) {
             h =vyCalculated;
         }
@@ -214,7 +212,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
 
 
-        Vector2 movePos = new Vector2(x, y);
+        Vector3 movePos = new Vector3(x, y,h);
         if (had_Thunder == false&&
             t>=all_t*0.7f)
         {
@@ -278,6 +276,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
                 AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<FSMbase>(), player, stormPistSkillDamage2, false, true);
             }
             weaponBase.AnimSpeed = 1;
+            player.setZ(0);
         }
         else
         {
@@ -425,32 +424,30 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         weaponBase.SP_FlipX();
 
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
+
+        if(Time.realtimeSinceStartup - stormpist.comboEndTime >= stormpist.comboExitTime)
+        {
+            tempAtkCount =ATK_COMBO_COUNT;
+        }
+
         CountCombo(weaponBase);
 
         weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        if (ATK_COMBO_COUNT % 3 != 0 &&
-            this.weaponBase.getAnimProgress() <= stormpist.stepEnd && this.weaponBase.getAnimProgress() >= stormpist.stepStart)
-            player.moveFoward(stormpist.stepSpeed);
-        else if (this.weaponBase.getAnimProgress() <= stormpist.strongStepEnd && this.weaponBase.getAnimProgress() >= stormpist.strongStepStart)
-            player.moveFoward(stormpist.strongStepSpeed);
-
-        HandleAttackCancel(weaponBase);
-        HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase, ()=>{ weaponBase.CanRotateView = true; }) ;
     }
     public override void StateEnd()
     {
         weaponBase.SetColliderEnable(false);
-    }
-    public override void motionEvent(string msg)
-    {
-        if(msg == "MoveConditionTo_Move_Attack")
-            weaponBase.currentMoveCondition = MoveWhileAttack.Move_Attack;
+        stormpist.comboEndTime = Time.realtimeSinceStartup;
     }
 
+    public override void motionEvent(string msg)
+    {
+        base.motionEvent(msg);
+    }
 }
 
 public class StormPistHittedStrategy : HittedStrategy

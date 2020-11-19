@@ -5,6 +5,8 @@ using UnityEngine;
 public class SlimeFsm : EnemyBase
 {
     public DroppedItemBase myDropItem;
+    public float jumpWaitTime  =1f;
+    bool attackTrigger = false;
     new void Awake()
     {
         base.Awake();
@@ -13,18 +15,17 @@ public class SlimeFsm : EnemyBase
     new void OnEnable()
     {
         base.OnEnable();
-        setState((int)SlimeState.patrol);
+        setState((int)SlimeState.idle);
     }
     void FixedUpdate()
     {
-        movePatrol((int)SlimeState.patrol);
-        moveAggro((int)SlimeState.aggro);
+        moveAggro((int)SlimeState.jump);
         moveKnockBack();
     }
     public override void initData()
     {
-        status.setStat(STAT.hp, 50000);
-        status.setStat(STAT.AtkPoint, 0);
+        status.setStat(STAT.hp, 50);
+        status.setStat(STAT.AtkPoint, 10);
         status.setStat(STAT.moveSpeed, 1);
         status.init();
         coolTimes = new float[]
@@ -55,51 +56,40 @@ public class SlimeFsm : EnemyBase
             tmpTime += Time.deltaTime;
             if (detectPlayer(disDetect))
             {
-                setAggro((int)SlimeState.aggro);
-            }
-            else if (tmpTime >= tIdle)
-            {
-                setState((int)SlimeState.patrol);
-
+                setAggro((int)SlimeState.jump);
             }
             yield return null;
         } while (!newState);
     }
-    IEnumerator patrol()
+    IEnumerator jump()
     {
-        float tmpTime = 0;
-        moveDir = Vector2.zero;
+        _animator.SetTrigger("OneShot");
+        float tempTime = 0;
         do
         {
-            tmpTime += Time.deltaTime;
-            if (detectPlayer(disDetect))
+            if (animEnd)
             {
-                setAggro((int)SlimeState.aggro);
-            }
-            else if (tmpTime >= tPatrol + tIdle)
-            {
-                tmpTime = 0;
                 moveDir = Vector2.zero;
+                tempTime += Time.deltaTime;
+                if (tempTime < jumpWaitTime)
+                {
+                    yield return null;
+                    continue;
+                }
+                else
+                {
+                    setState((int)SlimeState.jump);
+                    yield return null;
+                    continue;
+                }
             }
-            else if (moveDir == Vector2.zero && tmpTime >= tIdle)
-            {
-                moveDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            }
-            yield return null;
-        } while (!newState);
-    }
-    IEnumerator aggro()
-    {
-        do
-        {
-
             moveDir = (player.position - transform.position).normalized;
             if (!detectPlayer(disMaxDetect))
             {
-                setState((int)SlimeState.patrol);
+                setState((int)SlimeState.idle);
             }
             else
-            if (Time.realtimeSinceStartup >= coolStartTime + aggroTime && Vector2.Distance(player.position, transform.position) <= disAttackRange)
+            if (canAttackPlayer())
             {
                 setState((int)SlimeState.attack);
             }
@@ -111,7 +101,7 @@ public class SlimeFsm : EnemyBase
         do
         {
             yield return null;
-            if (animEnd&&knockBackDistance <= 0&&!CCreamin())
+            if (animEnd&&!CCreamin())
             {
                 CCfree();
             }
@@ -124,13 +114,14 @@ public class SlimeFsm : EnemyBase
         SetComboCount(tempAttackCount);
         do
         {
-            //TODO: 공격 시 몇% 애니 재생 시 판정으로 할 지
-            //      아니면 애니메이션에서 키프레임에서 이벤트 호출시킬지
-            //      정해야함 / 키프레임 하기로 정해짐 나중에 제대로 애니메이션 나오면 적용
-            if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
-            {//attack Anim 종료
+           if (attackTrigger)
+            {
+                attackTrigger = false;
                 doSimpleAttack();
-                setAggro((int)SlimeState.aggro);
+            }
+            if (animEnd)
+            {
+                setAggro((int)SlimeState.jump);
             }
             yield return null;
         } while (!newState);
@@ -144,6 +135,10 @@ public class SlimeFsm : EnemyBase
             }
             coolStartTime = Time.realtimeSinceStartup;
         }
+    }
+    public override void  sendAttackMessage(int attackType)
+    {
+        attackTrigger = true;
     }
     public override void TakeAttack(float dmg, bool cancelAttack = false)
     {
@@ -161,25 +156,23 @@ public class SlimeFsm : EnemyBase
         {
             setState((int)SlimeState.hitted);
             _animator.SetTrigger("OneShot");
-            hittedNextState = (int)SlimeState.aggro;
+            hittedNextState = (int)SlimeState.jump;
         }
     }
-    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
+    public override void TakeKnockBack(float force, Vector2 knockBackDir)
     {
-
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
             return;
         }
         _animator.SetTrigger("OneShot");
         setState((int)SlimeState.hitted);
-        hittedNextState = (int)SlimeState.aggro;
-        knockBackDistance = distance;
-        knockBackVelocity = velocity;
+        hittedNextState = (int)SlimeState.jump;
 
-        knockDir = knockBackDir.normalized * distance + (Vector2)transform.position;
+        knockDir = knockBackDir.normalized*force;
         SetCollidersTriggerNotTerrain(true);
     }
+    
     public override void KnockBackEnd()
     {
 
@@ -198,12 +191,12 @@ public class SlimeFsm : EnemyBase
     }
     public override void DropItem()
     {
-        ItemDropSystem.MyInstance.DropItem(transform.position,myDropItem);
+       // ItemDropSystem.MyInstance.DropItem(transform.position,myDropItem);
     }
     public enum SlimeState
     {//슬라임의 스테이트(고유 번호 고정)
-        patrol = 0,
-        aggro,
+        idle = 0,
+        jump,
         attack,
         dead,
         hitted,

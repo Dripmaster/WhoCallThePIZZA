@@ -8,9 +8,8 @@ public class PlayerFSM : FSMbase
     public float moveSpeed;
     public float dashSpeed;
     public int DashFrameCount;
-    Vector2 moveDir;
-    Vector2 forcedDir;
-    Vector2 viewDir;
+    Vector3 moveDir;
+    Vector3 forcedDir;
 
     int dashFrameCount;
     WeaponBase Weapon;
@@ -29,7 +28,7 @@ public class PlayerFSM : FSMbase
     new void OnEnable()
     {
         base.OnEnable();
-        moveDir = Vector2.zero;
+        moveDir = Vector3.zero;
         dashFrameCount = 0;
         setState((int)PlayerState.idle);
     }
@@ -114,7 +113,7 @@ public class PlayerFSM : FSMbase
         {
             moveDir.y += -1;
         }
-        if (moveDir != Vector2.zero)
+        if (moveDir != Vector3.zero)
         {
             if (dashInput())
             {
@@ -133,11 +132,11 @@ public class PlayerFSM : FSMbase
         }
     }
    
-    public bool doMove(Vector2 moveDir) {
+    public bool doMove(Vector3 moveDir) {
         moveDir.Normalize();
-        if (moveDir != Vector2.zero)
+        if (moveDir != Vector3.zero)
         {
-            _rigidbody2D.MovePosition((Vector2)transform.position + moveDir * status.getCurrentStat(STAT.moveSpeed)*Weapon.weakedSpeed * Time.deltaTime);
+            _rigidbody2D.MovePosition(transform.position + moveDir * status.getCurrentStat(STAT.moveSpeed)*Weapon.weakedSpeed * Time.deltaTime);
             
             return true;
         }
@@ -155,15 +154,15 @@ public class PlayerFSM : FSMbase
             return false;
         }
     }
-    bool doDash(Vector2 moveDir)
+    bool doDash(Vector3 moveDir)
     {
         moveDir.Normalize();
         dashFrameCount++;
         if (dashFrameCount >= DashFrameCount)
             return false;
-        if (moveDir != Vector2.zero)
+        if (moveDir != Vector3.zero)
         {
-            _rigidbody2D.MovePosition((Vector2)transform.position + moveDir * dashSpeed * Time.deltaTime);
+            _rigidbody2D.MovePosition(transform.position + moveDir * dashSpeed * Time.deltaTime);
             return true;
         }
         return false;
@@ -182,7 +181,12 @@ public class PlayerFSM : FSMbase
 
     private void FixedUpdate()
     {
-        if (moveDir != Vector2.zero)
+        viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        if (stepFoward.IsProgress())
+        {
+            return;
+        }
+        if (moveDir != Vector3.zero)
         {
             if (objectState == (int)PlayerState.move)
             {
@@ -193,13 +197,23 @@ public class PlayerFSM : FSMbase
                 doDash(moveDir);
             }
         }
-        if(forcedDir != Vector2.zero)
+        if (forcedDir.z != 0)
         {
-                _rigidbody2D.MovePosition((Vector2)transform.position + forcedDir * Time.deltaTime);
-            forcedDir = Vector2.zero;
+            zSystem.Z += forcedDir.z * Time.deltaTime;
+            forcedDir.z = 0;
         }
-        viewDir = (mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
+        if (forcedDir.x!= 0 && forcedDir.y != 0)
+        {
+                _rigidbody2D.MovePosition((Vector2)transform.position + (Vector2)forcedDir * Time.deltaTime);
+           
+            forcedDir = Vector3.zero;
+        }
+    }
+    public override void setZ(float z)
+    {
+        base.setZ(z);
+        forcedDir.z = 0;
     }
     IEnumerator idle()
     {
@@ -335,9 +349,15 @@ public class PlayerFSM : FSMbase
     public override void TakeAttack(float dmg, bool cancelAttack = false)
     {//!TODO : 대쉬중인지 + 무기가 대쉬중일때 안맞는 무기인지 확인할 것
         //!TODO : 
+        if (isDead)
+        {
+            return;
+        }
+
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
+            isDead = true;
             setState((int)PlayerState.dead);
             Weapon.SetDead();
         }
@@ -368,14 +388,12 @@ public class PlayerFSM : FSMbase
             Weapon.SetIdle();
         }
     }
-    public override void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir)
+    
+    public override void TakeKnockBack(float force, Vector2 knockBackDir)
     {
-        knockDir = knockBackDir;
-        knockBackDistance = distance;
-        knockBackVelocity = velocity;
-        IgnoreEnemyPlayerCollison(true);
 
-        
+        IgnoreEnemyPlayerCollison(true);
+        knockDir = knockBackDir.normalized * force;
     }
     public override void KnockBackEnd()
     {
@@ -395,13 +413,15 @@ public class PlayerFSM : FSMbase
             Weapon.SetIdle();
         }
     }
-    public void AddPosition(Vector2 movePos)
+    public void AddPosition(Vector3 movePos)
     {
         forcedDir = movePos;
     }
-    public void moveFoward(float speed)
+    public override void moveFoward(StepForwardValues sfv)
     {
-        AddPosition( viewDir*speed);
+        IgnoreEnemyPlayerCollison(true);
+        stepFoward.SetStep(sfv, viewDir, IgnoreEnemyPlayerCollison, false);
     }
 
+    
 }

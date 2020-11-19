@@ -168,7 +168,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         dashCondition = false;
     }
     public override void SetCooltime() {
-        totalCoolTime = 3;
+        skillCoolTimes[0] = 3;
     }
     AttackMessage TouchHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
@@ -325,7 +325,6 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 {
     AttackMessage m;
     float[] Damages;
-
     GameObject[]ironHookEffects; 
     //float h_Thunder= 0.3f;
     int ironHookEffectsinitialCount = 10;
@@ -340,7 +339,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
 
     bool flipX = false;
 
-    public SampleAttackStrategy(WeaponBase weaponBase) : base(2,0.8f,0.3f,0.7f)
+    public SampleAttackStrategy(WeaponBase weaponBase) : base(2)
     {
         attackMoveCondition = MoveWhileAttack.Move_Attack;
         dashCondition = true; 
@@ -436,10 +435,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     }
     public void Update(WeaponBase weaponBase)
     {
-        HandleAttackCancel(weaponBase);
-        HandleAttackCommand(weaponBase);
         HandleAttackEND(weaponBase);
-
     }
     public override void motionEvent(int value)
     {
@@ -447,6 +443,10 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         {
             E_Slash(chainHead.position);
         }
+    }
+    public override void motionEvent(string msg)
+    {
+        base.motionEvent(msg);
     }
     void E_Slash(Vector2 point)
     {

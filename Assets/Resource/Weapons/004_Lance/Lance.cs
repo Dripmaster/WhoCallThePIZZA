@@ -9,8 +9,6 @@ public class Lance : AttackComponent
     public float devideRatio = 0.75f;// 전체애니에서 돌진부분 차지 부분 0~1
     public float chargeSpeed = 10f; //돌진속도
     public float maxChargeTime = 2;//최대 충전 시간
-    public float stepProgress = 0.25f;
-    public float stepSpeed = 6f;
 
     public GameObject lanceChargeEffect1;
     public Color charge1Color;
@@ -18,6 +16,8 @@ public class Lance : AttackComponent
     public Color charge2Color;
     public GameObject lanceFullChargeEffect;
     public Color fullChargeColor;
+
+    public int[] skillAngles;
     public override void SetStrategy(WeaponBase weaponBase)
     {
         idleStrategy = new LanceIdleStrategy();
@@ -55,7 +55,6 @@ public class LanceIdleStrategy : IdleStrategy
         if (weaponBase.CanAttackCancel)
         {
             weaponBase.setState((int)PlayerState.idle);
-            weaponBase.setRotate(0);
         }
     }
     public void Update(WeaponBase weaponBase)
@@ -65,7 +64,7 @@ public class LanceIdleStrategy : IdleStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection*0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class LanceMoveStrategy : MoveFunction, MoveStrategy
@@ -82,7 +81,7 @@ public class LanceMoveStrategy : MoveFunction, MoveStrategy
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
-        weaponBase.setRotate(weaponBase.WeaponViewDirection * 0.5f);
+        weaponBase.setRotate(weaponBase.WeaponViewDirection);
     }
 }
 public class LanceDeadStrategy : DeadStrategy
@@ -177,14 +176,19 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     int lanceSkillEffectsinitialCount = 14;
     int lanceSkillEffectsincrementCount = 7;
     float flip;
-    WeaponBase weapon;
+    WeaponBase weaponBase;
     Lance lance;
+    int skillStack;
+    string mst_skillEffect = "SkillEffect";
+    string mst_ResetStack = "ResetStack";
+    string mst_LastSting = "LastSting";
     public LanceSkillStrategy(WeaponBase weaponBase)
     {
+        lance = weaponBase.WeaponComponent() as Lance;
         dashCondition = false;
         moveSkillcondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
-        weapon = weaponBase;
+        this.weaponBase = weaponBase;
         lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
         if(lanceSkillEffectsPools == null)
         {
@@ -201,11 +205,12 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
                 lanceSkillEffectsPools[i].Initialize();
             }
         }
+        skillStack = 0;
     }
 
     public override void SetCooltime()
     {
-        totalCoolTime = 4;
+        skillCoolTimes[0] = 4;
     }
 
 
@@ -244,16 +249,9 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
             attackedColliders.Clear();
             weaponBase.SetColliderEnable(colliderEnable);
         }
-
-        if (weapon.getAnimProgress() <= stepProgressEnd && weapon.getAnimProgress() >= stepProgress)
-            player.moveFoward(stepSpeed);
-
         HandleSkillEND(weaponBase);
     }
 
-    float stepProgress = 0.75f;
-    float stepProgressEnd = 0.95f;
-    float stepSpeed = 6f;
     AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.SMALL;
@@ -273,27 +271,56 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         }
     }
 
-    public override void motionEvent(int value)
+    public override void motionEvent(string msg)
     {
-        if (value == 0)
+        
+        if (msg == mst_skillEffect)
             E_LanceStings();
+        else if (msg == mst_ResetStack)
+            skillStack = 0;
+        else if (msg == mst_LastSting)
+            LastSting();
+    }
+    float SkillAlphaEffectCurve(float t)
+    {
+        float stayTime = 0.4f;
+        float result = (t - stayTime) * (1f / stayTime);
+        return result > 0 ? result : 0;
     }
     void E_LanceStings()
     {
         var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
-        t.transform.position = lanceTransform.position;
-        t.transform.rotation = lanceTransform.rotation;
-        t.transform.Rotate(0, 0, flip);
+        t.transform.rotation = Quaternion.identity;
+        t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection + lance.skillAngles[skillStack]);
+        t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
+        //t.transform.rotation = lanceTransform.rotation;
+
         t.transform.localScale = lanceTransform.localScale;
         t.gameObject.SetActive(true);
 
-        float duration = 1;
-        t.GetComponent<Effector>().Alpha(duration, 0f).And().Scale(duration, 2f).Then().Disable().Play();
+        float duration = 0.3f;  //Wait(duration/2).Then().
+        t.GetComponent<Effector>().Alpha(duration/2, 0, SkillAlphaEffectCurve).And().Scale(duration, 0.5f).And().Move(duration, t.transform.right * 0.25f)
+                                    .Then().Disable().Play();
+        skillStack++;
+    }
+    void LastSting()
+    {
+        var t = lanceSkillEffectsPools[0].GetObjectDisabled(effcetParent);
+        t.transform.rotation = Quaternion.identity;
+        t.transform.Rotate(0, 0, flip + weaponBase.WeaponViewDirection);
+        t.transform.position = lanceTransform.position + t.transform.right * 0.8f;
+        //t.transform.rotation = lanceTransform.rotation;
+        t.transform.localScale = lanceTransform.localScale*1.5f;
+        t.gameObject.SetActive(true);
 
+        float duration = 0.5f;  //Wait(duration/2).Then().
+        t.GetComponent<Effector>().Alpha(duration / 2, 0, SkillAlphaEffectCurve).And().Scale(duration, 0.8f).And().Move(duration, t.transform.right * 0.4f)
+                                    .Then().Disable().Play();
+        skillStack++;
     }
     public override void StateEnd()
     {
-        weapon.SetColliderEnable(false);
+        weaponBase.SetColliderEnable(false);
     }
 
 }
@@ -343,7 +370,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         animTimeAll = t * (1- lance.devideRatio) + animTimeRush;
         weapon.AnimSpeed = 1 / animTimeAll;
     }
-    public LanceAttackStrategy(WeaponBase weaponBase) : base(3,0.8f)
+    public LanceAttackStrategy(WeaponBase weaponBase) : base(3)
     {
         weapon = weaponBase;
         lance = weapon.WeaponComponent() as Lance;
@@ -504,11 +531,6 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
                 }
             }
 
-            if (tempAtkCount == 1)
-            {
-                if (weapon.getAnimProgress() <= lance.stepProgress)
-                    player.moveFoward(lance.stepSpeed);
-            }
             
             HandleAttackCancel(weaponBase);
             HandleAttackEND(weaponBase, endAttack);

@@ -13,6 +13,7 @@ public class FireworkBullet : BulletBase
     private void Awake()
     {
         myrigid = GetComponent<Rigidbody2D>();
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

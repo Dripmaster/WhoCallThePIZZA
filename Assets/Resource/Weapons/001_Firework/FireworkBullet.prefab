@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8973406912825689212}
   - component: {fileID: 8973406912825689213}
   - component: {fileID: 8973406912825689214}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: FireworkBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,8 +137,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0}
   speed: 0
   DestroyEffectPool: {fileID: 0}
-  effectParent: {fileID: 1649803945078530814, guid: 1549cfaa60bc4ef4a9456c4a1597c94e,
-    type: 3}
+  effectParent: {fileID: 0}
   curve: 0
   explosionTime: 0
 --- !u!114 &8973406912825689214

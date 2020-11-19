@@ -78,7 +78,7 @@ public class FireworkMouseInputStrategy : MouseInputStrategy
     public void HandleInput(WeaponBase weaponBase)
     {
         /////기본 공격
-        if (!weaponBase.isDash && InputSystem.Instance.getKeyDown(InputKeys.MB_L_click))
+        if (!weaponBase.isDash && InputSystem.Instance.getKey(InputKeys.MB_L_click))
         {
             weaponBase.attackComboCount = 0;
             if (!weaponBase.IsAttackCoolTimeRemain() && weaponBase.CanAttackCancel)
@@ -159,8 +159,8 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     Pool bulletPool;
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
-    public Vector3 bulletDir;
-    public Vector3 mouseDir;
+    public Vector2 bulletDir;
+    public Vector2 mouseDir;
     public float Speed = 3;
 
     GameObject FW_DestroyEffect;
@@ -171,13 +171,11 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     public string tmpMessage;
 
-    float time = 0;
     float randomTime;
 
 
     public Transform bulletTransform;
     AttackMessage m;
-    float tempTime = 0;
 
     float randomAngle;
     Quaternion qRandomAngle;
@@ -185,7 +183,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
     WeaponBase weapon;
 
-    public FireworkAttackStrategy(WeaponBase weaponBase) : base()
+    public FireworkAttackStrategy(WeaponBase weaponBase) : base(1)
     {
         if(FW_DestroyEffectPool == null)
         {
@@ -200,6 +198,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         {
             bulletPrefab = (weaponBase.WeaponComponent() as Firework).BulletPrefab;
             bulletPrefab.DestroyEffectPool = FW_DestroyEffectPool;
+            bulletPrefab.effectParent = EffectManager.GetInstance().effectParent.transform;
             bulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
             bulletPool.incrementCount = FW_bulletincrementCount;
             bulletPool.initialCount = FW_bulletinitialCount;
@@ -213,9 +212,6 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         weapon = weaponBase;
 
         fireworkMuzzleTransform = weaponBase.transform.Find("FireWorkParent/Firework/FireworkMuzzle/FireworkMuzzlePosition");
-
-
-        tempAtkCount = 0;
 
         attackMoveCondition = MoveWhileAttack.Move_Attack;
     }
@@ -244,7 +240,6 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
             weaponBase.setState(PlayerState.attack);
         weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.SetColliderEnable(true);
-        time = 0;
         weaponBase.CanRotateView = true;
         weaponBase.setViewPoint();
         weaponBase.SP_FlipX();
@@ -252,61 +247,44 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
         bulletDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
         bulletDir.Normalize();
-        tempTime = 0;
         weaponBase.CanRotateView = false;
     }
     public void Update(WeaponBase weaponBase)
     {
-        if(tempAtkCount == 0)
-        {
-            tempTime = 0;
-            CountCombo(weaponBase);
-        }
-        else
-        {
-            tempTime = 0.33f;
-        }
-
-        tempAtkCount = weaponBase.attackComboCount;
-
-        if (tempAtkCount == 1 || tempAtkCount == 0)
-        {
-            
-            weaponBase.CanRotateView = true;
+        weaponBase.CanRotateView = true;
             weaponBase.setViewPoint();
             weaponBase.SP_FlipX();
             weaponBase.setRotate(weaponBase.WeaponViewDirection, true);
-            
-            //!TODO 곡선 궤적  //이것도 불릿 베이스 에서 해야하나? 상속 받아서 해야하나?
-            time += Time.deltaTime;
-            if (time >= tempTime)
-            {
-                time = 0;
-                randomTime = UnityEngine.Random.Range(2, 5);
-                randomAngle = (UnityEngine.Random.Range(-3, 4)) * 15;                 //-45 -30 -15 0 15 30 45 랜덤방향 설정
-                qRandomAngle = Quaternion.AngleAxis(randomAngle, new Vector3(0, 0, 1));
-                mouseDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
-                bulletDir = qRandomAngle * mouseDir;
-                bulletDir.Normalize();
-                var b = bulletPool.GetObjectDisabled().GetComponent<FireworkBullet>();
-                //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
-                b.transform.position = fireworkMuzzleTransform.position;
-                b.dir = bulletDir;
-                b.speed = Speed;
-                b.curve = UnityEngine.Random.Range(0, 3);
-                b.explosionTime = randomTime;
-                b.touched += fireworkBulletTouched;
-                b.gameObject.SetActive(true);  
-            } 
 
             weaponBase.CanRotateView = false;
-            
-        }
-        else
+    }
+    public override void motionEvent(int value)
+    {
+        base.motionEvent(value);
+        if (value == 1)
         {
-            HandleAttackEND(weaponBase);
+            shotOnce();
         }
+    }
+    void shotOnce()
+    { //!TODO 곡선 궤적  //이것도 불릿 베이스 에서 해야하나? 상속 받아서 해야하나?
+        randomTime = UnityEngine.Random.Range(2, 5);
+        randomAngle = (UnityEngine.Random.Range(-3, 4)) * 15;                 //-45 -30 -15 0 15 30 45 랜덤방향 설정
+        qRandomAngle = Quaternion.AngleAxis(randomAngle, new Vector3(0, 0, 1));
+        mouseDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
+        
+        bulletDir = qRandomAngle * mouseDir;
+        bulletDir.Normalize();
 
+        var b = bulletPool.GetObjectDisabled().GetComponent<FireworkBullet>();
+        //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
+        b.transform.position = fireworkMuzzleTransform.position;
+        b.dir = bulletDir;
+        b.speed = Speed;
+        b.curve = UnityEngine.Random.Range(0, 3);
+        b.explosionTime = randomTime;
+        b.touched += fireworkBulletTouched;
+        b.gameObject.SetActive(true);
     }
 
     bool fireworkBulletTouched(Collider2D collision)
@@ -339,7 +317,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
     Pool bulletPool;
     int FW_bulletinitialCount = 10;
     int FW_bulletincrementCount = 1;
-    public Vector3 bulletDir;
+    public Vector2 bulletDir;
     public float Speed = 9;
 
     public string tmpMessage;
@@ -352,7 +330,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
     AttackMessage m;
     float SkilltempTime;
 
-    public Vector3 mouseDir;
+    public Vector2 mouseDir;
     float randomAngle;
     Quaternion qRandomAngle;
 
@@ -410,6 +388,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
             mouseDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - player.transform.position);
             bulletDir = qRandomAngle * mouseDir;
             bulletDir.Normalize();
+
             var b = bulletPool.GetObjectDisabled().GetComponent<FireworkBullet>();
             //위에 실제 다른곳에서 호출 시 parent 설정 해줘야함
             b.transform.position = fireworkMuzzleTransform.position;

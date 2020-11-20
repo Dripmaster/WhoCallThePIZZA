@@ -150,7 +150,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     public override void SetCooltime() {
         skillCoolTimes[0] = 3;
     }
-    AttackMessage TouchHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage TouchHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.SMALL;
         m.critEffectType = EffectType.CRIT;
@@ -168,7 +168,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
 
     public void onWeaponTouch(int colliderType, Collider2D target)
     {
-        FSMbase t = target.GetComponent<FSMbase>();
+        IHitable t = target.GetComponent<IHitable>();
         if ( t!= null)
         {
             collisionFlag = true;
@@ -349,7 +349,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         //!TODO fsm만이 아니라 그냥 오브젝트들도 다 되게 할 것
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<FSMbase>();
+        var fsm = target.GetComponent<IHitable>();
         if (fsm != null)
         {
             attackedColliders.Add(target);
@@ -372,7 +372,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
             }
         }
     }
-    AttackMessage AttackHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage AttackHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         if (tempAtkCount == 1)

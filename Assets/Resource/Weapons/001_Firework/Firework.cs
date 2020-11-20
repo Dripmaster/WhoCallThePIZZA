@@ -207,7 +207,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         attackMoveCondition = MoveWhileAttack.Move_Attack;
     }
 
-    AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage bulletHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
@@ -270,7 +270,8 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
         b.explosionTime = randomTime;
         b.touched += fireworkBulletTouched;
         b.gameObject.SetActive(true);
-    }
+
+        }
 
     bool fireworkBulletTouched(Collider2D collision)
     {//!TODO 넉백 추가 파티클 추가
@@ -385,7 +386,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         HandleSkillEND(weaponBase);
     }
 
-    AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage bulletHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 

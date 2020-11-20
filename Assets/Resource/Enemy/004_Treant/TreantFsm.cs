@@ -163,7 +163,7 @@ public class TreantFsm : EnemyBase
         }
         return false;
     }
-    AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage bulletHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 

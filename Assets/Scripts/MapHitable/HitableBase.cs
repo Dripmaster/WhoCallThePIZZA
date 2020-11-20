@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
+ 
+     구현중단!
+     
+     
+     
+     */
 public abstract class HitFuncStrategy
 {
     public HitableBase objectBase;
@@ -59,7 +65,13 @@ public class DefaultTakeFunc : TakeFuncStrategy
         isUsed = true;
     }
 }
-
+public enum HitableState
+{
+    idle = 0,
+    collision,
+    destroy,
+    take
+}
 public class HitableBase : FSMbase
 {
     HitFuncStrategy hitFuncStrategy;
@@ -70,6 +82,7 @@ public class HitableBase : FSMbase
     public float currentHp;
     Material tmpMat;
 
+    
     HitableState hitableState;
     bool activeTake;
 
@@ -284,6 +297,10 @@ public class HitableBase : FSMbase
     }
 
     public override void TakeKnockBack(float force, Vector2 knockBackDir)
+    {
+    }
+
+    public override void initData()
     {
     }
 }

@@ -241,7 +241,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         HandleSkillEND(weaponBase);
     }
 
-    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage stingHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.SMALL;
         m.critEffectType = EffectType.CRIT;
@@ -252,7 +252,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     {
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<FSMbase>();
+        var fsm = target.GetComponent<IHitable>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
@@ -373,13 +373,13 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
             1,
             2f };
     }
-    AttackMessage stingHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage stingHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
         return m;
     }
-    AttackMessage rushHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage rushHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint ;
 
@@ -416,7 +416,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     {
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<FSMbase>();
+        var fsm = target.GetComponent<IHitable>();
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             if (tempAtkCount == 1)//그냥찌르기

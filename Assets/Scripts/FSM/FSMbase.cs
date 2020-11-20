@@ -12,7 +12,7 @@ using UnityEngine;
 * @version 0.0.1
 *
 */
-public abstract class FSMbase : MonoBehaviour
+public abstract class FSMbase : IHitable
 {
     protected Animator _animator;
     protected SpriteRenderer _sr;
@@ -23,7 +23,6 @@ public abstract class FSMbase : MonoBehaviour
     int viewDirection;
     private float animSpeed;
     protected Rigidbody2D _rigidbody2D;
-    public StatusBase status;
     Collider2D[] _colliders;
 
     protected float knockBackVelocity;
@@ -33,10 +32,8 @@ public abstract class FSMbase : MonoBehaviour
     protected int hittedNextState;
     public  bool animEnd;
 
-    [SerializeField]
-    public bool isDead;
-
     protected ZSystem zSystem;
+    protected bool isDead;
 
     public ZSystem GetZSystem()
     {
@@ -94,6 +91,7 @@ public abstract class FSMbase : MonoBehaviour
         ViewDirection = 6;
         setState(0);
         AnimSpeed = 1;
+        isDead = false;
         StartCoroutine(FSMmain());
     }
     protected void setStateType(Type t) {
@@ -154,10 +152,9 @@ public abstract class FSMbase : MonoBehaviour
             yield return null;
         } while (!newState);
     }
-    public abstract void TakeAttack(float dmg, bool cancelAttack);
    // public abstract void TakeKnockBack(float distance, float velocity, Vector2 knockBackDir);
-    public abstract void TakeKnockBack(float force, Vector2 knockBackDir);
-    public abstract void TakeCC(int CCnum = 0);
+
+
     public abstract void CCfree();
     public abstract void KnockBackEnd();
 
@@ -206,5 +203,7 @@ public abstract class FSMbase : MonoBehaviour
     public virtual void DropItem() { }
 
     public abstract void moveFoward(StepForwardValues sfv);
+    public override abstract void TakeAttack(float dmg, bool cancelAttack);
+
     public delegate void StepFowardCallBack(bool v);
 }

@@ -104,7 +104,7 @@ public abstract class EnemyBase : FSMbase
         }
         return result;
     }*/
-    public abstract void initData();
+    public override abstract void initData();
     public bool detectPlayer(float dis) {
         Collider2D c =  Physics2D.OverlapCircle(transform.position, dis,1<<9);
         if (c != null)

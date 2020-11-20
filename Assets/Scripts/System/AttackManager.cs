@@ -145,24 +145,15 @@ public class AttackManager : MonoBehaviour
         return r;
     }
     */
-    public void SimpleDamage(float Dmg, FSMbase target) {
+    public void SimpleDamage(float Dmg, IHitable target) {
         //TODO : cri계산??
-        if (target.isDead)
-        {
-
-            return;
-        }
         target.TakeAttack(Dmg,false);
         var mHit = target as HitableBase;
         if (mHit == null)
             effectManager.defaultEffect(target,0);
     }
-    public void HandleAttack(attackFunc attack, FSMbase target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
+    public void HandleAttack(attackFunc attack, IHitable target, FSMbase sender, float attackPoint, bool cancelAttack = false, bool isKnockBack = false)
     {
-        if (target.isDead)
-        {
-            return;
-        }
         AttackMessage m = attack.Invoke(target, sender, attackPoint);
         if(!m.criCalculated)
             m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint), sender.status.getCurrentStat(STAT.CriticalDamage));
@@ -180,7 +171,7 @@ public class AttackManager : MonoBehaviour
         }
     }
 }
-public delegate AttackMessage attackFunc(FSMbase target, FSMbase sender, float attackPoint);
+public delegate AttackMessage attackFunc(IHitable target, FSMbase sender, float attackPoint);
 public struct AttackMessage
 {
     public float FinalDamage;
@@ -207,7 +198,7 @@ public struct AttackMessage
         return isCritical;
     }
 
-    public void CalcDefense(FSMbase target, FSMbase sender)
+    public void CalcDefense(IHitable target, FSMbase sender)
     {
         if (target.status.IsBuff(BUFF.Bleeding))
         {
@@ -228,7 +219,7 @@ public struct AttackMessage
         this.knockBackDistance = knockBackDistance;
         this.knockBackDir = knockBackDir;
     }
-    public void CalcKnockBack(FSMbase target, FSMbase sender, float knockBackVelocity, float knockBackDistance)
+    public void CalcKnockBack(IHitable target, FSMbase sender, float knockBackVelocity, float knockBackDistance)
     {
         this.knockBackVelocity = knockBackVelocity;
         this.knockBackDistance = knockBackDistance;

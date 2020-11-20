@@ -8,6 +8,7 @@ public class StatusBase
     public float[] Stats;
     public float[] StatValuePlus;
     public float[] StatValueMultiply;
+    public float[] BuffImmune;
     public List<Buff> buffs;
     public StatusBase()
     {
@@ -16,9 +17,16 @@ public class StatusBase
             Enum.GetValues(typeof(BUFF)).Length];
         StatValueMultiply = new float[Enum.GetValues(typeof(STAT)).Length +
             Enum.GetValues(typeof(BUFF)).Length];
+        BuffImmune = new float[Enum.GetValues(typeof(BUFF)).Length];
+
+
         for (int i = 0; i < StatValueMultiply.Length; i++)
         {
             StatValueMultiply[i] = 1;
+        }
+        for (int i = 0; i < BuffImmune.Length; i++)
+        {
+            BuffImmune[i] = 0;
         }
         buffs = new List<Buff>();
     }
@@ -48,6 +56,10 @@ public class StatusBase
     }
     public void AddBuff(Buff buff,bool reFresh = true)
     {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
+        if (BuffImmune[(int)buff.buffName] == 1)
+        {
+            return;
+        }
         if (getCurrentStat(STAT.hp) <= 0)
             return;
         if (reFresh)
@@ -171,12 +183,12 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
     public float totalTime;//지속시간(전체)
     public float tempTime;//시작시간
     public bool isOn;//시간과 관계없는 버프디버프인지(Off시 false)
-    protected FSMbase target;
+    protected IHitable target;
 
     public Buff()
     {
     }
-    public Buff(float time, BUFF buff,FSMbase target,bool isCC = false,bool isOn = false)
+    public Buff(float time, BUFF buff,IHitable target,bool isCC = false,bool isOn = false)
     {
         buffName = buff;
 
@@ -189,7 +201,7 @@ public class Buff {//상속해서 사용, 필요없으면 안해도됨
             target.TakeCC();
         SetTarget(target);
     }
-    public void SetTarget(FSMbase target)
+    public void SetTarget(IHitable target)
     {
         this.target = target;
     }
@@ -221,7 +233,7 @@ public class Bleeding : Buff
     public float Damage;
     float dealTime;
     float dealedDamage;
-    public Bleeding(float time,float Dmg, FSMbase target)
+    public Bleeding(float time,float Dmg, IHitable target)
     {
         buffName = BUFF.Bleeding;
         totalTime = time;
@@ -253,7 +265,7 @@ public class Burn : Buff
     public float Damage;
     float dealTime;
     float dealedDamage;
-    public Burn(float time, float Dmg, FSMbase target)
+    public Burn(float time, float Dmg, IHitable target)
     {
         buffName = BUFF.Burn;
         totalTime = time;
@@ -283,7 +295,7 @@ public class Burn : Buff
 
 public class Electrified : Buff
 {
-    public Electrified(float time, FSMbase target)
+    public Electrified(float time, IHitable target)
     {
         buffName = BUFF.Electrified;
         totalTime = time;
@@ -306,7 +318,7 @@ public class Electrified : Buff
 }
 public class Pierced : Buff
 {
-    public Pierced(float time, FSMbase target)
+    public Pierced(float time, IHitable target)
     {
         buffName = BUFF.Pierced;
         totalTime = time;
@@ -329,7 +341,7 @@ public class Pierced : Buff
 }
 public class BatteryCharged : Buff
 {
-    public BatteryCharged(float time, FSMbase target)
+    public BatteryCharged(float time, IHitable target)
     {
         buffName = BUFF.BatteryCharged;
         totalTime = time;

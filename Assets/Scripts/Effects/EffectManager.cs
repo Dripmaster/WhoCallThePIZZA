@@ -59,10 +59,12 @@ public class EffectManager : MonoBehaviour
             hitEffectPools[i].Initialize();
         }
     }
-    public void defaultEffect(FSMbase target, EffectType effectType)
+    public void defaultEffect(IHitable target, EffectType effectType)
     {
         //!TODO :콜리전 정보를 받아와서 살짝의 랜덤을 준 위치에 생성하는것도 만들 것
         if (effectType == EffectType.NONE)
+            return;
+        if (target.showEffect == false)
             return;
         var e = GetEffectFromPool(effectType);
         e.transform.position = target.transform.position;

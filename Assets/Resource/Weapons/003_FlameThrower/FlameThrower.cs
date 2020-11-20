@@ -159,7 +159,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         HandleSkillEND(weaponBase);
     }
 
-    AttackMessage explosionHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage explosionHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.BIG;
         m.critEffectType = EffectType.CRIT;
@@ -264,7 +264,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         dashCondition = true;
     }
 
-    AttackMessage flameHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage flameHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
 
@@ -275,7 +275,7 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
     {
         if (colliderType == 1)
             return;
-        var fsm = target.GetComponent<FSMbase>();
+        var fsm = target.GetComponent<IHitable>();
         if (fsm != null)
         {
             

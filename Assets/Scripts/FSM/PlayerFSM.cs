@@ -36,7 +36,7 @@ public class PlayerFSM : FSMbase
     {
         _animator.SetInteger("WeaponNumber", weaponType);
     }
-    void initData()
+    public override void initData()
     {//현재는 임시 데이터
         _animator.SetInteger("WeaponNumber", (int)Weapon.weaponType);
         status.setStat(STAT.hp, 50);

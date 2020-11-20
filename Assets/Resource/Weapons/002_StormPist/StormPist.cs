@@ -235,7 +235,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             for(int i = 0; i < currentSkillTargetCount; i++)
             {
                 E_ThunderDown(SkillTargetList[i].transform.position);
-                AttackManager.GetInstance().HandleAttack(ThunderHandle, SkillTargetList[i].GetComponent<FSMbase>(),player,stormPistSkillDamage1);
+                AttackManager.GetInstance().HandleAttack(ThunderHandle, SkillTargetList[i].GetComponent<IHitable>(),player,stormPistSkillDamage1);
             }
             had_Thunder = true;
         }
@@ -250,7 +250,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             //스킬이 끝날 때 이펙트 출력
             E_GroundDown(); 
             
-            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(player.transform.position, skillRange, 1 << 10); ;
+            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(player.transform.position, skillRange,(1<<10 )| (1<<12)); ;
             int discoveredTargetCount = SkillTargetList.Length;
 
             //타격대상 개수 확인
@@ -270,7 +270,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             //데미지
             for (int i = 0; i < currentSkillTargetCount; i++)
             {
-                AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<FSMbase>(), player, stormPistSkillDamage2, false, true);
+                AttackManager.GetInstance().HandleAttack(GroundHandle, SkillTargetList[i].GetComponent<IHitable>(), player, stormPistSkillDamage2, false, true);
             }
             weaponBase.AnimSpeed = 1;
             player.setZ(0);
@@ -300,7 +300,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         e.gameObject.SetActive(true);
         e.GetComponent<Effector>().Disable(1f).And().Alpha(0.3f, 0.7f).Play();
     }
-    AttackMessage ThunderHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage ThunderHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.MID;
         m.critEffectType = EffectType.CRIT;
@@ -309,7 +309,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         target.status.AddBuff(new Electrified(1, target));
         return m;
     }
-    AttackMessage GroundHandle(FSMbase target, FSMbase sender, float attackPoint)
+    AttackMessage GroundHandle(IHitable target, FSMbase sender, float attackPoint)
     {
         m.effectType = EffectType.SMALL;
         m.critEffectType = EffectType.SMALL;
@@ -366,7 +366,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             1,
             1.2f };
     }
-    AttackMessage attackHandle(FSMbase target, FSMbase sender, float attackPoint) {
+    AttackMessage attackHandle(IHitable target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         m.CalcKnockBack(target, sender, 1,1);
 
@@ -382,13 +382,18 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     {
         if (attackedColliders.Contains(target))
             return;
+        var hitable = target.GetComponent<IHitable>();
         var fsm = target.GetComponent<FSMbase>();
+        if (hitable!= null)
+        {
+            AttackManager.GetInstance().HandleAttack(attackHandle, hitable, player, Damages[tempAtkCount], false, true);
+            attackedColliders.Add(target);
+        }
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
             List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
             alreadyHitTarget.Add(target.GetComponent<Collider2D>());
-            AttackManager.GetInstance().HandleAttack(attackHandle, fsm, player, Damages[tempAtkCount], false, true);
-
+           
             for (int i = 0; i < attackConnectCount; i++)
             {
                 Collider2D[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1 << 10, alreadyHitTarget);
@@ -399,8 +404,9 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
             for (int i = 1; i < alreadyHitTarget.Count; i++)
             {
                 AttackManager.GetInstance().HandleAttack(attackHandle, alreadyHitTarget[i].GetComponent<FSMbase>(),player, Damages[tempAtkCount], false, true);
+
+                attackedColliders.Add(alreadyHitTarget[i]);
             }
-            attackedColliders.Add(target);
         }
     }
 

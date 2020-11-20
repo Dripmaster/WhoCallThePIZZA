@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5311767968275880691}
   - component: {fileID: 3628560021046411871}
   - component: {fileID: 892074493431454566}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Treant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 3168847345402999229}
   - component: {fileID: 4863910312241966542}
   - component: {fileID: 2560590081850173796}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: RigidWithCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 9018724990676485166}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3333334, y: 2.8235295, z: 1}
   m_Children: []
   m_Father: {fileID: 7599830295662684080}
   m_RootOrder: 1
@@ -270,7 +270,7 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 1, y: 3}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0

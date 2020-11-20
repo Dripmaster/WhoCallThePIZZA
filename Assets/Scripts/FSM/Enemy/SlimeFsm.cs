@@ -17,8 +17,9 @@ public class SlimeFsm : EnemyBase
         base.OnEnable();
         setState((int)SlimeState.idle);
     }
-    void FixedUpdate()
+    new void  FixedUpdate()
     {
+        base.FixedUpdate();
         moveAggro((int)SlimeState.jump);
         moveKnockBack();
     }

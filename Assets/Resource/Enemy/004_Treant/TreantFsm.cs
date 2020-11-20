@@ -8,7 +8,7 @@ public class TreantFsm : EnemyBase
 
     //투사체
     Transform TreantLaunchTransform;
-    public BulletBase bulletPrefab;
+    public GameObject bulletPrefab;
     Pool TreantBulletPool;
     int TreantBulletinitialCount = 16;
     int TreantBulletincrementCount = 16;
@@ -29,7 +29,7 @@ public class TreantFsm : EnemyBase
             TreantBulletPool = AttackManager.GetInstance().bulletParent.gameObject.AddComponent<Pool>();
             TreantBulletPool.incrementCount = TreantBulletincrementCount;
             TreantBulletPool.initialCount = TreantBulletinitialCount;
-            TreantBulletPool.poolPrefab = bulletPrefab.gameObject;
+            TreantBulletPool.poolPrefab = bulletPrefab;
             TreantBulletPool.Initialize();
         }
 
@@ -54,7 +54,7 @@ public class TreantFsm : EnemyBase
         };
         damages = new float[]
         {
-            1
+            1.3f
         };
         attackCount = 1;
         tPatrol = 3;
@@ -154,14 +154,14 @@ public class TreantFsm : EnemyBase
     }
     bool TreantBulletTouched(Collider2D collision)
     {
-        var fsm = collision.GetComponent<FSMbase>();
+        var fsm = collision.GetComponent<PlayerFSM>();
         if (fsm != null)
         {
 
-            AttackManager.GetInstance().HandleAttack(bulletHandle, fsm, playerFsm, 1.3f);
-
+            AttackManager.GetInstance().HandleAttack(bulletHandle, fsm, this, damages[0]);
+            return true;
         }
-        return true;
+        return false;
     }
     AttackMessage bulletHandle(FSMbase target, FSMbase sender, float attackPoint)
     {

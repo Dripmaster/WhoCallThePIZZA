@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class IHitable : MonoBehaviour
 {
-    [HideInInspector]
+    //[HideInInspector]
     public StatusBase status;
 
     [HideInInspector]

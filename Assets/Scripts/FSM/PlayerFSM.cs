@@ -21,8 +21,8 @@ public class PlayerFSM : FSMbase
         
         setStateType(typeof(PlayerState));
         mainCamera = Camera.main;
-        Weapon = GetComponentInChildren<WeaponBase>();
-        Weapon.player = this;
+        Weapon = WeaponBase.instance;
+        WeaponBase.instance.player = this;
         initData();
     }
     new void OnEnable()

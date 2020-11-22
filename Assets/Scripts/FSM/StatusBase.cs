@@ -2,61 +2,100 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[System.Serializable]
 public class StatusBase
 {
-    public float[] CurrentStats;
-    public float[] Stats;
-    public float[] StatValuePlus;
-    public float[] StatValueMultiply;
-    public float[] BuffImmune;
+    public Dictionary<STAT,float>  CurrentStats;
+    public Dictionary<STAT,float>  Stats;
+    public Dictionary<STAT,float>  StatValuePlus;
+    public Dictionary<STAT,float>  StatValueMultiply;
+    public Dictionary<BUFF, float> BuffImmune;
+
+    public Dictionary<BUFF, float> BuffValuePlus;
+    public Dictionary<BUFF, float> BuffValueMultiply;
+
     public List<Buff> buffs;
+
+    public class STATtypeComparer : IEqualityComparer<STAT>
+    {
+        public bool Equals(STAT x, STAT y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(STAT obj)
+        {
+            return (int)obj;
+        }
+    }
+    public class BUFFtypeComparer : IEqualityComparer<BUFF>
+    {
+        public bool Equals(BUFF x, BUFF y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(BUFF obj)
+        {
+            return (int)obj;
+        }
+    }
+
     public StatusBase()
     {
-        Stats = new float[Enum.GetValues(typeof(STAT)).Length];
-        StatValuePlus = new float[Enum.GetValues(typeof(STAT)).Length+
-            Enum.GetValues(typeof(BUFF)).Length];
-        StatValueMultiply = new float[Enum.GetValues(typeof(STAT)).Length +
-            Enum.GetValues(typeof(BUFF)).Length];
-        BuffImmune = new float[Enum.GetValues(typeof(BUFF)).Length];
+        Stats = new Dictionary<STAT, float>(new STATtypeComparer());
+        StatValuePlus = new Dictionary<STAT, float>(new STATtypeComparer());
+        StatValueMultiply = new Dictionary<STAT, float>(new STATtypeComparer());
 
-
-        for (int i = 0; i < StatValueMultiply.Length; i++)
+        foreach (var item in Enum.GetValues(typeof(STAT)))
         {
-            StatValueMultiply[i] = 1;
+            Stats.Add((STAT)item, 0);
+            StatValuePlus.Add((STAT)item, 0);
+            StatValueMultiply.Add((STAT)item, 1);
         }
-        for (int i = 0; i < BuffImmune.Length; i++)
+
+        BuffImmune = new Dictionary<BUFF, float>(new BUFFtypeComparer());
+
+        BuffValuePlus = new Dictionary<BUFF, float>(new BUFFtypeComparer());
+        BuffValueMultiply = new Dictionary<BUFF, float>(new BUFFtypeComparer());
+
+
+        foreach (var item in Enum.GetValues(typeof(BUFF)))
         {
-            BuffImmune[i] = 0;
+            BuffImmune.Add((BUFF)item, 0);
+            BuffValuePlus.Add((BUFF)item, 0);
+            BuffValueMultiply.Add((BUFF)item, 1);
         }
         buffs = new List<Buff>();
     }
     public void setCurrentStat(STAT s,float value) {
-        CurrentStats[(int)s] = value;
+        CurrentStats[s] = value;
     }
     public float getCurrentStat(STAT s)
     {
-     return CurrentStats[(int)s];
+     return CurrentStats[s];
     }
     public void setStat(STAT s, float value)
     {
-        Stats[(int)s] = value;
+        Stats[s] = value;
     }
     public float getStat(STAT s)
     {
-        return Stats[(int)s];
+        return Stats[s];
     }
     public void ChangeStat(STAT s, float value, bool Multiply = false)
     {//주의 : 곱연산은 +10퍼 일 시 1.1로 줄 것
         
         if(Multiply)
-            StatValueMultiply[(int)s] *= value;
+            StatValueMultiply[s] *= value;
         else
-            StatValuePlus[(int)s] += value;
-        CurrentStats[(int)s] = (Stats[(int)s] + StatValuePlus[(int)s]) * StatValueMultiply[(int)s];
+            StatValuePlus[s] += value;
+        CurrentStats[s] = (Stats[s] + StatValuePlus[s]) * StatValueMultiply[s];
     }
     public void AddBuff(Buff buff,bool reFresh = true)
     {//TODO : 버프 시작, 진행중, 종료 시각효과 넣을 것
-        if (BuffImmune[(int)buff.buffName] == 1)
+        if (BuffImmune[buff.buffName] == 1)
         {
             return;
         }
@@ -78,7 +117,7 @@ public class StatusBase
         }
         else
         {
-            StatValuePlus[(int)buff.buffName + Stats.Length] += 1;
+            BuffValuePlus[buff.buffName] += 1;
             buff.tempTime = Time.realtimeSinceStartup;
             buff.StartBuff();
             buffs.Add(buff);
@@ -86,7 +125,7 @@ public class StatusBase
     }
     public bool IsBuff(BUFF buff)
     {
-        return StatValuePlus[(int)buff+Stats.Length] >0 ;
+        return BuffValuePlus[buff] >0 ;
     }
     public void UpdateBuff()
     {
@@ -112,7 +151,7 @@ public class StatusBase
     }
     public Buff GetBuff(BUFF buff)
     {
-        if (StatValuePlus[(int)buff + Stats.Length] > 0)
+        if (BuffValuePlus[buff] > 0)
         {
             foreach (var item in buffs)
             {
@@ -137,7 +176,7 @@ public class StatusBase
     {
         if (buff != null)
         {
-            StatValuePlus[(int)buff.buffName + Stats.Length] -= 1;
+            BuffValuePlus[buff.buffName] -= 1;
             buff.EndBuff(); 
             buffs.Remove(buff);
         }

@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537e6c5303a446f4faf3bd262c9b9510, type: 3}
   m_Name: Rock1
   m_EditorClassIdentifier: 
-  hitType: 2
+  objectID: 2
   maxHp: 20
-  collisionType: 0
-  takeType: 0
   defaultSprite: {fileID: 21300000, guid: 7521121400dcb9f4f955fe52a63561aa, type: 3}
   outLineMat: {fileID: 0}
-  animController: {fileID: 9100000, guid: 0778872ca3fd86f469cc5da2cff03701, type: 2}
+  chainAble: 0
+  showEffect: 1

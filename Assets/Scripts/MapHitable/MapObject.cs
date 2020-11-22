@@ -1,16 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapObject : IHitable
+public abstract class MapObject : IHitable
 {
-
     SpriteRenderer _sr;
-    HitableState hitableState;
+    protected HitableState hitableState;
     bool activeTake;
     public Hitableinfo myHitableInfo;
     Material tmpMat;
     Collider2D _collider2D;
+    bool chainAble;
 
     void Awake()
     {
@@ -29,20 +30,22 @@ public class MapObject : IHitable
         initData();
         setBuffImmune();
     }
-    void setBuffImmune()
+    protected virtual void setBuffImmune()
     {
-        for (int i = 0; i < status.BuffImmune.Length; i++)
+        foreach (BUFF key in Enum.GetValues(typeof(BUFF)))
         {
-            status.BuffImmune[i] = 1;
+            status.BuffImmune[key] = 1;
         }
     }
 
     public override void initData()
     {
-        status.setStat(STAT.hp, 1);
+        chainAble = myHitableInfo.ChainAble;
+        showEffect = myHitableInfo.ShowEffect;
+        status.setStat(STAT.hp, myHitableInfo.MaxHp);
         status.init();
     }
-    void Update()
+    protected void Update()
     {
         status.UpdateBuff();
         if (activeTake)
@@ -52,10 +55,10 @@ public class MapObject : IHitable
         }
     }
 
-    public virtual void OnPlayerEnter() { }
-    public virtual void OnPlayerExit() { }
-    public virtual void OnOtherEnter(Collider2D collision) { }
-    public virtual void OnOtherExit(Collider2D collision) { }
+    public abstract void OnPlayerEnter();
+    public abstract void OnPlayerExit();
+    public abstract void OnOtherEnter(Collider2D collision);
+    public abstract void OnOtherExit(Collider2D collision);
     public virtual void OnHit(float dmg) {
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
@@ -66,9 +69,10 @@ public class MapObject : IHitable
     public virtual void DoTake() {
         _collider2D.enabled = false;
         ActivateTake(false);
-
     }
-    public virtual void DoDest() {
+    public virtual void DoDest()
+    {
+        _collider2D.enabled = false;
         gameObject.SetActive(false);
     }
 
@@ -145,13 +149,9 @@ public class MapObject : IHitable
         OnHit(dmg);
     }
 
-    public override void TakeKnockBack(float force, Vector2 knockBackDir)
-    {
-    }
+    public abstract override void TakeKnockBack(float force, Vector2 knockBackDir);
 
-    public override void TakeCC(int CCnum = 0)
-    {
-    }
+    public abstract override void TakeCC(int CCnum = 0);
 
 
     public enum HitableState

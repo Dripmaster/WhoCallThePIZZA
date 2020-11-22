@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537e6c5303a446f4faf3bd262c9b9510, type: 3}
   m_Name: Mushroom00
   m_EditorClassIdentifier: 
-  hitType: 0
-  maxHp: 0
-  collisionType: 1
-  takeType: 1
+  objectID: 1
+  maxHp: 100
   defaultSprite: {fileID: 21300000, guid: 25be5f0dc517acb47bf247163cf1afb3, type: 3}
   outLineMat: {fileID: 2100000, guid: e364119f2ad66b943b3b5834f2e17940, type: 2}
-  animController: {fileID: 9100000, guid: 0778872ca3fd86f469cc5da2cff03701, type: 2}
+  chainAble: 0
+  showEffect: 0

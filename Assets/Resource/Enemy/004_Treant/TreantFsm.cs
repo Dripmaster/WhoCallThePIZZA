@@ -44,9 +44,10 @@ public class TreantFsm : EnemyBase
     }
     public override void initData()
     {
+        /*
         status.setStat(STAT.hp, 80);
         status.setStat(STAT.AtkPoint, 3);
-        status.setStat(STAT.moveSpeed, 0);
+        status.setStat(STAT.moveSpeed, 0)*/
         status.init();
         coolTimes = new float[]
         {

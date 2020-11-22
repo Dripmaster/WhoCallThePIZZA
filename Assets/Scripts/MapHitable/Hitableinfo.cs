@@ -4,29 +4,56 @@ using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New MapObject", menuName = "MapObject/New MapObject", order = 2)]
+[System.Serializable]
 public class Hitableinfo : ScriptableObject
 {
     [SerializeField]
-    private int hitType = 0;
+    private int objectID = 0;
     [SerializeField]
     private int maxHp = 0;
-    [SerializeField]
-    private int collisionType = 0;
-    [SerializeField]
-    private int takeType = 0;
-
     [SerializeField]
     private Sprite defaultSprite;
     [SerializeField]
     private Material outLineMat;
     [SerializeField]
-    private AnimatorController animController;
+    private bool chainAble;
+    [SerializeField]
+    private bool showEffect;
+
+
+    //[SerializeField]
+    private int hitType = 0;
+    //[SerializeField]
+    private int collisionType = 0;
+   // [SerializeField]
+    private int takeType = 0;
 
     public int HitType
     {
         get
         {
             return hitType;
+        }
+    }
+    public bool ShowEffect
+    {
+        get
+        {
+            return showEffect;
+        }
+    }
+    public int ObjectID
+    {
+        get
+        {
+            return objectID;
+        }
+    }
+    public bool ChainAble
+    {
+        get
+        {
+            return chainAble;
         }
     }
     public int CollisionType
@@ -45,7 +72,6 @@ public class Hitableinfo : ScriptableObject
     }
 
     public Sprite DefaultSprite { get => defaultSprite; }
-    public AnimatorController AnimController { get => animController; }
     public int MaxHp { get => maxHp;}
     public Material OutLineMat { get => outLineMat; }
 }

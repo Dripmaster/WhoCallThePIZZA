@@ -99,7 +99,6 @@ public class HitableBase : FSMbase
         setState((int)HitableState.idle);
         status.init();
 
-        _animator.runtimeAnimatorController = myHitableInfo.AnimController;
         tmpMat = _sr.material;
         _sr.sprite = myHitableInfo.DefaultSprite;
         setStrategy();

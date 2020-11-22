@@ -446,7 +446,6 @@ GameObject:
   - component: {fileID: 270784407}
   - component: {fileID: 270784406}
   - component: {fileID: 270784404}
-  - component: {fileID: 270784405}
   m_Layer: 12
   m_Name: forest_deco_grass00 (2)
   m_TagString: Untagged
@@ -473,20 +472,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &270784405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 270784403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &270784406
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -689,7 +674,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 484429378}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 115f00ed745c19d4890ba3ec14ace1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   showEffect: 1
@@ -2071,7 +2056,6 @@ GameObject:
   - component: {fileID: 753158001}
   - component: {fileID: 753158000}
   - component: {fileID: 753157998}
-  - component: {fileID: 753157999}
   m_Layer: 12
   m_Name: forest_deco_grass00 (6)
   m_TagString: Untagged
@@ -2098,20 +2082,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &753157999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753157997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &753158000
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2204,7 +2174,6 @@ GameObject:
   - component: {fileID: 773681617}
   - component: {fileID: 773681616}
   - component: {fileID: 773681614}
-  - component: {fileID: 773681615}
   m_Layer: 12
   m_Name: forest_deco_grass00 (12)
   m_TagString: Untagged
@@ -2231,20 +2200,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &773681615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 773681613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &773681616
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2337,7 +2292,6 @@ GameObject:
   - component: {fileID: 810014786}
   - component: {fileID: 810014785}
   - component: {fileID: 810014783}
-  - component: {fileID: 810014784}
   m_Layer: 12
   m_Name: forest_deco_grass00 (15)
   m_TagString: Untagged
@@ -2364,20 +2318,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &810014784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810014782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &810014785
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2589,7 +2529,6 @@ GameObject:
   - component: {fileID: 903652944}
   - component: {fileID: 903652943}
   - component: {fileID: 903652941}
-  - component: {fileID: 903652942}
   m_Layer: 12
   m_Name: forest_deco_grass00 (14)
   m_TagString: Untagged
@@ -2616,20 +2555,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &903652942
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903652940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &903652943
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2966,7 +2891,6 @@ GameObject:
   - component: {fileID: 967932199}
   - component: {fileID: 967932198}
   - component: {fileID: 967932196}
-  - component: {fileID: 967932197}
   m_Layer: 12
   m_Name: forest_deco_grass00 (13)
   m_TagString: Untagged
@@ -2993,20 +2917,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &967932197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967932195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &967932198
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3353,7 +3263,6 @@ GameObject:
   - component: {fileID: 1096018514}
   - component: {fileID: 1096018513}
   - component: {fileID: 1096018511}
-  - component: {fileID: 1096018512}
   m_Layer: 12
   m_Name: forest_deco_grass00 (10)
   m_TagString: Untagged
@@ -3380,20 +3289,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1096018512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096018510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1096018513
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3972,7 +3867,6 @@ GameObject:
   - component: {fileID: 1320196804}
   - component: {fileID: 1320196803}
   - component: {fileID: 1320196801}
-  - component: {fileID: 1320196802}
   m_Layer: 12
   m_Name: forest_deco_grass00 (5)
   m_TagString: Untagged
@@ -3999,20 +3893,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1320196802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1320196800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1320196803
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4105,7 +3985,6 @@ GameObject:
   - component: {fileID: 1337948817}
   - component: {fileID: 1337948816}
   - component: {fileID: 1337948814}
-  - component: {fileID: 1337948815}
   m_Layer: 12
   m_Name: forest_deco_grass00 (8)
   m_TagString: Untagged
@@ -4132,20 +4011,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1337948815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337948813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1337948816
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4402,7 +4267,6 @@ GameObject:
   - component: {fileID: 1459279114}
   - component: {fileID: 1459279113}
   - component: {fileID: 1459279111}
-  - component: {fileID: 1459279112}
   m_Layer: 12
   m_Name: forest_deco_grass00 (11)
   m_TagString: Untagged
@@ -4429,20 +4293,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1459279112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1459279110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1459279113
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4735,7 +4585,6 @@ GameObject:
   - component: {fileID: 1535324263}
   - component: {fileID: 1535324262}
   - component: {fileID: 1535324260}
-  - component: {fileID: 1535324261}
   m_Layer: 13
   m_Name: forest_object_rock1
   m_TagString: Untagged
@@ -4762,20 +4611,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1535324261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1535324259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: cf79dd93ee4b4c84e8c9c09797e29326, type: 2}
 --- !u!58 &1535324262
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4868,7 +4703,6 @@ GameObject:
   - component: {fileID: 1559104761}
   - component: {fileID: 1559104760}
   - component: {fileID: 1559104758}
-  - component: {fileID: 1559104759}
   m_Layer: 12
   m_Name: forest_deco_grass00 (1)
   m_TagString: Untagged
@@ -4895,20 +4729,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1559104759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559104757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1559104760
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5120,7 +4940,6 @@ GameObject:
   - component: {fileID: 1672855192}
   - component: {fileID: 1672855191}
   - component: {fileID: 1672855189}
-  - component: {fileID: 1672855190}
   m_Layer: 12
   m_Name: forest_deco_grass00 (4)
   m_TagString: Untagged
@@ -5147,20 +4966,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1672855190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1672855188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1672855191
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5686,7 +5491,6 @@ GameObject:
   - component: {fileID: 1839916381}
   - component: {fileID: 1839916380}
   - component: {fileID: 1839916378}
-  - component: {fileID: 1839916379}
   m_Layer: 12
   m_Name: forest_deco_grass00 (3)
   m_TagString: Untagged
@@ -5713,20 +5517,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1839916379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839916377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1839916380
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5819,7 +5609,6 @@ GameObject:
   - component: {fileID: 1840191107}
   - component: {fileID: 1840191106}
   - component: {fileID: 1840191104}
-  - component: {fileID: 1840191105}
   m_Layer: 12
   m_Name: forest_deco_grass00 (7)
   m_TagString: Untagged
@@ -5846,20 +5635,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1840191105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1840191103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &1840191106
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -8025,7 +7800,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1960024646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 115f00ed745c19d4890ba3ec14ace1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   showEffect: 1
@@ -8865,7 +8640,6 @@ GameObject:
   - component: {fileID: 2079393320}
   - component: {fileID: 2079393319}
   - component: {fileID: 2079393317}
-  - component: {fileID: 2079393318}
   m_Layer: 12
   m_Name: forest_deco_grass00 (9)
   m_TagString: Untagged
@@ -8892,20 +8666,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2079393318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2079393316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &2079393319
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -8998,7 +8758,6 @@ GameObject:
   - component: {fileID: 2092413234}
   - component: {fileID: 2092413233}
   - component: {fileID: 2092413231}
-  - component: {fileID: 2092413232}
   m_Layer: 12
   m_Name: forest_deco_grass00
   m_TagString: Untagged
@@ -9025,20 +8784,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2092413232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2092413230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showEffect: 1
-  myHitableInfo: {fileID: 11400000, guid: ead64750116216b48a3388147d95d3b7, type: 2}
 --- !u!58 &2092413233
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -40,6 +40,7 @@ public class Effector : MonoBehaviour
     float original_Alpha;
     float original_Roate;
     Color original_Color;
+    Sprite[] sprites;
 
     #region Scale
     public Effector Scale(float duration, Vector2 target)
@@ -198,9 +199,32 @@ public class Effector : MonoBehaviour
         }
         spriteRenderer.color = target;
     }
-#endregion
+    #endregion
 
-#region Disable
+    #region Animation
+    public Effector SimpleAnimation(float duration, Sprite[] sprites)
+    {
+#if UNITY_EDITOR
+        if (isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
+#endif
+        effectList.Add(new Effect(SimpleAnimationCoroutine(duration, sprites), duration));
+        return this;
+    }
+
+    IEnumerator SimpleAnimationCoroutine(float duration, Sprite[] sprites)
+    {
+        float eTime = 0f;
+        Sprite originalSprite = spriteRenderer.sprite;
+        while (eTime <= duration)
+        {
+            spriteRenderer.sprite = sprites[(int)(sprites.Length * (eTime / duration))];
+            eTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+    #endregion
+
+    #region Disable
     public Effector Disable(float timeOffset = 0f, bool destroy = false)
     {
     #if UNITY_EDITOR

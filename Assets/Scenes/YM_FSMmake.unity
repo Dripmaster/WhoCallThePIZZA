@@ -5276,6 +5276,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 951197803055953129, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1760152420017876512, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}
       propertyPath: m_Enabled
@@ -5365,6 +5370,11 @@ PrefabInstance:
         type: 3}
       propertyPath: rotSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229258637901855803, guid: 479303b630fc812449bb430d14a054cb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7229258638212081578, guid: 479303b630fc812449bb430d14a054cb,
         type: 3}

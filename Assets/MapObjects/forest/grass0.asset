@@ -17,4 +17,5 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: d93a11c0a4768124b995dfbb3ee5be0d, type: 3}
   outLineMat: {fileID: 0}
   chainAble: 0
-  showEffect: 0
+  showEffect: 1
+  takeType: 0

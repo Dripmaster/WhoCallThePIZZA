@@ -18,3 +18,4 @@ MonoBehaviour:
   outLineMat: {fileID: 2100000, guid: e364119f2ad66b943b3b5834f2e17940, type: 2}
   chainAble: 0
   showEffect: 0
+  takeType: 1

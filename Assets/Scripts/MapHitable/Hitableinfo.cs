@@ -25,7 +25,7 @@ public class Hitableinfo : ScriptableObject
     private int hitType = 0;
     //[SerializeField]
     private int collisionType = 0;
-   // [SerializeField]
+    [SerializeField]
     private int takeType = 0;
 
     public int HitType

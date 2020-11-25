@@ -72,7 +72,7 @@ public abstract class FSMbase : IHitable
         _animator = GetComponent<Animator>();
         var rigids = GetComponentsInChildren<Rigidbody2D>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _sr = GetComponent<SpriteRenderer>();
+        _sr = GetComponentInChildren<SpriteRenderer>();
         status = new StatusBase();
         _colliders = GetComponentsInChildren<CircleCollider2D>();
         stepFoward = GetComponent<StepFoward>();

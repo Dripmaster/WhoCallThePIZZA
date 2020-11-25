@@ -32,12 +32,12 @@ RectTransform:
   m_Children:
   - {fileID: 653288369}
   - {fileID: 1477814999}
-  m_Father: {fileID: 7229258638212081578}
-  m_RootOrder: 1
+  m_Father: {fileID: 5315573330758685887}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.525}
+  m_AnchoredPosition: {x: 0, y: 0.399}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &644594252
@@ -10004,9 +10004,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 644594249}
   - {fileID: 7229258637901855802}
   m_Father: {fileID: 7229258638212081578}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1760152420017876512
 SpriteRenderer:
@@ -10075,7 +10076,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5250623072340641352
 Transform:
   m_ObjectHideFlags: 0
@@ -10083,12 +10084,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951197803055953129}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.273, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.39899993, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7229258638212081578}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1394913207345163221
 SpriteRenderer:
@@ -10371,7 +10372,7 @@ Transform:
   - {fileID: 226065664445166823}
   - {fileID: 6286304418302767117}
   m_Father: {fileID: 5315573330758685887}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7229258637901855801
 MonoBehaviour:
@@ -10434,7 +10435,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7229258636783642963}
-  - {fileID: 644594249}
   - {fileID: 5315573330758685887}
   - {fileID: 5250623072340641352}
   m_Father: {fileID: 7229258637010547688}

@@ -88,6 +88,7 @@ public class SlimeFsm : EnemyBase
             if (!detectPlayer(disMaxDetect))
             {
                 setState((int)SlimeState.idle);
+
             }
             else
             if (canAttackPlayer())

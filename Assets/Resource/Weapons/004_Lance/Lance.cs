@@ -10,6 +10,10 @@ public class Lance : AttackComponent
     public float chargeSpeed = 10f; //돌진속도
     public float maxChargeTime = 2;//최대 충전 시간
 
+    public GameObject chargeEffect;
+    public GameObject rushEffect;
+    public GameObject chargePlayerEffect;
+
 
     public int[] skillAngles;
     public override void SetStrategy(WeaponBase weaponBase)
@@ -25,6 +29,7 @@ public class Lance : AttackComponent
     }
     public void Awake()
     {
+        chargePlayerEffect.transform.parent = transform.parent.GetComponent<WeaponBase>().effectParent.transform;
     }
 }
 
@@ -499,6 +504,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
     }
     void ChargeEnd(WeaponBase weaponBase)
     {
+        lance.chargeEffect.SetActive(false);
+        lance.chargePlayerEffect.SetActive(false);
         if (tempTime <= 0.4f)
         {//찌르기
             DoAttack(weaponBase, 1);
@@ -506,6 +513,7 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         }
         else
         {//돌진찌르기
+            lance.rushEffect.SetActive(true);
             preCalculate();
             DoAttack(weaponBase, 2);
             tempAtkCount = 2;
@@ -525,6 +533,8 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
         effectLevel = 0;
         dashCondition = true;
         weaponBase.weakedSpeed = 0.8f;
+        lance.chargeEffect.SetActive(true);
+        lance.chargePlayerEffect.SetActive(true);
     }
     public override void StateEnd()
     {

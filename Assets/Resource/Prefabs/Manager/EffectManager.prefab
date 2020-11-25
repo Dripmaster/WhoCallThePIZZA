@@ -59,8 +59,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectParent: {fileID: 0}
   hitEffects:
-  - {fileID: 5368625869436337994, guid: 2fc7f5b1fa6a6d84d8de719f8e940103, type: 3}
   - {fileID: 1591627787088936009, guid: 557dec46ce6dfea4aa63cef0d8db4183, type: 3}
   - {fileID: 1591627787088936009, guid: 557dec46ce6dfea4aa63cef0d8db4183, type: 3}
-  hitEffectinitialCount: 5
-  hitEffectincrementCount: 1
+  - {fileID: 1591627787088936009, guid: 557dec46ce6dfea4aa63cef0d8db4183, type: 3}
+  hitEffectInitialCount: 5
+  hitEffectIncrementCount: 1
+  dustEffects:
+  - {fileID: 2077609177840400440, guid: a6fa42074e89a0a44ad2e30d149e8df2, type: 3}
+  dustEffectsInitialCount: 5
+  dustEffectsIncrementCount: 1

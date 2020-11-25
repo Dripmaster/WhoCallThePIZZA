@@ -44,6 +44,7 @@ public class WeaponBase : MonoBehaviour
     WeaponInfo[] equipedWeapons;
     AttackComponent[] equipedWeaponsComponents;
     int currentWeapon;
+    public GameObject effectParent;
     private WeaponBase() {
         instance = this;
     }

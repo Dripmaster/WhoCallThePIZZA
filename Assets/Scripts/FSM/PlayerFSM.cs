@@ -15,6 +15,7 @@ public class PlayerFSM : FSMbase
     WeaponBase Weapon;
     Camera mainCamera;
 
+    public DustGenerator dustGenerator;
     new void Awake()
     {
         base.Awake();
@@ -231,6 +232,7 @@ public class PlayerFSM : FSMbase
     }
     IEnumerator move()
     {
+        dustGenerator.Activate();
         do
         {
             if (!MoveInput()) {
@@ -239,6 +241,7 @@ public class PlayerFSM : FSMbase
             }
             yield return null;
         } while (!newState);
+        dustGenerator.Deactivate();
     }
     IEnumerator dash()
     {

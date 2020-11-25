@@ -5217,7 +5217,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1204033077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
+  m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!95 &1204033079
@@ -8351,9 +8351,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1753871974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce46acc3ebf68924788a079dbedb34a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 115f00ed745c19d4890ba3ec14ace1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showEffect: 1
+  myHitableInfo: {fileID: 11400000, guid: 0ed83b71c70af1148a9cda6f61730d8a, type: 2}
 --- !u!58 &1753871977
 CircleCollider2D:
   m_ObjectHideFlags: 0

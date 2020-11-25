@@ -25,7 +25,7 @@ public class SlimeFsm : EnemyBase
     }
     public override void initData()
     {
-        status.setStat(STAT.hp, 50);
+        status.setStat(STAT.hp, 50000);
         status.setStat(STAT.AtkPoint, 10);
         status.setStat(STAT.moveSpeed, 1);
         status.init();

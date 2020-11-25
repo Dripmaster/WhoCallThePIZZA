@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//EffectManager은 global한 이펙트들의 관리를 담당
 public class EffectManager : MonoBehaviour
 {
     Shaker cameraShaker;
     public Transform effectParent;
+
     public GameObject[] hitEffects;
-    public int hitEffectinitialCount;
-    public int hitEffectincrementCount = 1;
+    public int hitEffectInitialCount;
+    public int hitEffectIncrementCount = 1;
     Pool[] hitEffectPools;
+
+    public GameObject[] dustEffects;
+    public int dustEffectsInitialCount;
+    public int dustEffectsIncrementCount = 1;
+    Pool[] dustEffectPools;
 
     #region Singletone
     private static EffectManager instance;
@@ -50,13 +57,24 @@ public class EffectManager : MonoBehaviour
         cameraShaker = GetComponent<Shaker>();
 
         hitEffectPools = new Pool[hitEffects.Length];
+        dustEffectPools = new Pool[dustEffects.Length];
         for (int i = 0; i < hitEffectPools.Length; i++)
         {
             hitEffectPools[i] = effectParent.gameObject.AddComponent<Pool>();
             hitEffectPools[i].poolPrefab = hitEffects[i];
-            hitEffectPools[i].initialCount = hitEffectinitialCount;
-            hitEffectPools[i].incrementCount = hitEffectincrementCount;
+            hitEffectPools[i].initialCount = hitEffectInitialCount;
+            hitEffectPools[i].incrementCount = hitEffectIncrementCount;
             hitEffectPools[i].Initialize();
+        }
+
+        dustEffectPools = new Pool[dustEffects.Length];
+        for (int i = 0; i < dustEffectPools.Length; i++)
+        {
+            dustEffectPools[i] = effectParent.gameObject.AddComponent<Pool>();
+            dustEffectPools[i].poolPrefab = dustEffects[i];
+            dustEffectPools[i].initialCount = dustEffectsInitialCount;
+            dustEffectPools[i].incrementCount = dustEffectsIncrementCount;
+            dustEffectPools[i].Initialize();
         }
     }
     public void defaultEffect(IHitable target, EffectType effectType)
@@ -87,6 +105,11 @@ public class EffectManager : MonoBehaviour
         else// if (type == EffectType.MID)
             return hitEffectPools[1].GetObjectDisabled();
     }
+    public PoolableObject GetDust(DustType type)
+    {
+        //if (type == DustType.WALK)
+            return dustEffectPools[0].GetObjectDisabled();
+    }
     void smallHit()
     {
         cameraShaker.StartShake(0.2f, 0.15f, 10f);
@@ -104,4 +127,8 @@ public enum EffectType
     MID = 1,
     BIG = 2,
     CRIT = 3
+}
+public enum DustType
+{
+    WALK = 0
 }

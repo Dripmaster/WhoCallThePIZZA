@@ -398,15 +398,19 @@ public class WeaponBase : MonoBehaviour
         CanRotateView = true;
     }
     public void onWeaponTouch(int colliderType, Collider2D target) {
+        var t = target.GetComponent<IHitable>();
+        if (t == null)
+            return;
+
         if (objectState == PlayerState.skill)
-            equipedWeaponsComponents[currentWeapon].skillStrategy.onWeaponTouch(colliderType, target);
+            equipedWeaponsComponents[currentWeapon].skillStrategy.onWeaponTouch(colliderType, t);
 
 
         if (!nowAttack)
         {
             return;
         }
-        equipedWeaponsComponents[currentWeapon].attackStrategy.onWeaponTouch(colliderType,target);
+        equipedWeaponsComponents[currentWeapon].attackStrategy.onWeaponTouch(colliderType,t);
     }
     public void setViewPoint() {
         player.SetViewPoint();

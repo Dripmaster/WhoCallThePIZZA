@@ -238,16 +238,13 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<IHitable>();
-        if (fsm != null)
-        {//!TODO 한 공격에 한번만 맞게 할 것
+        //!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
-            AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, 0.4f);
-        }
+            AttackManager.GetInstance().HandleAttack(stingHandle, target, player, 0.4f);
     }
 
     public override void motionEvent(string msg)
@@ -399,26 +396,23 @@ public class LanceAttackStrategy : AttackValues, AttackStrategy
 
         v3Dest.Normalize();
        
-        m.CalcKnockBack(v3Dest, 3,3);
+        m.CalcKnockBack(v3Dest, 3);
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<IHitable>();
-        if (fsm != null)
-        {//!TODO 한 공격에 한번만 맞게 할 것
+        //!TODO 한 공격에 한번만 맞게 할 것
             if (tempAtkCount == 1)//그냥찌르기
             {
-                AttackManager.GetInstance().HandleAttack(stingHandle, fsm, player, Damages[tempAtkCount-1]);
+                AttackManager.GetInstance().HandleAttack(stingHandle, target, player, Damages[tempAtkCount-1]);
             }else if(tempAtkCount == 2)
             {//돌진찌르기
-                AttackManager.GetInstance().HandleAttack(rushHandle, fsm, player, Damages[tempAtkCount - 1],false,true);
+                AttackManager.GetInstance().HandleAttack(rushHandle, target, player, Damages[tempAtkCount - 1],false,true);
                 
             }
             attackedColliders.Add(target);
-        }
     }
 
     public override void SetCoolTimes()

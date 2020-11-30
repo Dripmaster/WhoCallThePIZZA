@@ -50,11 +50,11 @@ public class AttackManager : MonoBehaviour
         }
         effectManager = EffectManager.GetInstance();
     }
-    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask, List<Collider2D> exceptList)  //원형범위 + 제외대상 제외
+    public IHitable[] GetTargetList(Vector2 point, float Range, int layerMask, List<IHitable> exceptList)  //원형범위 + 제외대상 제외
     {
 
-        Collider2D[] colliders = GetTargetList(point, Range, layerMask);
-        List<Collider2D> colliderList = colliders.ToList();
+        IHitable[] colliders = GetTargetList(point, Range, layerMask);
+        List<IHitable> colliderList = colliders.ToList();
         foreach (var item in exceptList)
         {
             colliderList.Remove(item);
@@ -62,11 +62,11 @@ public class AttackManager : MonoBehaviour
         return colliderList.ToArray();
 
     }
-    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask, List<Collider2D> exceptList) // 부채꼴형범위 + 제외대상 제외
+    public IHitable[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask, List<IHitable> exceptList) // 부채꼴형범위 + 제외대상 제외
     {
 
-        Collider2D[] colliders = GetTargetList(point, DegreeRange, ViewDirection, Range, layerMask);
-        List<Collider2D> colliderList = colliders.ToList();
+        IHitable[] colliders = GetTargetList(point, DegreeRange, ViewDirection, Range, layerMask);
+        List<IHitable> colliderList = colliders.ToList();
         foreach (var item in exceptList)
         {
             colliderList.Remove(item);
@@ -75,7 +75,7 @@ public class AttackManager : MonoBehaviour
 
     }
 
-    public Collider2D[] GetTargetList(Vector2 point, float Range, int layerMask) // 원형 가까운 순 정렬
+    public IHitable[] GetTargetList(Vector2 point, float Range, int layerMask) // 원형 가까운 순 정렬
     { 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(point, Range, layerMask);
 
@@ -93,9 +93,18 @@ public class AttackManager : MonoBehaviour
                 }
             }
         }
-        return colliders;
+        List<IHitable> hitables = new List<IHitable>();
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            var h = colliders[i].GetComponent<IHitable>();
+            if (h != null &&((h as PlayerFSM)==null)) 
+            {
+                hitables.Add(h);
+            }
+        }
+        return hitables.ToArray();
     }
-    public Collider2D[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask) //부채꼴형 가까운 순 정렬
+    public IHitable[] GetTargetList(Vector2 point, float DegreeRange, Vector2 ViewDirection, float Range, int layerMask) //부채꼴형 가까운 순 정렬
     {
         List<Collider2D> colliders = Physics2D.OverlapCircleAll(point, Range, layerMask).ToList();
         for (int i = colliders.Count - 1; i >= 0; i--)
@@ -119,7 +128,16 @@ public class AttackManager : MonoBehaviour
                 }
             }
         }
-        return colliders.ToArray();
+        List<IHitable> hitables = new List<IHitable>();
+        for (int i = 0; i < colliders.Count; i++)
+        {
+            var h = colliders[i].GetComponent<IHitable>();
+            if (h != null && ((h as PlayerFSM) == null))
+            {
+                hitables.Add(h);
+            }
+        }
+        return hitables.ToArray();
     }
     /*HandleDamage
     public bool HandleDamage(float atkPoint, FSMbase target, StatusBase status, out float ResultAttackPoint) {
@@ -161,7 +179,7 @@ public class AttackManager : MonoBehaviour
         target.TakeAttack(m.FinalDamage,cancelAttack);
         if (isKnockBack)
         {
-            target.TakeKnockBack(m.knockBackVelocity/50, m.knockBackDir);
+            target.TakeKnockBack(m.knockBackForce, m.knockBackDir);
         }
         var mHit = target as HitableBase;
         if(effectManager != null)
@@ -180,8 +198,7 @@ public struct AttackMessage
     public bool isCritical;
     public bool criCalculated;
     public Vector2 knockBackDir;
-    public float knockBackVelocity;
-    public float knockBackDistance;
+    public float knockBackForce;
 
     public bool CriCalculate(float criPoint,float criticalDamage) {
         int r = Random.Range(0,100);
@@ -213,16 +230,14 @@ public struct AttackMessage
             FinalDamage *=1.2f;
         }
     }
-    public void CalcKnockBack(Vector2 knockBackDir,float knockBackVelocity,float knockBackDistance)
+    public void CalcKnockBack(Vector2 knockBackDir,float knockBackForce)
     {
-        this.knockBackVelocity = knockBackVelocity;
-        this.knockBackDistance = knockBackDistance;
+        this.knockBackForce = knockBackForce;
         this.knockBackDir = knockBackDir;
     }
-    public void CalcKnockBack(IHitable target, FSMbase sender, float knockBackVelocity, float knockBackDistance)
+    public void CalcKnockBack(IHitable target, FSMbase sender, float knockBackForce)
     {
-        this.knockBackVelocity = knockBackVelocity;
-        this.knockBackDistance = knockBackDistance;
+        this.knockBackForce = knockBackForce;
         knockBackDir = (target.transform.position - sender.transform.position).normalized;
     }
 }

@@ -23,6 +23,8 @@ public abstract class EnemyBase : FSMbase
     protected float coolStartTime;//쿨타임 시작 시간(real time)
     protected bool hadAttack;//공격 했는지
 
+    protected float knockBackWeight;//넉백 몸무게
+
     public new void Awake()
     {
         base.Awake();
@@ -76,10 +78,10 @@ public abstract class EnemyBase : FSMbase
         if (knockDir.sqrMagnitude> 0)
         {
             result = true;
-            knockDir = Vector2.Lerp(knockDir,Vector2.zero,Time.deltaTime);
+            knockDir = Vector2.Lerp(knockDir,Vector2.zero,Time.deltaTime*((knockBackWeight-1)/9+1));
 
             Vector2 tempPos = transform.position;
-            Vector2 targetPos = (Vector2)transform.position + knockDir;
+            Vector2 targetPos = (Vector2)transform.position + knockDir*Time.deltaTime;
             if (knockDir.sqrMagnitude <= 0.0001 || (targetPos-tempPos).sqrMagnitude<=0.0001)
             {
                 clearKnockBack();
@@ -185,8 +187,6 @@ public abstract class EnemyBase : FSMbase
     public void clearKnockBack()
     {
         knockDir = Vector2.zero;
-        knockBackDistance = 0;
-        knockBackVelocity = 0;
     }
     public void SetCollidersTriggerNotTerrain(bool value)
     {

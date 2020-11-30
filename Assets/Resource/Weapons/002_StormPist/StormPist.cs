@@ -214,7 +214,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             t>=all_t*0.7f)
         {
             //스킬이 거의 끝날 때 번개 판정
-            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(weaponBase.player.transform.position, skillRange, 1 << 10); ;
+            IHitable[] SkillTargetList = AttackManager.GetInstance().GetTargetList(weaponBase.player.transform.position, skillRange, (1 << 10) | (1 << 16)); ;
             int discoveredTargetCount = SkillTargetList.Length;
 
             //타격대상 개수 확인
@@ -248,9 +248,9 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
             had_Thunder = false;
 
             //스킬이 끝날 때 이펙트 출력
-            E_GroundDown(); 
-            
-            Collider2D[] SkillTargetList = AttackManager.GetInstance().GetTargetList(player.transform.position, skillRange,(1<<10 )| (1<<12)); ;
+            E_GroundDown();
+
+            IHitable[] SkillTargetList = AttackManager.GetInstance().GetTargetList(player.transform.position, skillRange,(1<<10 )| (1<<12) | (1 << 16)); ;
             int discoveredTargetCount = SkillTargetList.Length;
 
             //타격대상 개수 확인
@@ -282,7 +282,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     }
 
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
 
     }
@@ -314,7 +314,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         m.effectType = EffectType.SMALL;
         m.critEffectType = EffectType.SMALL;
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-        m.CalcKnockBack(target, sender, 2,2);
+        m.CalcKnockBack(target, sender,2);
 
         int r = UnityEngine.Random.Range(0, 100);
         if (r < 20)
@@ -368,7 +368,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
     }
     AttackMessage attackHandle(IHitable target, FSMbase sender, float attackPoint) {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
-        m.CalcKnockBack(target, sender, 1,1);
+        m.CalcKnockBack(target, sender, 1);
 
         //20퍼센트 확률로 감전
         int r = UnityEngine.Random.Range(0, 100);
@@ -378,7 +378,7 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         }
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         if (attackedColliders.Contains(target))
             return;
@@ -391,12 +391,12 @@ public class StormPistAttackStrategy : AttackValues, AttackStrategy
         }
         if (fsm != null)
         {//!TODO 한 공격에 한번만 맞게 할 것
-            List<Collider2D> alreadyHitTarget = new List<Collider2D>();  //타격된 저장용
-            alreadyHitTarget.Add(target.GetComponent<Collider2D>());
+            List<IHitable> alreadyHitTarget = new List<IHitable>();  //타격된 저장용
+            alreadyHitTarget.Add(target.GetComponent<IHitable>());
            
             for (int i = 0; i < attackConnectCount; i++)
             {
-                Collider2D[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1 << 10, alreadyHitTarget);
+                IHitable[] targetList = AttackManager.GetInstance().GetTargetList(alreadyHitTarget.Last().transform.position, 10, 1 << 10, alreadyHitTarget);
                 if (targetList.Length < 1)
                     break;
                 alreadyHitTarget.Add(targetList[0]);

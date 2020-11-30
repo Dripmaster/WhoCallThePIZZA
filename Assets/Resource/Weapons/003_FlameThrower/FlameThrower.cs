@@ -166,16 +166,14 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         if (colliderType == 0)
             return;
-        var fsm = target.GetComponent<FSMbase>();
-        if (fsm != null)
-        {//!TODO 한 공격에 한번만 맞게 할 것
+       //!TODO 한 공격에 한번만 맞게 할 것
             attackedColliders.Add(target);
-            AttackManager.GetInstance().HandleAttack(explosionHandle, fsm, player, 8f);
-        }
+            AttackManager.GetInstance().HandleAttack(explosionHandle, target, player, 8f);
+  
     }
 
     public override void motionEvent(int value)
@@ -271,18 +269,14 @@ public class FlameThrowerAttackStrategy : AttackValues, AttackStrategy
         target.status.AddBuff(new Burn(burnTime, burnDmg, target));
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         if (colliderType == 1)
             return;
-        var fsm = target.GetComponent<IHitable>();
-        if (fsm != null)
-        {
             
-            AttackManager.GetInstance().HandleAttack(flameHandle, fsm, player, 1.3f);
+            AttackManager.GetInstance().HandleAttack(flameHandle, target, player, 1.3f);
             
             attackedColliders.Add(target);
-        }
     }
     public override void motionEvent(int value)
     {

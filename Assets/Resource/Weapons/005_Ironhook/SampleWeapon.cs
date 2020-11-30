@@ -166,11 +166,8 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         return m;
     }
 
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
-        IHitable t = target.GetComponent<IHitable>();
-        if ( t!= null)
-        {
             collisionFlag = true;
             headCollider.enabled = false;
             targetPos = target.transform.position;
@@ -180,12 +177,11 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
             tempPos = headChainP.transform.position;
             startPos = weaponBase.player.transform.position;
             weaponBase.currentMoveCondition = MoveWhileAttack.Cannot_Move;
-            AttackManager.Instance.HandleAttack(TouchHandle, t, player, 1);
+            AttackManager.Instance.HandleAttack(TouchHandle, target, player, 1);
             for (int i = 0; i < chains.Length; i++)
             {
                 chains[i].SetActive(false);
             }
-        }
     }
 
     public void SetState(WeaponBase weaponBase)
@@ -344,32 +340,28 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
     }
 
 
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         //!TODO fsm만이 아니라 그냥 오브젝트들도 다 되게 할 것
         if (attackedColliders.Contains(target))
             return;
-        var fsm = target.GetComponent<IHitable>();
-        if (fsm != null)
-        {
             attackedColliders.Add(target);
             if (colliderType == 0)
             {
                 m.effectType = EffectType.MID;
                 if (tempAtkCount == 1)
                 {
-                    AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4, false, true);
+                    AttackManager.GetInstance().HandleAttack(AttackHandle, target, player, Damages[tempAtkCount] * 4, false, true);
                 }
                 else
                 {
-                    AttackManager.GetInstance().HandleAttack(AttackHandle, fsm, player, Damages[tempAtkCount] * 4);
+                    AttackManager.GetInstance().HandleAttack(AttackHandle, target, player, Damages[tempAtkCount] * 4);
                 }
             }
             else
             {
                 m.effectType = EffectType.SMALL;
-                AttackManager.GetInstance().HandleAttack(AttackHandle, fsm,player, Damages[tempAtkCount]);
-            }
+                AttackManager.GetInstance().HandleAttack(AttackHandle, target,player, Damages[tempAtkCount]);
         }
     }
     AttackMessage AttackHandle(IHitable target, FSMbase sender, float attackPoint)
@@ -377,7 +369,7 @@ public class SampleAttackStrategy : AttackValues, AttackStrategy
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         if (tempAtkCount == 1)
         {
-            m.CalcKnockBack(target, sender, 2,1);
+            m.CalcKnockBack(target, sender,1);
         }
         if(m.CriCalculate(sender.status.getCurrentStat(STAT.CriticalPoint),
             sender.status.getCurrentStat(STAT.CriticalDamage))){

@@ -28,7 +28,6 @@ public class DustGenerator : MonoBehaviour
     }
     public void Activate()
     {
-        Debug.Log(restTime);
         if (restTime >= 0.2f)
             CreateDust();
         isOn = true;

@@ -213,7 +213,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
 
         return m;
     }
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
       
 
@@ -393,7 +393,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         return m;
     }
 
-    public void onWeaponTouch(int colliderType, Collider2D target)
+    public void onWeaponTouch(int colliderType, IHitable target)
     {
         
     }

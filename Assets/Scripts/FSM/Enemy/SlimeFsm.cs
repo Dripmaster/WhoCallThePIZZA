@@ -43,6 +43,7 @@ public class SlimeFsm : EnemyBase
         disDetect = 5;
         disMaxDetect = 7;
         disAttackRange = 1;
+        knockBackWeight = 10;
         //끝
         tempAttackCount = 0;
         aggroTime = 0;
@@ -103,7 +104,7 @@ public class SlimeFsm : EnemyBase
         do
         {
             yield return null;
-            if (animEnd&&!CCreamin())
+            if (animEnd&&!CCreamin()&&knockDir==Vector2.zero)
             {
                 CCfree();
             }

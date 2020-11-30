@@ -32,6 +32,7 @@ public class Effector : MonoBehaviour
     }
     List<Effect> effectList = new List<Effect>();
     bool isDoneSetting = false;
+    bool isPlaying = false;
     SpriteRenderer spriteRenderer;
     IEnumerator mainCoroutine;
 
@@ -291,12 +292,15 @@ public class Effector : MonoBehaviour
     #if UNITY_EDITOR
         if(effectList[effectList.Count-1].nextType != ChainType.DONE)
                 Debug.LogWarning(gameObject.name + ": Chain played after" + effectList[effectList.Count-1].nextType);
-            if(isDoneSetting)
+        if(isDoneSetting)
             Debug.LogWarning(gameObject.name + ": Played an already played effect");
         if(effectList.Count == 0)
             Debug.LogWarning(gameObject.name + ": No effected attatched");
-   
-    #endif
+
+#endif
+        if (isPlaying)
+            StopCoroutine(mainCoroutine);
+        isPlaying = true;
         mainCoroutine = MainCoroutine();
         original_Pos = transform.position;
         original_Scale = transform.localScale;
@@ -325,6 +329,7 @@ public class Effector : MonoBehaviour
             }
             index++;
         }
+        isPlaying = false;
     }
     private void resetProperty()
     {

@@ -60,6 +60,10 @@ public abstract class MapObject : IHitable
     public abstract void OnOtherEnter(Collider2D collision);
     public abstract void OnOtherExit(Collider2D collision);
     public virtual void OnHit(float dmg) {
+    }
+
+    protected void getDamage(float dmg)
+    {
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {

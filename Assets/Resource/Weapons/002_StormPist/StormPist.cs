@@ -171,7 +171,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
     //!TODO
     //날아가는동안 충돌판정 변경 및 지형지물 계산해야함(벽에다가 카직스 e 잘못쓰면)
 
-}
+    }
     public void Update(WeaponBase weaponBase)
     {
        

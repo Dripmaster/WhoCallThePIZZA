@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1465515893600705830}
   - component: {fileID: 1465515893600705829}
   - component: {fileID: 1465515893600705828}
-  - component: {fileID: 1465515893600705826}
   - component: {fileID: 1059104851}
   - component: {fileID: 7022250551670818938}
+  - component: {fileID: 4192141839012263481}
   m_Layer: 10
   m_Name: Slime_Sick
   m_TagString: Untagged
@@ -128,22 +128,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1465515893600705826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465515893600705825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cced66d271c1894468ee62a5c8831c25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectState: 0
-  animEnd: 0
-  myDropItem: {fileID: 11400000, guid: 489e86e96c320c64fa28a92cc793bbe6, type: 2}
-  jumpWaitTime: 1
 --- !u!58 &1059104851
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -173,6 +157,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ImageTransform: {fileID: 3215279775016931375}
+--- !u!114 &4192141839012263481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465515893600705825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ebce01fab323924c9a270a935c5f67e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showEffect: 1
+  objectState: 0
+  animEnd: 0
+  myDropItem: {fileID: 0}
+  jumpWaitTime: 1
+  SickBulletPrefab: {fileID: 6727938911945934148, guid: 55341ff0f0e7def41bbe42605e9e54a0,
+    type: 3}
+  startPos: {x: 0, y: 0}
+  targetPos: {x: 0, y: 0}
+  bulletSpeed: 5
 --- !u!1 &1465515894327741303
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +326,6 @@ SpriteRenderer:
   m_Size: {x: 0.18, y: 0.14}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

@@ -9,11 +9,11 @@ public class BulletBase : MonoBehaviour
     public float speed;
     protected Rigidbody2D myrigid;
 
-    private void Awake()
+    protected void Awake()
     {
         myrigid = GetComponent<Rigidbody2D>();
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         bool dest = false;
         if(touched != null)
@@ -21,7 +21,7 @@ public class BulletBase : MonoBehaviour
         if (dest)
             gameObject.SetActive(false);
     }
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
         myrigid.MovePosition(transform.position +(Vector3) dir * speed * Time.deltaTime);
     }

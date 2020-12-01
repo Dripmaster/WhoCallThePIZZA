@@ -10,12 +10,7 @@ public class FireworkBullet : BulletBase
     private float time = 0;
     public float explosionTime;
 
-    private void Awake()
-    {
-        myrigid = GetComponent<Rigidbody2D>();
-
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private new void OnTriggerEnter2D(Collider2D collision)
     {
         bool dest = false;
         if (touched != null)
@@ -23,7 +18,7 @@ public class FireworkBullet : BulletBase
         if (dest)
             Explosion();
     }
-    private void FixedUpdate()
+    private new void FixedUpdate()
     {
         myrigid.MovePosition(transform.position + (Vector3)dir * speed * Time.deltaTime);
 

@@ -6,18 +6,18 @@ public class SlimeFsm : EnemyBase
 {
     public DroppedItemBase myDropItem;
     public float jumpWaitTime  =1f;
-    bool attackTrigger = false;
+    protected bool attackTrigger = false;
     new void Awake()
     {
         base.Awake();
         setStateType(typeof(SlimeState));
     }
-    new void OnEnable()
+    protected new void OnEnable()
     {
         base.OnEnable();
         setState((int)SlimeState.idle);
     }
-    new void  FixedUpdate()
+    protected new void  FixedUpdate()
     {
         base.FixedUpdate();
         moveAggro((int)SlimeState.jump);

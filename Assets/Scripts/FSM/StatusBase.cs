@@ -278,6 +278,7 @@ public class Bleeding : Buff
         totalTime = time;
         Damage = Dmg;
         dealTime = 0;
+        dealedDamage = 0;
         SetTarget(target);
     }
     public override void StartBuff()
@@ -299,6 +300,39 @@ public class Bleeding : Buff
     }
 }
 
+public class Poisoned : Buff
+{
+    public float Damage;
+    float dealTime;
+    float dealedDamage;
+    public Poisoned(float time, float Dmg, IHitable target)
+    {
+        buffName = BUFF.Bleeding;
+        totalTime = time;
+        Damage = Dmg;
+        dealTime = 0;
+        dealedDamage = 0;
+        SetTarget(target);
+    }
+    public override void StartBuff()
+    {
+        AttackManager.Instance.SimpleDamage(Damage / totalTime, target);
+        dealedDamage += Damage / totalTime;
+    }
+    public override void Update()
+    {
+        if (dealedDamage >= Damage)
+            return;
+        dealTime += Time.deltaTime;
+        if (dealTime >= 1)
+        {
+            dealTime -= 1;
+            AttackManager.Instance.SimpleDamage(Damage / totalTime, target);
+            dealedDamage += Damage / totalTime;
+        }
+
+    }
+}
 public class Burn : Buff
 {
     public float Damage;
@@ -310,6 +344,7 @@ public class Burn : Buff
         totalTime = time;
         Damage = Dmg;
         dealTime = 0;
+        dealedDamage = 0;
         SetTarget(target);
     }
     public override void StartBuff()

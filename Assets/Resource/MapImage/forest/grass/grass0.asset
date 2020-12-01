@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: 0
   maxHp: 1
-  defaultSprite: {fileID: 21300000, guid: d93a11c0a4768124b995dfbb3ee5be0d, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 1e5d8978e9f52114d9e11e2ceb8169f1, type: 3}
   outLineMat: {fileID: 0}
   chainAble: 0
   showEffect: 1

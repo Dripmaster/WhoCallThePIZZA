@@ -10,10 +10,12 @@ using UnityEngine;
  *        실행한 이펙트 중 제일 긴 이펙트가 끝날때 다음 Then()까지 읽어옴, 반복
  * EffectCurve] 인자 time : normalized 지난 시간 / 리턴값 : normalized 된 효과 value
  * 
+ * play와 동시에 effectQueue를 싹다 비움. cancelPlayingEffect 가 true면 play시 기존 플레이중이던 효과를 취소함
  */
 public class Effector : MonoBehaviour
 {
     
+    public bool cancelPlayingEffect = false;
     public delegate float EffectCurve(float time);
 
     public static EffectCurve IncreCurve = increCurve;
@@ -31,7 +33,6 @@ public class Effector : MonoBehaviour
         }
     }
     List<Effect> effectList = new List<Effect>();
-    bool isDoneSetting = false;
     bool isPlaying = false;
     SpriteRenderer spriteRenderer;
     IEnumerator mainCoroutine;
@@ -43,7 +44,7 @@ public class Effector : MonoBehaviour
     Color original_Color;
     Sprite[] sprites;
 
-    #region Scale
+#region Scale
     public Effector Scale(float duration, Vector2 target)
     { 
         return Scale(duration, target, increCurve); 
@@ -58,10 +59,9 @@ public class Effector : MonoBehaviour
     }
     public Effector Scale(float duration, Vector2 target, EffectCurve Curve)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(ScaleCoroutine(duration,target,Curve), duration));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(ScaleCoroutine(duration,target,Curve), duration));
         return this;
     }
     IEnumerator ScaleCoroutine(float duration, Vector2 target, EffectCurve Curve)
@@ -86,10 +86,9 @@ public class Effector : MonoBehaviour
     }
     public Effector Move(float duration, Vector2 offset, EffectCurve Curve)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(MoveCoroutine(duration,offset,Curve), duration));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(MoveCoroutine(duration,offset,Curve), duration));
         return this;
     }
     IEnumerator MoveCoroutine(float duration, Vector2 offset, EffectCurve Curve)
@@ -114,10 +113,9 @@ public class Effector : MonoBehaviour
     }
     public Effector Alpha(float duration, float target, EffectCurve Curve)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(AlphaCoroutine(duration,target,Curve), duration));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(AlphaCoroutine(duration,target,Curve), duration));
         return this;
     }
     IEnumerator AlphaCoroutine(float duration, float target, EffectCurve Curve)
@@ -152,10 +150,9 @@ public class Effector : MonoBehaviour
     }
     public Effector RotateTo(float duration, float target, EffectCurve Curve)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif  
-        effectList.Add(new Effect(RotateCoroutine(duration,target,Curve), duration));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(RotateCoroutine(duration,target,Curve), duration));
         return this;
     }
     IEnumerator RotateCoroutine(float duration, float target, EffectCurve Curve)
@@ -179,10 +176,9 @@ public class Effector : MonoBehaviour
     }
     public Effector ColorChange(float duration, Color target, EffectCurve Curve)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(ColorCoroutine(duration,target,Curve), duration));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(ColorCoroutine(duration,target,Curve), duration));
         return this;
     }
 
@@ -202,13 +198,13 @@ public class Effector : MonoBehaviour
     }
     #endregion
 
-    #region Animation
+#region Animation
     public Effector SimpleAnimation(float duration, Sprite[] sprites)
     {
 #if UNITY_EDITOR
-        if (isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
+
 #endif
-        effectList.Add(new Effect(SimpleAnimationCoroutine(duration, sprites), duration));
+        QueueEffect(new Effect(SimpleAnimationCoroutine(duration, sprites), duration));
         return this;
     }
 
@@ -225,13 +221,12 @@ public class Effector : MonoBehaviour
     }
     #endregion
 
-    #region Disable
+#region Disable
     public Effector Disable(float timeOffset = 0f, bool destroy = false)
     {
-    #if UNITY_EDITOR
-        if(isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
-    #endif
-        effectList.Add(new Effect(DisableCoroutine(timeOffset,destroy), timeOffset));
+#if UNITY_EDITOR
+#endif
+        QueueEffect(new Effect(DisableCoroutine(timeOffset,destroy), timeOffset));
         return this;
     }
     IEnumerator DisableCoroutine(float timeOffset, bool destroy)
@@ -239,12 +234,14 @@ public class Effector : MonoBehaviour
         if (timeOffset != 0f)
             yield return new WaitForSeconds(timeOffset);
         if (!destroy)
+        {
+            Stop(true);
             gameObject.SetActive(false);
+        }
         else
             Destroy(gameObject);
         effectList.Clear();
-        isDoneSetting = false;
-        resetProperty();
+        //isDoneSetting = false;
     }
     #endregion
 
@@ -252,9 +249,8 @@ public class Effector : MonoBehaviour
     public Effector Wait(float duration)
     {
 #if UNITY_EDITOR
-        if (isDoneSetting) Debug.LogWarning("Already playing effect " + gameObject.name + "is being modified");
 #endif
-        effectList.Add(new Effect(WaitCoroutine(duration), duration));
+        QueueEffect(new Effect(WaitCoroutine(duration), duration));
         return this;
     }
     IEnumerator WaitCoroutine(float timeOffset)
@@ -273,33 +269,50 @@ public class Effector : MonoBehaviour
         if(effectList[effectList.Count-1].nextType != ChainType.DONE)
             Debug.LogWarning(gameObject.name + ": Chained Add after" + effectList[effectList.Count-1].nextType);
     #endif
-        effectList[effectList.Count-1].nextType = ChainType.AND;
+        //if(!isPlaying || queueWhilePlay)
+            effectList[effectList.Count-1].nextType = ChainType.AND;
         return this;
     }
     public Effector Then()
     {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         if(effectList[effectList.Count-1].nextType != ChainType.DONE)
             Debug.LogWarning(gameObject.name + ": Chained Add after" + effectList[effectList.Count-1].nextType);
-    #endif
-        effectList[effectList.Count-1].nextType = ChainType.THEN;
+#endif
+        //if (!isPlaying || queueWhilePlay)
+            effectList[effectList.Count-1].nextType = ChainType.THEN;
         return this;
     }
-#endregion
-   
+    #endregion
+
+    public void Stop(bool resetProperties = true)
+    {
+        if (isPlaying)
+        {
+            StopCoroutine(mainCoroutine);
+            isPlaying = false;
+        }
+        if (resetProperties)
+            resetProperty();
+    }
     public void Play()
     {
     #if UNITY_EDITOR
         if(effectList[effectList.Count-1].nextType != ChainType.DONE)
                 Debug.LogWarning(gameObject.name + ": Chain played after" + effectList[effectList.Count-1].nextType);
-        if(isDoneSetting)
-            Debug.LogWarning(gameObject.name + ": Played an already played effect");
         if(effectList.Count == 0)
             Debug.LogWarning(gameObject.name + ": No effected attatched");
 
 #endif
         if (isPlaying)
-            StopCoroutine(mainCoroutine);
+        {
+            if (cancelPlayingEffect)
+            {
+                Stop();
+            }
+            else
+                return;
+        }
         isPlaying = true;
         mainCoroutine = MainCoroutine();
         original_Pos = transform.position;
@@ -308,18 +321,22 @@ public class Effector : MonoBehaviour
         original_Color = spriteRenderer.color;
         original_Alpha = original_Color.a;
         StartCoroutine(mainCoroutine);
-        isDoneSetting = true;      
     }
     
     IEnumerator MainCoroutine()
     {
         int index = 0;
         List<Effect> effectBatch = new List<Effect>();
-        
-        while(index < effectList.Count)
+        List<Effect> effectListCopy = new List<Effect>();
+        for(int i=0; i<effectList.Count; i++)
         {
-            effectBatch.Add(effectList[index]);
-            if(effectList[index].nextType == ChainType.THEN || effectList[index].nextType == ChainType.DONE)
+            effectListCopy.Add(effectList[i]);
+        }
+        effectList.Clear();
+        while (index < effectListCopy.Count)
+        {
+            effectBatch.Add(effectListCopy[index]);
+            if(effectListCopy[index].nextType == ChainType.THEN || effectListCopy[index].nextType == ChainType.DONE)
             {
                 effectBatch.Sort((x1, x2) => x1.duration.CompareTo(x2.duration));
                 for(int i=0; i<effectBatch.Count-1; i++)
@@ -330,6 +347,11 @@ public class Effector : MonoBehaviour
             index++;
         }
         isPlaying = false;
+    }
+    void QueueEffect(Effect effect)
+    {
+        //if (!isPlaying || queueWhilePlay)
+            effectList.Add(effect);
     }
     private void resetProperty()
     {

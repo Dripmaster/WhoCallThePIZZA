@@ -67,14 +67,14 @@ public abstract class MapObject : IHitable
         status.ChangeStat(STAT.hp, -dmg);
         if (status.getCurrentStat(STAT.hp) <= 0)
         {
-            DoDest();
+            DoDestroy();
         }
     }
     public virtual void DoTake() {
         _collider2D.enabled = false;
         ActivateTake(false);
     }
-    public virtual void DoDest()
+    public virtual void DoDestroy()
     {
         _collider2D.enabled = false;
         gameObject.SetActive(false);

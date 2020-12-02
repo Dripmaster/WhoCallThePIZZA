@@ -429,7 +429,7 @@ public class WeaponBase : MonoBehaviour
     }
     public MoveWhileAttack getMoveSkillCondition()
     {
-        return equipedWeaponsComponents[currentWeapon].skillStrategy.getSkillMoveCondition();
+        return equipedWeaponsComponents[currentWeapon].skillStrategy.getAttackMoveCondition();
     }
     public void SetComboCount(int c)
     {

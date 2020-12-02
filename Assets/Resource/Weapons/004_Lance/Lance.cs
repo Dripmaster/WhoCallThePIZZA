@@ -144,7 +144,7 @@ public class LanceMouseInputStrategy : MouseInputStrategy
 
     }
 }
-public class LanceSkillStrategy : SkillValues, SkillStrategy
+public class LanceSkillStrategy : AttackValues, AttackStrategy
 {
     AttackMessage m;
     float tempTime;//경과시간
@@ -167,7 +167,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
     {
         lance = weaponBase.WeaponComponent() as Lance;
         dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Move_Attack;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
         m = new AttackMessage();
         this.weaponBase = weaponBase;
         lanceTransform = weaponBase.transform.Find("LanceParent/Lance/LanceHead");
@@ -189,15 +189,15 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
         skillStack = 0;
     }
 
-    public override void SetCooltime()
+    public override void SetCoolTimes()
     {
-        skillCoolTimes[0] = 4;
+        coolTimes[0] = 4;
     }
 
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.currentMoveCondition = moveSkillcondition;
+        weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.setState(PlayerState.skill);
 
         bool doFlip;
@@ -228,7 +228,7 @@ public class LanceSkillStrategy : SkillValues, SkillStrategy
             attackedColliders.Clear();
             weaponBase.SetColliderEnable(colliderEnable);
         }
-        HandleSkillEND(weaponBase);
+        HandleAttackEND(weaponBase);
     }
 
     AttackMessage stingHandle(IHitable target, FSMbase sender, float attackPoint)

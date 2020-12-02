@@ -100,7 +100,7 @@ public class FlameThrowerMouseInputStrategy : MouseInputStrategy
 
     }
 }
-public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
+public class FlameThrowerSkillStrategy : AttackValues, AttackStrategy
 {
     AttackMessage m;
     float tempTime;//경과시간
@@ -115,7 +115,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
     public FlameThrowerSkillStrategy(WeaponBase weaponBase)
     {
         dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+        attackMoveCondition = MoveWhileAttack.Cannot_Move;
         m = new AttackMessage();
         weapon = weaponBase;
         if (FT_SkillEffectsPool == null)
@@ -133,15 +133,15 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
         }
     }
 
-    public override void SetCooltime()
+    public override void SetCoolTimes()
     {
-        skillCoolTimes[0] = 6;
+        coolTimes[0] = 6;
     }
 
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.currentMoveCondition = moveSkillcondition;
+        weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.setState(PlayerState.skill);
 
         ViewManager.viewMouse(weaponBase);
@@ -156,7 +156,7 @@ public class FlameThrowerSkillStrategy : SkillValues, SkillStrategy
     {
         //랜스처럼 일정시간 되면 콜라이더 꺼야함?
 
-        HandleSkillEND(weaponBase);
+        HandleAttackEND(weaponBase);
     }
 
     AttackMessage explosionHandle(IHitable target, FSMbase sender, float attackPoint)

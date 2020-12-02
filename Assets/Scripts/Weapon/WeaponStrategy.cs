@@ -8,7 +8,7 @@ using UnityEngine.XR;
 public abstract class AttackComponent : MonoBehaviour
 {
     public IdleStrategy idleStrategy;
-    public SkillStrategy skillStrategy;
+    public AttackStrategy skillStrategy;
     public MoveStrategy moveStrategy;
     public DashStrategy dashStrategy;
     public DeadStrategy deadStrategy;
@@ -79,6 +79,7 @@ public abstract class DashFunction
     }
 
 }
+/*
 public interface SkillStrategy
 {
     void SetState(WeaponBase weaponBase);
@@ -92,13 +93,13 @@ public interface SkillStrategy
     void motionEvent(int value);
     void motionEvent(string msg);
 }
-
+*/
 public interface MouseInputStrategy
 {
      void HandleInput(WeaponBase weaponBase);
 }
 #endregion
-
+/*
 #region SkillValues
 public abstract class SkillValues
 {
@@ -201,7 +202,7 @@ public abstract class SkillValues
     }
 }
 #endregion
-
+    */
 
 public static class ViewManager
 {

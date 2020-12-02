@@ -296,7 +296,7 @@ public class FireworkAttackStrategy : AttackValues, AttackStrategy
     }
 }  
 
-public class FireworkSkillStrategy : SkillValues, SkillStrategy
+public class FireworkSkillStrategy : AttackValues, AttackStrategy
 {
     Transform fireworkMuzzleTransform;
     public BulletBase bulletPrefab;
@@ -340,18 +340,18 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
         weapon = weaponBase;
         fireworkMuzzleTransform = weaponBase.transform.Find("FireWorkParent/Firework/FireworkMuzzle");
 
-        moveSkillcondition = MoveWhileAttack.Move_Attack;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
     }
 
-    public override void SetCooltime()
+    public override void SetCoolTimes()
     {
-        skillCoolTimes[0] = 4;
+        coolTimes[0] = 4;
     }
 
 
     public void SetState(WeaponBase weaponBase)
     {
-        weaponBase.currentMoveCondition = moveSkillcondition;
+        weaponBase.currentMoveCondition = attackMoveCondition;
         weaponBase.setState(PlayerState.skill);
 
         SkilltempTime = 0.18f;
@@ -383,7 +383,7 @@ public class FireworkSkillStrategy : SkillValues, SkillStrategy
             b.gameObject.SetActive(true);
         }
 
-        HandleSkillEND(weaponBase);
+        HandleAttackEND(weaponBase);
     }
 
     AttackMessage bulletHandle(IHitable target, FSMbase sender, float attackPoint)

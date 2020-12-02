@@ -115,7 +115,7 @@ public class SampleMouseInputStrategy : MouseInputStrategy
 
     }
 }
-public class SampleSkillStrategy : SkillValues, SkillStrategy
+public class SampleSkillStrategy : AttackValues, AttackStrategy
 {
     //!TODO
     //기절 안되었을때 따라가기
@@ -142,13 +142,13 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
     int chainCount = 100;
     public SampleSkillStrategy()
     {
-        moveSkillcondition = MoveWhileAttack.Move_Attack;
+        attackMoveCondition = MoveWhileAttack.Move_Attack;
         headChain = new List<Transform>();
         chains = GameObject.FindGameObjectsWithTag("chain");
         dashCondition = false;
     }
-    public override void SetCooltime() {
-        skillCoolTimes[0] = 3;
+    public override void SetCoolTimes() {
+        coolTimes[0] = 3;
     }
     AttackMessage TouchHandle(IHitable target, FSMbase sender, float attackPoint)
     {
@@ -205,7 +205,7 @@ public class SampleSkillStrategy : SkillValues, SkillStrategy
         weaponBase.transform.Find("ironhookParent/ironhook").transform.localScale = new Vector3(1,1,1);
         weaponBase.GetAnimatior().enabled = false;
         collisionFlag = false;
-        weaponBase.currentMoveCondition = getSkillMoveCondition();
+        weaponBase.currentMoveCondition = getAttackMoveCondition();
         weaponBase.setState(PlayerState.skill);
         weaponBase.CanRotateView = false;
         headChain.Add(headTransform);

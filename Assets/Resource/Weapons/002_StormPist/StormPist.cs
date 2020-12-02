@@ -64,7 +64,7 @@ public class StormPistDeadStrategy : DeadStrategy
     }
 }
 
-public class StormPistSkillStrategy :  SkillValues,SkillStrategy
+public class StormPistSkillStrategy :  AttackValues,AttackStrategy
 {
     Vector2 targetPos;//목표지점
     Vector2 startPos;//시작점
@@ -98,7 +98,7 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
 
     public StormPistSkillStrategy(WeaponBase weaponBase) {
         dashCondition = false;
-        moveSkillcondition = MoveWhileAttack.Cannot_Move;
+        attackMoveCondition = MoveWhileAttack.Cannot_Move;
         m = new AttackMessage(); 
         
         if (stormPistHitEffectPools == null)
@@ -118,9 +118,9 @@ public class StormPistSkillStrategy :  SkillValues,SkillStrategy
         }
     }
 
-    public override void SetCooltime()
+    public override void SetCoolTimes()
     {
-        skillCoolTimes[0] = 1;
+        coolTimes[0] = 1;
     }
 
     void PreCalculate() {

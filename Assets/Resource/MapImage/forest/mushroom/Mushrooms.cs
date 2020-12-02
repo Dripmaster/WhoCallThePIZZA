@@ -33,7 +33,7 @@ public class Mushrooms : MapObject
             WeaponBase.instance.player.status.AddBuff(new Bleeding(5, 3, WeaponBase.instance.player));
 
             hitableState = HitableState.take;
-            DoDest();
+            DoDestroy();
         }
         isUsed = true;
     }

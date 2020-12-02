@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537e6c5303a446f4faf3bd262c9b9510, type: 3}
+  m_Name: grass0
+  m_EditorClassIdentifier: 
+  objectID: 0
+  maxHp: 1
+  defaultSprite: {fileID: 21300000, guid: 1e5d8978e9f52114d9e11e2ceb8169f1, type: 3}
+  outLineMat: {fileID: 0}
+  chainAble: 0
+  showEffect: 1
+  takeType: 0

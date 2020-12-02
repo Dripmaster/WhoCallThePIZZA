@@ -7,6 +7,7 @@ public class TreantFsm : EnemyBase
 {
 
     //투사체
+    AttackMessage m;
     Transform TreantLaunchTransform;
     public GameObject bulletPrefab;
     Pool TreantBulletPool;
@@ -20,7 +21,6 @@ public class TreantFsm : EnemyBase
 
     public DroppedItemBase myDropItem;
     bool attackTrigger = false;
-    AttackMessage m;
     new void Awake()
     {
         //투사체 풀

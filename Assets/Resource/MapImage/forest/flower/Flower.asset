@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 537e6c5303a446f4faf3bd262c9b9510, type: 3}
-  m_Name: Rock1
+  m_Name: Flower
   m_EditorClassIdentifier: 
-  objectID: 2
-  maxHp: 20
-  defaultSprite: {fileID: 21300000, guid: 7521121400dcb9f4f955fe52a63561aa, type: 3}
+  objectID: 0
+  maxHp: 50
+  defaultSprite: {fileID: 21300000, guid: b864711305024584a9e72b04352b3e47, type: 3}
   outLineMat: {fileID: 0}
   chainAble: 0
-  showEffect: 1
+  showEffect: 0
+  takeType: 0

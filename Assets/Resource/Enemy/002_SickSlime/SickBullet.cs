@@ -9,11 +9,14 @@ public class SickBullet : BulletBase
 
     Vector2 lerpPos;//프레임 당 이동(방향벡터)
 
-    float vy = 5f;//y가짜 포물선 속도         몇으로 해야하는 거임???
+    [HideInInspector]
+    public float vy = 5f;//y가짜 포물선 속도         몇으로 해야하는 거임???
+    [HideInInspector]
+    public float all_t = 1;//전체 이동 시간
+
     float vyCalculated;//y가짜 포물선 속도를 이동거리에 반비례하게 적용
     float h;
     float t;//경과시간
-    float all_t;//전체 이동 시간
     float l;//이동거리
 
     ZSystem zSystem;
@@ -25,63 +28,51 @@ public class SickBullet : BulletBase
         l = lerpPos.magnitude;
         lerpPos.Normalize();
 
-        lerpPos *= speed;
 
         h = 0;
         t = 0;
-        all_t = l / speed;  
-        vyCalculated = vy / all_t;     
+
+        speed = l / all_t;
+
+
+        vyCalculated = vy / all_t;
+
+        lerpPos *= speed;
     }
 
-    new void Awake()
+    private new void Awake()
     {
         myrigid = GetComponent<Rigidbody2D>();
         zSystem = GetComponent<ZSystem>();
+    }
+    private void OnEnable()
+    {
         PreCalculate();
     }
-
     new void FixedUpdate()
     {
         t += Time.deltaTime;
 
         float x = lerpPos.x;
         float y = lerpPos.y;
-        if (t <= all_t * 0.2f)
-        {
-            h = vyCalculated;
-        }
-        else if (t <= all_t * 0.8f)
-        {
 
-            if (t <= all_t * 0.25f)
-            {
-                h = Mathf.Lerp(h, 0, Time.deltaTime * 10);
-            }
-            else if (t >= all_t * 0.75f)
-            {
-                h = Mathf.Lerp(h, -vyCalculated, Time.deltaTime * 10);
-            }
-            else
-            {
-                h = 0;
-            }
-        }
-        else if (t <= all_t)
-        {
-            h = -vyCalculated;
-        }
+        float curveHeight = 0;
+
+        curveHeight = Mathf.Sin((t/all_t)*Mathf.PI);
+
+       if(t<all_t)
+        h = curveHeight * vyCalculated*10;
         else
         {
             h = 0;
         }
-
-
-        if (h != 0)
+            zSystem.Z = h * Time.deltaTime;
+        if (t <= all_t)
         {
-            zSystem.Z += h * Time.deltaTime;
+            Vector3 movePos = new Vector3(x, y, 0);
+            Vector3 nextPos = transform.position + movePos * Time.deltaTime;
+            myrigid.MovePosition(nextPos);
         }
-        Vector3 movePos = new Vector3(x, y, 0);
-        myrigid.MovePosition(transform.position + movePos * Time.deltaTime);
 
     }
 }

@@ -100,7 +100,8 @@ public class Shaker : MonoBehaviour
         isLoop = false;
         totalETime = 0f;
         isShaking = false;
-        transformToShake.localPosition = originalPosition;
+        if (transformToShake != null)
+            transformToShake.localPosition = originalPosition;
     }
     void Shake()
     {

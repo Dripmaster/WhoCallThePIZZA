@@ -50,13 +50,13 @@ public class Pool : MonoBehaviour
     public void ReturnObjectDisabled(PoolableObject poolable)
     {
         waitingQueue.Enqueue(poolable);
-        StartCoroutine(ChangeParent(poolable));
+       // StartCoroutine(ChangeParent(poolable));
+        poolable.transform.parent = transform;
     }
     
     IEnumerator ChangeParent(PoolableObject poolable)
     {
         yield return null;
-        poolable.transform.parent = transform;
     }
 
 

@@ -11,9 +11,11 @@ public class SickSlime : SlimeFsm
     Pool SickBulletPool;
     int SickBulletinitialCount = 3;
     int SickBulletincrementCount = 1;
-    public Vector2 startPos;
-    public Vector2 targetPos;
-    public float bulletSpeed = 5;
+    Vector2 startPos;
+    Vector2 targetPos;
+
+    public float vy = 5f;//y가짜 포물선 속도         몇으로 해야하는 거임???
+    public float all_t = 1;//전체 이동 시간
 
     new void Awake()
     {
@@ -69,6 +71,7 @@ public class SickSlime : SlimeFsm
             {
                 attackTrigger = false;
                 rangedAttack();//원거리 공격 추가
+                hadAttack = true;
             }
             if (animEnd)
             {
@@ -97,7 +100,9 @@ public class SickSlime : SlimeFsm
         b.transform.position = SickSlimeLaunchTransform.position;
         b.targetPos = targetPos;
         b.startPos = startPos;
-        b.speed = bulletSpeed;
+        b.vy = this.vy ;
+        b.all_t = this.all_t;
+        b.touched = null;
         b.touched += SickBulletTouched;
         b.gameObject.SetActive(true);
     }
@@ -107,7 +112,6 @@ public class SickSlime : SlimeFsm
         var fsm = collision.GetComponent<PlayerFSM>();
         if (fsm != null)
         {
-            Debug.Log("damage");
             AttackManager.GetInstance().HandleAttack(bulletHandle, fsm, this, damages[0]);
             return true;
         }
@@ -117,7 +121,6 @@ public class SickSlime : SlimeFsm
     {
         m.FinalDamage = sender.status.getCurrentStat(STAT.AtkPoint) * attackPoint;
         target.status.AddBuff(new Poisoned(5, 3, target));
-        Debug.Log("데뮈쥐");
         return m;
     }
 }

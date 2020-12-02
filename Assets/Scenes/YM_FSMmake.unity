@@ -639,6 +639,16 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4192141839012263481, guid: 6823dbded8835684595b3c1799be43f7,
+        type: 3}
+      propertyPath: bulletSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4192141839012263481, guid: 6823dbded8835684595b3c1799be43f7,
+        type: 3}
+      propertyPath: vy
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6823dbded8835684595b3c1799be43f7, type: 3}
 --- !u!1 &484429378
